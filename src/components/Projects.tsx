@@ -7,50 +7,67 @@ import { faSquareGithub } from '@fortawesome/free-brands-svg-icons';
 
 const projects = [
     {
+        title: 'Multi-Agent Research Intelligence System',
+        description:
+            'Advanced AI-powered multi-agent research system orchestrating specialized AI agents to conduct comprehensive research, synthesize information, and generate professional reports. Features 10 research strategies, parallel swarm research, self-critique quality control, RAG knowledge management, and dual-format report generation (Markdown + PDF).',
+        tags: ['LangGraph', 'LangChain', 'Python', 'RAG', 'ChromaDB', 'Multi-Agent', 'Ollama'],
+        link: 'https://github.com/Babitdor',
+        github: 'https://github.com/Babitdor',
+    },
+    {
         title: 'SysML v2 Multi-Agent Workflow Automation',
         description:
-            'Fine-tuned multiple LLMs on custom SysML v2 datasets using Unsloth and orchestrated multi-agent workflows with LangChain/LangGraph for automated code generation, validation, and iterative error correction, with Docker containerization.',
-        tags: ['LangGraph', 'LangChain', 'Unsloth', 'Docker', 'RAG', 'ChromaDB'],
+            'Sophisticated AI-powered system for generating and validating SysML v2 code using multi-agent architecture with RAG and vector database integration. Features intelligent code generation with context awareness, automated multi-step validation with syntax and semantic checks, automatic error detection and fixing, knowledge management with RAG system, solution memory using ChromaDB vector database, optional human approval with feedback integration, and real-time analytics dashboard.',
+        tags: ['LangGraph', 'LangChain', 'Python', 'RAG', 'ChromaDB', 'Ollama', 'Streamlit', 'Multi-Agent', 'Jupyter', 'PyTorch'],
+        link: 'https://github.com/Babitdor',
+        github: 'https://github.com/Babitdor',
+    },
+
+    {
+        title: 'Nami-Code: Deep Agent Framework & AI Coding Assistant',
+        description:
+            'Open-source AI agent framework and terminal-based coding assistant enabling LLMs to handle complex multi-step tasks through advanced planning, context management, and parallel execution. Features planning tools, filesystem operations, subagent spawning, persistent memory, and MCP support for extensible tool integration.',
+        tags: ['LangGraph', 'LangChain', 'Python', 'Prompt Engineering', 'OpenAI', 'Anthropic', 'Ollama', 'MCP'],
         link: 'https://github.com/Babitdor',
         github: 'https://github.com/Babitdor',
     },
     {
-        title: 'Personal Knowledge Assistant',
+        title: 'S.A.R.A.H. – Smart Assistant Real At Heart',
         description:
-            'Built an intelligent knowledge management platform leveraging RAG architecture, vector embeddings, and LLMs to enable conversational querying of personal document collections with semantic search.',
-        tags: ['RAG', 'Vector DB', 'Embeddings', 'LLM'],
+            'A fully local desktop voice assistant powered by a fine-tuned LLaMA 3.2 model. Uses a real-time STT → LLM → TTS pipeline with LiveKit for voice streaming, Deepgram for speech-to-text, and Cartesia AI for natural voice responses. Can understand natural language commands and invoke tools like launching apps, reading emails, or organizing files — all while running 100% offline for complete privacy.',
+        tags: ['LLaMA 3.2', 'LiveKit', 'Deepgram', 'Cartesia AI', 'Voice Assistant', 'STT', 'TTS', 'Local AI'],
         link: 'https://github.com/Babitdor',
         github: 'https://github.com/Babitdor',
     },
     {
-        title: 'Codebase QA Assistant',
+        title: 'Speaker Voice Separation with Dual-Path Transformers',
         description:
-            'Developed AI-powered codebase Q&A tool using LangChain, LangGraph, and ChromaDB to accelerate developer onboarding through RAG-powered natural language search.',
-        tags: ['LangChain', 'LangGraph', 'ChromaDB', 'RAG'],
+            'Enhancing the Dual-Path RNN framework by replacing the original recurrent modules with intra-chunk and inter-chunk Transformer layers. This hybrid architecture aims to better capture both local and global audio dependencies for superior multi-speaker separation. Intra-chunk Transformer applies self-attention within small audio chunks to model fine-grained, short-term temporal features, while Inter-chunk Transformer captures long-range context by attending across chunk sequences.',
+        tags: ['PyTorch', 'Transformers', 'Audio Processing', 'Speaker Separation', 'Deep Learning', 'SI-SNR', 'SDR'],
         link: 'https://github.com/Babitdor',
         github: 'https://github.com/Babitdor',
     },
     {
-        title: 'Researcher Assistant',
+        title: 'Assistive Sidewalk Segmentation: Fine-Tuning SAM 2.1 with a Custom Dataset for the Visually Impaired',
         description:
-            'Developed multi-agent research pipeline using CrewAI with custom tools (arXiv retrieval, PubMed search, critic validation) to conduct parallel literature searches and generate citation-backed research reports.',
-        tags: ['CrewAI', 'arXiv', 'PubMed', 'Multi-Agent'],
+            'Developed a comprehensive training and deployment pipeline for fine-tuning Segment Anything Model (SAM) 2.1 by Meta on custom sidewalk imagery, aimed at enabling assistive vision systems for the visually impaired. The project spans data preprocessing, dynamic prompt generation, mixed-precision training, checkpointing, and model evaluation, culminating in an interactive Streamlit application for real-time segmentation and inference.',
+        tags: ['SAM 2.1', 'PyTorch', 'Hugging Face', 'Streamlit', 'Computer Vision', 'Fine-Tuning', 'Assistive Technology', 'FP16/BF16'],
         link: 'https://github.com/Babitdor',
         github: 'https://github.com/Babitdor',
     },
     {
-        title: 'Hands-Free Desktop AI Assistant',
+        title: 'ogAI: Multi-Model LLM Discord Assistant',
         description:
-            'Developed real-time voice AI assistant using Livekit, locally hosted Ollama models (Llama 3, Mistral), wake-word detection, PyAutoGUI for desktop control, Gmail API, and Spotipy integration.',
-        tags: ['Livekit', 'Ollama', 'Python', 'Voice AI', 'Privacy-First'],
+            'Built a fully customizable AI-powered Discord bot that integrates multiple local and cloud-based language models (e.g., Ollama, Gemini, GPT-4) to deliver intelligent, context-aware responses across diverse use cases including general Q&A, summarization, and creative tasks. Features integrated multiple backends, flexible routing logic to dynamically select models based on task or user input, prompt templates, system messages, and conversation context tracking.',
+        tags: ['discord.py', 'OpenAI GPT', 'Google Gemini', 'Ollama', 'LLM', 'Discord Bot', 'Multi-Model', 'Async'],
         link: 'https://github.com/Babitdor',
         github: 'https://github.com/Babitdor',
     },
     {
-        title: 'AI-Powered Task Manager',
+        title: 'N8N-Framework: AI-Powered SysMLv2 Systems Engineering Platform',
         description:
-            'Built a smart task management application with natural language processing for task creation, automatic prioritization using ML models, and collaborative features for team workflows.',
-        tags: ['React', 'Node.js', 'OpenAI', 'MongoDB'],
+            'Advanced AI-powered systems engineering platform integrating SysMLv2 with multi-agent LLMs to assist in designing, modeling, analyzing, and optimizing complex systems. Built on n8n workflow automation, features AI-driven code generation, multi-agent analysis (KPI-Analyst, SysML-Expert, MA-Solver), rigorous ANTLR4-based validation, Eclipse SysON integration for visual modeling, and comprehensive knowledge management with RAG capabilities.',
+        tags: ['n8n', 'Next.js', 'LangGraph', 'LangChain', 'FastAPI', 'SysMLv2', 'Multi-Agent', 'RAG', 'Qdrant', 'PostgreSQL', 'Docker', 'Eclipse SysON'],
         link: 'https://github.com/Babitdor',
         github: 'https://github.com/Babitdor',
     },
@@ -152,7 +169,7 @@ export default function Projects() {
                                         </motion.span>
                                     ))}
                                 </motion.div>
-                                <div className="projectLinks">
+                                {/* <div className="projectLinks">
                                     <motion.a
                                         href={project.github}
                                         className="projectLink"
@@ -161,6 +178,7 @@ export default function Projects() {
                                         whileHover={{ scale: 1.05 }}
                                         whileTap={{ scale: 0.95 }}
                                     >
+                                        <FontAwesomeIcon icon={faSquareGithub} />
                                         Code
                                     </motion.a>
                                     {project.link && (
@@ -176,7 +194,7 @@ export default function Projects() {
                                             Demo
                                         </motion.a>
                                     )}
-                                </div>
+                                </div> */}
                             </div>
                         </motion.div>
                     ))}

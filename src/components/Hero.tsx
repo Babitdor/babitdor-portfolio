@@ -5,7 +5,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGithub, faLinkedin } from '@fortawesome/free-brands-svg-icons';
 import { faEnvelope, faMapMarkerAlt, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import Model3D from './Model3D';
-import Link from 'next/link';
 
 const containerVariants = {
     hidden: { opacity: 0 },
@@ -72,15 +71,15 @@ export default function Hero() {
 
                     <motion.div className="heroButtons" variants={itemVariants}>
                         <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
-                            <Link href="#projects" className="btnPrimary">
+                            <a href="#projects" className="btnPrimary">
                                 View Projects
                                 <FontAwesomeIcon icon={faArrowRight} />
-                            </Link>
+                            </a>
                         </motion.div>
                         <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
-                            <Link href="#contact" className="btnSecondary">
+                            <a href="#contact" className="btnSecondary">
                                 Get In Touch
-                            </Link>
+                            </a>
                         </motion.div>
                     </motion.div>
 

@@ -249,6 +249,7 @@ h1, h2, h3, h4, h5, h6 {
     max-width: 1280px;
     margin: 0 auto;
     padding: 0 2.5rem;
+    flex-wrap: wrap;
 }
 
 .hero::before {
@@ -990,12 +991,25 @@ section {
         padding-top: 6rem;
     }
 
+    .hero::before {
+        top: -20%;
+        right: -30%;
+        width: 100%;
+        height: 120%;
+    }
+
     .hero3DBackground {
         position: relative;
         width: 100%;
         height: 300px;
         right: auto;
-        margin-top: 3rem;
+        margin-top: 0;
+        margin-bottom: 2rem;
+        order: -1;
+    }
+
+    .heroContent {
+        order: 1;
     }
 
     .heroButtons {
@@ -1028,6 +1042,13 @@ section {
 @media (max-width: 480px) {
     .hero h1 {
         font-size: 2rem;
+    }
+
+    .hero::before {
+        top: -10%;
+        right: -40%;
+        width: 120%;
+        height: 100%;
     }
 
     .sectionTitle {

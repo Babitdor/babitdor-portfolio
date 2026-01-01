@@ -3,7 +3,6 @@
 import { motion } from 'framer-motion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGithub, faLinkedin, faTwitter } from '@fortawesome/free-brands-svg-icons';
-import Link from 'next/link';
 
 const currentYear = new Date().getFullYear();
 
@@ -12,6 +11,11 @@ const socialLinks = [
     { icon: faLinkedin, href: 'https://www.linkedin.com/in/babitdor-kayang-khonglah-aa1b68207/', label: 'LinkedIn' },
     { icon: faTwitter, href: 'https://twitter.com', label: 'Twitter' },
 ];
+
+const emailInfo = {
+    email: 'babitdorbryan14@gmail.com',
+    href: 'mailto:babitdorbryan14@gmail.com',
+};
 
 const footerLinks = [
     { label: 'Home', href: '#home' },
@@ -37,12 +41,26 @@ export default function Footer() {
                     viewport={{ once: true }}
                     transition={{ duration: 0.5 }}
                 >
-                    <Link href="/" className="logo" style={{ fontSize: '1.25rem' }}>
+                    <a href="/" className="logo" style={{ fontSize: '1.25rem' }}>
                         Babitdor.
-                    </Link>
+                    </a>
                     <p style={{ marginTop: '0.5rem', fontSize: '0.9rem', color: 'var(--text-muted)' }}>
                         AI/ML Engineer | LLM Specialist
                     </p>
+                    <a
+                        href={emailInfo.href}
+                        style={{
+                            marginTop: '0.75rem',
+                            fontSize: '0.85rem',
+                            color: 'var(--text-secondary)',
+                            textDecoration: 'none',
+                            transition: 'color 0.3s ease',
+                        }}
+                        onMouseEnter={(e) => e.currentTarget.style.color = 'var(--accent)'}
+                        onMouseLeave={(e) => e.currentTarget.style.color = 'var(--text-secondary)'}
+                    >
+                        {emailInfo.email}
+                    </a>
                 </motion.div>
 
                 <motion.div
@@ -60,7 +78,7 @@ export default function Footer() {
                             viewport={{ once: true }}
                             transition={{ duration: 0.3, delay: 0.2 + index * 0.05 }}
                         >
-                            <Link href={link.href}>{link.label}</Link>
+                            <a href={link.href}>{link.label}</a>
                         </motion.div>
                     ))}
                 </motion.div>

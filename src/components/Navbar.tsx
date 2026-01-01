@@ -5,7 +5,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMoon, faSun, faBars, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState, useEffect } from 'react';
-import Link from 'next/link';
 
 export default function Navbar() {
     const { theme, toggleTheme } = useTheme();
@@ -35,9 +34,9 @@ export default function Navbar() {
                         whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.98 }}
                     >
-                        <Link href="/" className="logo">
+                        <a href="/" className="logo">
                             Babitdor.
-                        </Link>
+                        </a>
                     </motion.div>
 
                     <ul className="navLinks">
@@ -52,9 +51,9 @@ export default function Navbar() {
                                     whileHover={{ scale: 1.05 }}
                                     style={{ cursor: 'pointer' }}
                                 >
-                                    <Link href={`#${item.toLowerCase()}`}>
+                                    <a href={`#${item.toLowerCase()}`}>
                                         {item}
-                                    </Link>
+                                    </a>
                                 </motion.span>
                             </motion.li>
                         ))}
@@ -112,12 +111,12 @@ export default function Navbar() {
                                     animate={{ opacity: 1, x: 0 }}
                                     transition={{ delay: i * 0.1 }}
                                 >
-                                    <Link
+                                    <a
                                         href={`#${item.toLowerCase()}`}
                                         onClick={() => setIsMobileMenuOpen(false)}
                                     >
                                         {item}
-                                    </Link>
+                                    </a>
                                 </motion.div>
                             ))}
                         </div>
