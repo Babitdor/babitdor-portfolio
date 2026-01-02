@@ -5,7 +5,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
-  title: "Portfolio",
+  title: "Babitdor Kayang Khonglah",
   description: "My personal portfolio website",
 };
 
