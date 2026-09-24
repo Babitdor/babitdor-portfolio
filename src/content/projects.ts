@@ -28,7 +28,7 @@ export const projects: Project[] = [
     stat: 'master thesis',
   },
   {
-    title: 'MBSE Multi-Agent Harness',
+    title: 'SysML v2 Multi-Agent Workflow Automation',
     blurb: 'Fine-tuned LLMs plus agentic validation for Model-Based Systems Engineering.',
     detail:
       'Agentic pipeline that generates and validates SysML v2 models from natural language. Multiple fine-tuned models orchestrated with LangGraph, a RAG store of error-correction manuals and approved solutions in ChromaDB, and iterative self-correction on validation failure. Syntax checking runs against a real parser rather than a regex.',
