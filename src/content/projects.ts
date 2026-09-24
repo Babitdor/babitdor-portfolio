@@ -20,6 +20,14 @@ export type Project = {
 
 export const projects: Project[] = [
   {
+    title: 'MBSE Multi-Agent Harness (Master Thesis)',
+    blurb: 'A 9-agent orchestrator turning requirements into validated SysML v2 models.',
+    detail:
+      'Multi-agent orchestrator for automated Model-Based Systems Engineering, producing validated SysML v2 artifacts end-to-end. Resolves 50+ dependency DAG nodes automatically across all four RFLP phases (Requirements, Functional, Logical, Physical). Agents run in a Docker sandbox backend serving 25 concurrent connections with a 1s artifact cache, cutting redundant Docker exec calls by roughly half. SSE streaming holds token display latency under 100ms with live status across 9 concurrent subagents. Validation runs against an ANTLR4 SysML v2 parser with zero-syntax tolerance across 100+ language constructs. Deployed on gunicorn + 4 uvicorn workers behind nginx.',
+    tags: ['LangGraph', 'SysML v2', 'Multi-Agent', 'Docker', 'SSE', 'ANTLR4', 'FastAPI', 'Next.js'],
+    stat: 'master thesis',
+  },
+  {
     title: 'SysML v2 Multi-Agent Workflow Automation',
     blurb: 'Fine-tuned LLMs plus agentic validation for Model-Based Systems Engineering.',
     detail:
@@ -77,13 +85,5 @@ export const projects: Project[] = [
       'Fine-tuning harness built on Unsloth for QLoRA runs, producing the domain models published on Ollama and Hugging Face below. Covers dataset preparation, training configuration and export for local serving.',
     tags: ['Unsloth', 'QLoRA', 'Fine-tuning', 'Hugging Face'],
     link: 'https://github.com/Babitdor/LLM-FineTuning_unsloth',
-  },
-  {
-    title: 'Fetal Biometric Structure Segmentation',
-    blurb: 'Medical image segmentation on fetal ultrasound.',
-    detail:
-      'Segmentation of fetal biometric structures from ultrasound imagery, built as an applied deep-learning pipeline in Python.',
-    tags: ['PyTorch', 'Segmentation', 'Medical Imaging'],
-    link: 'https://github.com/Babitdor/fetal_biometric_structure_segmentation',
   },
 ];
