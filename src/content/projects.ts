@@ -38,14 +38,6 @@ export const projects: Project[] = [
     stat: '2 stars · MIT',
   },
   {
-    title: 'NAMI Researcher',
-    blurb: 'Multi-agent research assistant with 10 research strategies.',
-    detail:
-      'Parallel swarm research with specialised agents, self-critique quality control, RAG knowledge management and dual-format report generation (Markdown and PDF). Runs on local or hosted models.',
-    tags: ['Multi-Agent', 'LangGraph', 'RAG', 'CrewAI', 'Ollama'],
-    link: 'https://github.com/Babitdor/NAMI-RESEARCHER',
-  },
-  {
     title: 'Assistive Sidewalk Segmentation — SAM 2.1',
     blurb: 'Fine-tuning Segment Anything 2.1 for assistive vision. Master project.',
     detail:
