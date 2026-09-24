@@ -17,7 +17,6 @@
     --border: rgba(57, 255, 136, 0.22);
     --border-strong: rgba(57, 255, 136, 0.45);
     --glow: rgba(57, 255, 136, 0.35);
-    --keycap: #151b19;
 
     --mono: var(--font-mono), ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas,
         'Liberation Mono', monospace;
@@ -75,21 +74,6 @@ button {
 :focus-visible {
     outline: 2px solid var(--accent);
     outline-offset: 2px;
-}
-
-/* ---------- WebGL layer ---------- */
-
-.keyboardScene {
-    position: fixed;
-    inset: 0;
-    z-index: 0;
-    pointer-events: none;
-}
-
-.keyboardScene canvas {
-    width: 100% !important;
-    height: 100% !important;
-    display: block;
 }
 
 /* ---------- CRT overlay ---------- */
@@ -299,29 +283,6 @@ button {
 .tuiPrompt__sigil { color: var(--accent); font-weight: 700; }
 .tuiPrompt__cmd { color: var(--fg); }
 
-.tuiPrompt__output {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
-    margin-left: 0.5rem;
-    padding-left: 1rem;
-    border-left: 1px solid var(--border);
-    white-space: nowrap;
-}
-
-.tuiPrompt__label {
-    color: var(--fg-faint);
-    font-size: 11px;
-    letter-spacing: 0.08em;
-}
-
-.tuiPrompt__word {
-    color: var(--accent);
-    font-weight: 700;
-    letter-spacing: 0.12em;
-    text-shadow: 0 0 10px var(--glow);
-}
-
 .tuiCursor {
     display: inline-block;
     width: 8px;
@@ -525,6 +486,38 @@ button {
 }
 
 /* ---------- Hero ---------- */
+
+/* Two columns on wide screens: the whoami pane, and the ASCII torus beside it.
+   The figure is a column flex with a definite height, so the stage gets a
+   definite height from `flex: 1` and the renderer has a real box to fill. */
+.tuiHeroGrid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 0.9fr);
+    gap: clamp(1.5rem, 4vw, 3.5rem);
+    align-items: center;
+    max-width: 1180px;
+}
+
+.tuiHeroArt {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    margin: 0;
+    min-height: clamp(320px, 56vh, 520px);
+}
+
+.tuiHeroArt__cap {
+    flex: 0 0 auto;
+    align-self: flex-start;
+    color: var(--fg-faint);
+    font-size: 12px;
+    letter-spacing: 0.02em;
+    /* Sits over both the torus and the ambient field, so it needs its own
+       background to stay readable. */
+    background: var(--bg);
+    border: 1px solid var(--border);
+    padding: 0.25rem 0.6rem;
+}
 
 .tuiHero__badge {
     display: inline-flex;
@@ -866,6 +859,28 @@ button {
     color: var(--accent);
 }
 
+/* The scramble-revealed name banner. Block glyphs only, so it renders the same
+   width everywhere; centred and sized to fit a 9-glyph row on small screens. */
+.tuiBoot__banner {
+    align-self: center;
+    white-space: pre;
+    color: var(--accent);
+    font-family: var(--mono);
+    font-size: clamp(8px, 1.6vw, 14px);
+    line-height: 1.05;
+    text-shadow: 0 0 18px var(--glow);
+    margin: 0;
+}
+
+.tuiBoot__hint {
+    align-self: center;
+    margin-top: 1.5rem;
+    color: var(--fg-faint);
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    animation: tuiBlink 1.6s steps(1, end) infinite;
+}
+
 /* ---------- Toast ---------- */
 
 .tuiToast {
@@ -887,99 +902,6 @@ button {
 .tuiToast__sigil {
     color: var(--accent);
     margin-right: 0.4rem;
-}
-
-/* ---------- Reveal curtain ---------- */
-
-/* Two fabric halves that part from the centre after the boot log ends. Sits
-   above everything (the palette is the only higher layer) and is inert to
-   pointer events, so it never blocks a click while it is on screen. */
-.tuiCurtain {
-    position: fixed;
-    inset: 0;
-    z-index: 400;
-    pointer-events: none;
-    --curtain-dur: 1.35s;
-    --curtain-delay: 0.15s;
-}
-
-.tuiCurtain__half {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    width: 50.5%; /* slight overlap so no seam of page shows mid-part */
-    background:
-        repeating-linear-gradient(
-            to right,
-            rgba(0, 0, 0, 0.55) 0px,
-            rgba(0, 0, 0, 0) 26px,
-            rgba(255, 255, 255, 0.05) 52px,
-            rgba(0, 0, 0, 0.55) 78px
-        ),
-        linear-gradient(180deg, #0a1410 0%, #050806 60%, #020403 100%);
-    animation-duration: var(--curtain-dur);
-    animation-delay: var(--curtain-delay);
-    animation-timing-function: cubic-bezier(0.72, 0, 0.22, 1);
-    animation-fill-mode: forwards;
-}
-
-.tuiCurtain__half--left {
-    left: 0;
-    animation-name: tuiCurtainLeft;
-}
-
-.tuiCurtain__half--right {
-    right: 0;
-    animation-name: tuiCurtainRight;
-}
-
-/* The lit leading edge, like the hem catching the light as it pulls back. */
-.tuiCurtain__edge {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    width: 2px;
-    background: var(--accent);
-    box-shadow:
-        0 0 12px var(--accent),
-        0 0 42px var(--glow);
-    opacity: 0.9;
-}
-
-.tuiCurtain__half--left .tuiCurtain__edge { right: 0; }
-.tuiCurtain__half--right .tuiCurtain__edge { left: 0; }
-
-/* A brief bright seam down the centre, gone by the time the halves move. */
-.tuiCurtain__seam {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 50%;
-    width: 1px;
-    transform: translateX(-50%);
-    background: linear-gradient(
-        180deg,
-        rgba(57, 255, 136, 0) 0%,
-        rgba(57, 255, 136, 0.75) 50%,
-        rgba(57, 255, 136, 0) 100%
-    );
-    animation: tuiCurtainSeam 0.5s ease-out forwards;
-}
-
-@keyframes tuiCurtainLeft {
-    from { transform: translateX(0); }
-    to { transform: translateX(-101%); }
-}
-
-@keyframes tuiCurtainRight {
-    from { transform: translateX(0); }
-    to { transform: translateX(101%); }
-}
-
-@keyframes tuiCurtainSeam {
-    from { opacity: 0; }
-    30% { opacity: 1; }
-    to { opacity: 0; }
 }
 
 /* ---------- Command palette ---------- */
@@ -1066,57 +988,60 @@ button {
     font-size: 12px;
 }
 
-/* ---------- WebGL fallback ---------- */
+/* ---------- ASCII art layers ---------- */
 
-.keyboardFallback {
+/* Ambient character field behind every pane. Sits under the frame (z-index 0)
+   and is inert to pointer events. The <pre> is written once per throttled frame
+   by the renderer; see src/lib/ascii.ts. */
+.asciiBackdrop {
     position: fixed;
-    left: 50%;
-    bottom: calc(var(--bar-bottom-h) + 8px);
-    transform: translateX(-50%) perspective(700px) rotateX(38deg);
-    z-index: 1;
-    display: grid;
-    grid-template-columns: repeat(10, 1fr);
-    gap: 4px;
-    padding: 10px;
-    border: 1px solid var(--border);
-    background: rgba(8, 13, 10, 0.7);
-    opacity: 0.9;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+    mask-image: radial-gradient(
+        ellipse 90% 75% at 50% 42%,
+        rgba(0, 0, 0, 0.18) 0%,
+        rgba(0, 0, 0, 0.55) 55%,
+        rgba(0, 0, 0, 1) 100%
+    );
 }
 
-.keyboardFallback__key {
-    width: clamp(18px, 3.2vw, 34px);
-    aspect-ratio: 1;
-    /* Like the 3D board, the KEY stays dark and the LEGEND carries the colour:
-       hue is baked per key in the component. */
-    border: 1px solid hsl(var(--key-hue, 150) 60% 30% / 0.45);
-    background: var(--keycap);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 10px;
-    font-weight: 600;
-    color: hsl(var(--key-hue, 150) 100% 62%);
-    text-shadow: 0 0 8px hsl(var(--key-hue, 150) 100% 55% / 0.75);
-}
-
-.keyboardFallback__key.is-lit {
-    border-color: hsl(var(--key-hue, 150) 100% 70% / 0.9);
-    color: #ffffff;
-    font-weight: 700;
-    text-shadow:
-        0 0 6px #ffffff,
-        0 0 16px hsl(var(--key-hue, 150) 100% 65% / 0.95);
-}
-
-.keyboardFallback__word {
-    position: absolute;
-    top: -2.1rem;
-    left: 50%;
-    transform: translateX(-50%) rotateX(-38deg);
+.asciiBackdrop pre {
+    margin: 0;
+    /* `pre` gets `font-family: monospace` from the UA stylesheet, which beats
+       the inherited value from `body`. Must be set explicitly or the ASCII
+       layers use the system monospace and the cell maths is wrong. */
+    font-family: var(--mono);
     color: var(--accent);
-    font-weight: 700;
-    letter-spacing: 0.2em;
-    text-shadow: 0 0 14px var(--glow);
+    opacity: 0.5;
+    white-space: pre;
+    user-select: none;
+}
+
+/* The hero centrepiece: a rotating ASCII torus. `.asciiDonut` is the stage the
+   renderer measures (a definite box from `flex: 1`); the <pre> is centred in it
+   and is never used for measurement, because it sizes to its own content. */
+.asciiDonut {
+    position: relative;
+    flex: 1 1 auto;
+    min-height: 0;
+    display: grid;
+    place-items: center;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.asciiDonut pre {
+    margin: 0;
+    /* See the note on `.asciiBackdrop pre`: the UA `monospace` default would
+       otherwise win over the inherited font. */
+    font-family: var(--mono);
+    color: var(--accent);
+    text-shadow: 0 0 18px var(--glow);
+    white-space: pre;
+    user-select: none;
+    opacity: 0.85;
 }
 
 /* ---------- Animations ---------- */
@@ -1159,6 +1084,16 @@ button {
         padding: 2rem 1rem;
     }
 
+    /* The torus needs horizontal room to read; below this it becomes a smear,
+       so drop it and let the pane have the full width. */
+    .tuiHeroGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .tuiHeroArt {
+        min-height: 220px;
+    }
+
     .tuiPrompt__meta {
         display: none;
     }
@@ -1179,10 +1114,6 @@ button {
 
     .tuiHero__name {
         font-size: 1.6rem;
-    }
-
-    .tuiPrompt__label {
-        display: none;
     }
 
     .tuiContact {
@@ -1208,10 +1139,15 @@ button {
         animation: none;
     }
 
-    /* Backstop for the `?boot=1` force path, which mounts the curtain even when
-       motion is reduced. BootSequence also declines to mount it; this catches
-       the forced case. */
-    .tuiCurtain {
+    /* The ASCII layers are driven by rAF in JS; the renderers stop their loops
+       under reduced motion, so there is nothing to freeze here. Hide the
+       backdrop's motion source rather than showing a static field that reads
+       as a glitch. */
+    .asciiBackdrop pre {
+        opacity: 0.28;
+    }
+
+    .asciiDonut {
         display: none;
     }
 

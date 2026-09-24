@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGithub, faLinkedin } from '@fortawesome/free-brands-svg-icons';
 import { faEnvelope } from '@fortawesome/free-solid-svg-icons';
 import TuiPane from './TuiPane';
+import AsciiDonut from './AsciiDonut';
 import { scrollToSectionId } from '@/lib/scroll';
 
 const socials = [
@@ -18,8 +19,8 @@ const socials = [
 
 export default function Hero() {
   return (
-    <section id="home" className="tuiSection">
-      <div className="tuiSection__inner">
+    <section id="home" className="tuiSection tuiSection--hero">
+      <div className="tuiSection__inner tuiHeroGrid">
         <TuiPane title="babit@portfolio: ~" status="bash" command="whoami">
           <div className="tuiHero__badge">
             <span className="tuiDot" aria-hidden="true" />
@@ -67,10 +68,17 @@ export default function Hero() {
           </div>
 
           <p className="tuiLine tuiFaint" style={{ marginTop: '1.5rem', fontSize: '12px' }}>
-            tip: press <span className="tuiKey">ctrl/cmd + k</span> for the command palette — the
-            keyboard behind this pane types <span className="tuiStrong">Babit</span> as you scroll.
+            tip: press <span className="tuiKey">ctrl/cmd + k</span> for the command palette.
           </p>
         </TuiPane>
+
+        {/* The rendering itself is decorative; the caption is the readable part. */}
+        <figure className="tuiHeroArt">
+          <AsciiDonut />
+          <figcaption className="tuiHeroArt__cap">
+            <span className="tuiKey">$</span> ./donut --render=ascii --spin
+          </figcaption>
+        </figure>
       </div>
     </section>
   );

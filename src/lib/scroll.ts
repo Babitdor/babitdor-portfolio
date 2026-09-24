@@ -5,10 +5,10 @@ import type Lenis from 'lenis';
 /**
  * Scroll state is kept OUTSIDE React on purpose.
  *
- * `scrollState` is mutated every frame (by the Lenis scroll handler) and read
- * every frame (by three.js `useFrame`). Routing that through React state would
- * re-render the whole tree 60x/second. React only subscribes to the *discrete*
- * stage index, which changes 5 times per full page scroll.
+ * `scrollState` is mutated every frame by the Lenis scroll handler. Routing that
+ * through React state would re-render the whole tree 60x/second. React only
+ * subscribes to the *discrete* stage index, which changes 5 times per full page
+ * scroll.
  */
 
 export const STAGE_IDS = ['home', 'about', 'skills', 'projects', 'contact'] as const;
@@ -31,12 +31,6 @@ export const STAGE_COMMANDS: Record<StageId, string> = {
   projects: 'ls projects/',
   contact: 'ssh babit@portfolio',
 };
-
-/**
- * The word the keyboard spells: one key per stage.
- * `Babit` -> home=B, about=a, skills=b, projects=i, contact=t
- */
-export const PRESS_WORD = 'Babit';
 
 export type ScrollState = {
   /** Global scroll progress, 0..1 */

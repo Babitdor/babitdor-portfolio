@@ -2,8 +2,7 @@ import type { Metadata } from "next";
 import { JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { SmoothScrollProvider } from "@/lib/SmoothScrollProvider";
-import KeyboardScene from "@/components/KeyboardScene";
-import KeyboardFallback from "@/components/KeyboardFallback";
+import AsciiBackdrop from "@/components/AsciiBackdrop";
 import TuiFrame from "@/components/TuiFrame";
 import TuiStatusBar from "@/components/TuiStatusBar";
 import TuiPromptBar from "@/components/TuiPromptBar";
@@ -33,8 +32,7 @@ export default function RootLayout({
     <html lang="en" className={mono.variable}>
       <body>
         <SmoothScrollProvider>
-          <KeyboardScene />
-          <KeyboardFallback />
+          <AsciiBackdrop />
 
           <TuiFrame>
             <TuiStatusBar />

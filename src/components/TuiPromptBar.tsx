@@ -1,12 +1,12 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { PRESS_WORD, STAGE_COMMANDS, STAGE_IDS, type StageId } from '@/lib/scroll';
+import { STAGE_COMMANDS, STAGE_IDS, type StageId } from '@/lib/scroll';
 import { useStage } from '@/lib/useStage';
 
 /**
- * The bottom prompt bar. This is also the verifiable readout of the keyboard
- * choreography: it types out one letter of `Babit` per section.
+ * The bottom prompt bar: the current stage's command, a live scroll readout and
+ * the stage counter. The prompt reads as a real shell would.
  */
 export default function TuiPromptBar() {
   const stage = useStage();
@@ -32,8 +32,6 @@ export default function TuiPromptBar() {
     };
   }, []);
 
-  const typed = PRESS_WORD.slice(0, stage + 1);
-
   return (
     <div className="tuiBar tuiBar--bottom">
       <div className="tuiBar__inner">
@@ -43,11 +41,6 @@ export default function TuiPromptBar() {
           <span className="tuiPrompt__dir">~</span>
           <span className="tuiPrompt__sigil">$</span>
           <span className="tuiPrompt__cmd">{STAGE_COMMANDS[STAGE_IDS[stage] as StageId]}</span>
-        </div>
-
-        <div className="tuiPrompt__output" aria-hidden="true">
-          <span className="tuiPrompt__label">typing</span>
-          <span className="tuiPrompt__word">{typed}</span>
           <span className="tuiCursor" />
         </div>
 
