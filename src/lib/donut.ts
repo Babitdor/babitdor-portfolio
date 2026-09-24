@@ -13,8 +13,8 @@
  *
  * Two changes from the C original, both because a browser cell is not a
  * terminal cell:
- *   - `y` is scaled by 2 on projection, since monospace cells are about twice
- *     as tall as they are wide. Without this the torus looks squashed.
+ *   - `y` is scaled by the measured cell aspect on projection. Without this the
+ *     torus looks squashed.
  *   - the buffers are typed arrays reused across frames, not fresh allocs.
  *
  * `RAMP_DONUT` is donut.c's own ramp, so the output reads exactly like the
@@ -43,8 +43,17 @@ let cellBuf: Int32Array | null = null;
 let cellCount = 0;
 let zbuf: Float32Array | null = null;
 
+/**
+ * The torus's two rotation angles, both in radians: `a` about x, `b` about z.
+ *
+ * These arrive from outside rather than being derived from a timestamp, because
+ * the rotation is now driven by the spin motor (idle autorotation plus whatever
+ * the visitor drags), not by elapsed time alone.
+ */
+export type DonutRotation = { a: number; b: number };
+
 export function renderDonut(
-  t: number,
+  rot: DonutRotation,
   cols: number,
   rows: number,
   cell: { w: number; h: number },
@@ -59,8 +68,8 @@ export function renderDonut(
   cellBuf.fill(-1); // -1 = empty cell
   zbuf.fill(0); // 0 = infinitely far
 
-  const A = t * 0.9; // rotation about x
-  const B = t * 0.5; // rotation about z
+  const A = rot.a;
+  const B = rot.b;
   const cosA = Math.cos(A);
   const sinA = Math.sin(A);
   const cosB = Math.cos(B);

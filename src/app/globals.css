@@ -515,6 +515,16 @@ button {
     background: var(--bg);
     border: 1px solid var(--border);
     padding: 0.25rem 0.6rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.5rem;
+}
+
+/* The interaction hint, styled like a trailing shell comment. */
+.tuiHeroArt__hint {
+    color: var(--accent);
+    opacity: 0.75;
 }
 
 .tuiHero__badge {
@@ -1105,17 +1115,41 @@ button {
     user-select: none;
 }
 
-/* The hero centrepiece: a rotating ASCII torus. `.asciiDonut` is the stage the
-   renderer measures (a definite box from `flex: 1`); the <pre> is centred in it
-   and is never used for measurement, because it sizes to its own content. */
+/* The hero centrepiece: a rotating ASCII torus you can drag to spin.
+   `.asciiDonut` is the stage the renderer measures (a definite box from
+   `flex: 1`); the <pre> is centred in it and is never used for measurement,
+   because it sizes to its own content. */
 .asciiDonut {
     position: relative;
     flex: 1 1 auto;
     min-height: 0;
     display: grid;
     place-items: center;
-    pointer-events: none;
     overflow: hidden;
+    /* Interactive: drag to spin. */
+    pointer-events: auto;
+    cursor: grab;
+    /*
+      Let the browser keep vertical panning, so a swipe up or down on a phone
+      still scrolls the page instead of grabbing the torus. Horizontal drags are
+      the ones that rotate it.
+    */
+    touch-action: pan-y;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.asciiDonut.is-dragging {
+    cursor: grabbing;
+}
+
+/* Brighten on hover and while dragging, so it reads as interactive rather than
+   as a flat picture. Deliberately a brightness change only: increasing the glow
+   here washed the glyphs out and made the torus look blobby, the same way a
+   large text-shadow blurs any fine character detail. */
+.asciiDonut:hover pre,
+.asciiDonut.is-dragging pre {
+    opacity: 1;
 }
 
 .asciiDonut pre {

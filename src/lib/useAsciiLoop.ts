@@ -49,6 +49,18 @@ type Options = {
    * platform fallback.
    */
   render: (t: number, cols: number, rows: number, cell: CharCell) => string[];
+  /**
+   * Optional per-frame step, called once before each render with the seconds
+   * since the previous rendered frame.
+   *
+   * This exists so an effect can carry mutable state between frames without
+   * making `render` impure. The torus uses it to integrate its rotation from the
+   * spin motor, which is what lets a drag feed into the animation.
+   *
+   * Not called while the loop is paused, so off-screen time does not advance it,
+   * and `dt` is clamped so resuming after a pause cannot jump.
+   */
+  advance?: (dt: number) => void;
   /** Fraction of the box the grid should cover. */
   fill?: { w: number; h: number };
   /** Time (seconds) frozen frames are rendered at under reduced motion. */
@@ -86,18 +98,20 @@ function measureCell(el: HTMLElement): CharCell | null {
 
 export function useAsciiLoop(
   ref: RefObject<HTMLElement | null>,
-  { boxRef, fps = 18, render, fill = { w: 1, h: 1 }, stillTime = 0 }: Options,
+  { boxRef, fps = 18, render, advance, fill = { w: 1, h: 1 }, stillTime = 0 }: Options,
 ): AsciiLoop {
   const reduced = usePrefersReducedMotion();
   const sizeRef = useRef({ cols: 0, rows: 0 });
   const cellRef = useRef<CharCell | null>(null);
   const [, force] = useState(0);
   const renderRef = useRef(render);
+  const advanceRef = useRef(advance);
   const drawRef = useRef<(t: number) => void>(() => {});
 
-  // Keep the latest renderer without writing a ref during render.
+  // Keep the latest callbacks without writing a ref during render.
   useEffect(() => {
     renderRef.current = render;
+    advanceRef.current = advance;
   });
 
   const box = () => boxRef?.current ?? ref.current?.parentElement ?? ref.current ?? null;
@@ -166,6 +180,9 @@ export function useAsciiLoop(
       if (delta < FRAME_MS) return;
       // Do not accumulate debt: a slow frame should skip, not burst.
       last = now - (delta % FRAME_MS);
+      // Clamped so a long first frame, or the frame that resumes after a pause,
+      // cannot advance the state by a huge step.
+      advanceRef.current?.(Math.min(delta / 1000, 0.1));
       drawRef.current((now - start) / 1000);
     };
     raf = requestAnimationFrame(tick);

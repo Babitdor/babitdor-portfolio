@@ -78,11 +78,13 @@ export default function Hero() {
           </p>
         </TuiPane>
 
-        {/* The rendering itself is decorative; the caption is the readable part. */}
+        {/* The torus renders the caption's promise: it really does spin, and you
+            can throw it around. */}
         <figure className="tuiHeroArt">
           <AsciiDonut />
           <figcaption className="tuiHeroArt__cap">
             <span className="tuiKey">$</span> ./donut --render=ascii --spin
+            <span className="tuiHeroArt__hint"># drag to spin it</span>
           </figcaption>
         </figure>
       </div>
