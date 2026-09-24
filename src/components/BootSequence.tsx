@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { usePrefersReducedMotion } from '@/lib/useClient';
 import { BANNER_REVEAL, BANNER_TEXT, buildBanner, revealDuration } from '@/lib/banner';
 import AsciiBanner from './AsciiBanner';
@@ -42,6 +42,30 @@ export default function BootSequence() {
   const [lineCount, setLineCount] = useState(0);
   const [progress, setProgress] = useState(0);
   const timers = useRef<number[]>([]);
+
+  /*
+   * Hand the page over from the server-rendered guard (see layout.tsx).
+   *
+   * Keyed on `phase`, not on mount: this component renders `null` while
+   * `phase === 'off'`, so hiding the guard on mount would uncover the page
+   * during the gap before the deferred state write renders the overlay.
+   *
+   * A layout effect runs after the DOM is updated but before paint, so keyed on
+   * `phase` the guard goes away in the same frame the overlay arrives.
+   *
+   * Hides rather than removes. The guard is part of the React tree, so removing
+   * it desyncs React from the DOM and React re-inserts it on a later render,
+   * bringing back a blank screen. `display: none` is invisible to React, because
+   * no `style` prop is rendered for the element.
+   *
+   * If the boot never plays, this never fires; the guard's own 0ms backstop in
+   * layout.tsx hides it instead.
+   */
+  useLayoutEffect(() => {
+    if (phase === 'off') return;
+    const guard = document.getElementById('tuiBootGuard');
+    if (guard) guard.style.display = 'none';
+  }, [phase]);
 
   useEffect(() => {
     const forced = new URLSearchParams(window.location.search).has('boot');

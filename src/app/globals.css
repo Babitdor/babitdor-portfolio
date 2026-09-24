@@ -76,6 +76,26 @@ button {
     outline-offset: 2px;
 }
 
+/* ---------- Boot guard ---------- */
+
+/*
+  Covers the page from the first paint until the boot animation takes over.
+  Server-rendered and self-removing (see the script in layout.tsx); z-index 500
+  puts it above everything except the command palette, which cannot open before
+  hydration anyway.
+
+  It starts fully opaque with no transition: it must be opaque at first paint,
+  and fading it in would defeat the purpose. The reveal is a discrete removal by
+  the script, so there is no exit transition to coordinate.
+*/
+.tuiBootGuard {
+    position: fixed;
+    inset: 0;
+    z-index: 500;
+    background: var(--bg);
+    pointer-events: none;
+}
+
 /* ---------- CRT overlay ---------- */
 
 .tuiOverlay {
