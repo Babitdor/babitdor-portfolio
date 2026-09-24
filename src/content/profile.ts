@@ -113,7 +113,7 @@ export const skillGroups = [
   },
   {
     category: 'MODELS / LOCAL AI',
-    items: ['Ollama', 'LM Studio', 'Hugging Face', 'Unsloth', 'PyTorch', 'QLoRA fine-tuning'],
+    items: ['Ollama', 'LM Studio', 'Hugging Face', 'Unsloth', 'PyTorch'],
   },
   {
     category: 'DATA / VECTOR',

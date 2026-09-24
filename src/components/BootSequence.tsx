@@ -19,7 +19,7 @@ const STEP_MS = 190;
 /** Time the boot log holds after the last line, before the banner appears. */
 const HOLD_MS = 620;
 /** How long the settled banner holds before the whole overlay drops. */
-const BANNER_HOLD_MS = 900;
+const BANNER_HOLD_MS = 1500;
 
 /**
  * The reveal's own length, derived from the same numbers the reveal uses. This

@@ -4,11 +4,16 @@ import { useMemo, useState } from 'react';
 import TuiPane from './TuiPane';
 import { publishedModels, skillGroups } from '@/content/profile';
 
-/** Flattened for the table, keeping each item's group for filtering. */
-const skills = skillGroups.flatMap((group) =>
-  group.items.map((name) => ({ name, category: group.category })),
-);
-
+/**
+ * Skills, as one compact block per category rather than one row per skill.
+ *
+ * The previous version was a 4-column table with a row per skill: 40 rows tall,
+ * and every row repeated its own category and a constant "in use" status, so
+ * most of the height carried no information. Grouping by category and rendering
+ * each group's items as chips keeps the same content in roughly a third of the
+ * space, and the filter buttons then select a whole group rather than filtering
+ * rows out of a long list.
+ */
 export default function Skills() {
   const [filter, setFilter] = useState('ALL');
 
@@ -17,16 +22,18 @@ export default function Skills() {
     [],
   );
 
-  const visible = filter === 'ALL' ? skills : skills.filter((skill) => skill.category === filter);
+  /**
+   * Annotated deliberately: `skillGroups` is `as const`, so without this the
+   * union of readonly tuples defeats `reduce`'s overload resolution.
+   */
+  const visible: ReadonlyArray<{ category: string; items: readonly string[] }> =
+    filter === 'ALL' ? skillGroups : skillGroups.filter((g) => g.category === filter);
+  const total = visible.reduce((n, group) => n + group.items.length, 0);
 
   return (
     <section id="skills" className="tuiSection">
-      <div className="tuiSection__inner">
-        <TuiPane
-          title="~/stack/"
-          status={`${visible.length} entries`}
-          command="ls -la ~/stack/"
-        >
+      <div className="tuiSection__inner tuiSection__inner--wide">
+        <TuiPane title="~/stack/" status={`${total} entries`} command="ls -la ~/stack/">
           <div className="tuiFilters" role="group" aria-label="Filter skills by category">
             {categories.map((category) => (
               <button
@@ -41,30 +48,23 @@ export default function Skills() {
             ))}
           </div>
 
-          <table className="tuiTable">
-            <thead>
-              <tr>
-                <th scope="col">#</th>
-                <th scope="col">name</th>
-                <th scope="col">category</th>
-                <th scope="col">status</th>
-              </tr>
-            </thead>
-            <tbody>
-              {visible.map((skill, index) => (
-                <tr key={`${skill.category}-${skill.name}`}>
-                  <td className="tuiTable__num">{String(index + 1).padStart(2, '0')}</td>
-                  <td className="tuiValue">{skill.name}</td>
-                  <td>
-                    <span className="tuiChip">{skill.category}</span>
-                  </td>
-                  <td>
-                    <span className="tuiChip tuiChip--accent">in use</span>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <div className={`tuiSkills${filter === 'ALL' ? '' : ' is-single'}`}>
+            {visible.map((group) => (
+              <div className="tuiSkillGroup" key={group.category}>
+                <div className="tuiSkillGroup__head">
+                  <span className="tuiSkillGroup__name">{group.category}</span>
+                  <span className="tuiSkillGroup__count">{group.items.length}</span>
+                </div>
+                <div className="tuiSkillGroup__items">
+                  {group.items.map((item) => (
+                    <span className="tuiChip" key={item}>
+                      {item}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
 
           {/* The published models are the most concrete thing here: real weights,
               real download counts, checkable on Ollama. */}

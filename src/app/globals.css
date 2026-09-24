@@ -21,6 +21,22 @@
     --mono: var(--font-mono), ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas,
         'Liberation Mono', monospace;
 
+    /*
+     * Font stack for artwork built from solid block glyphs (U+2588 and friends).
+
+     * Deliberately excludes the site font. JetBrains Mono's `U+2588 FULL BLOCK`
+     * is drawn slightly smaller than its cell, so adjacent blocks leave a seam
+     * on every edge. For a dot-matrix banner that is fatal: at 11px the seams
+     * merge into a mush and the word reads as smeared noise. Every stack below
+     * was rendered side by side and tiles solid; JetBrains Mono was the only one
+     * that did not.
+     *
+     * Line-drawn ASCII ramps (`.:-=+*#%@`) are unaffected and still use --mono,
+     * because those are ordinary characters that do not need to tile.
+     */
+    --mono-blocks: Consolas, ui-monospace, 'DejaVu Sans Mono', 'Liberation Mono',
+        'Courier New', monospace;
+
     --bar-top-h: 46px;
     --bar-bottom-h: 42px;
     --gutter: 1.5rem;
@@ -467,44 +483,6 @@ button {
     letter-spacing: -1px;
 }
 
-/* ---------- Table ---------- */
-
-.tuiTable {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 13px;
-}
-
-.tuiTable th,
-.tuiTable td {
-    text-align: left;
-    padding: 0.5rem 0.75rem;
-    border-bottom: 1px solid rgba(57, 255, 136, 0.12);
-    vertical-align: top;
-}
-
-.tuiTable th {
-    color: var(--fg-faint);
-    font-weight: 500;
-    font-size: 11px;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    border-bottom-color: var(--border);
-}
-
-.tuiTable tr:last-child td {
-    border-bottom: 0;
-}
-
-.tuiTable tbody tr:hover {
-    background: rgba(57, 255, 136, 0.05);
-}
-
-.tuiTable__num {
-    color: var(--fg-faint);
-    width: 3ch;
-}
-
 /* ---------- Hero ---------- */
 
 /* Two columns on wide screens: the whoami pane, and the ASCII torus beside it.
@@ -701,6 +679,56 @@ button {
     font-weight: 700;
 }
 
+/*
+  Skills laid out as one block per category instead of a row per skill.
+
+  Two columns on wide screens keeps the whole section to three short rows, which
+  is what stops it running the length of the page. A single filter selection
+  drops to one column (`is-single`) so the chosen group is not squeezed into half
+  the width next to an empty cell.
+*/
+.tuiSkills {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.25rem 2.25rem;
+}
+
+.tuiSkills.is-single {
+    grid-template-columns: 1fr;
+}
+
+.tuiSkillGroup {
+    min-width: 0;
+}
+
+.tuiSkillGroup__head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-bottom: 0.4rem;
+    margin-bottom: 0.6rem;
+    border-bottom: 1px solid var(--border);
+}
+
+.tuiSkillGroup__name {
+    color: var(--accent);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+}
+
+.tuiSkillGroup__count {
+    color: var(--fg-faint);
+    font-size: 11px;
+}
+
+.tuiSkillGroup__items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+}
+
 /* ---------- Projects ---------- */
 
 .tuiProjects {
@@ -894,18 +922,39 @@ button {
 .tuiBoot__bar {
     margin-top: 1rem;
     color: var(--accent);
+    /* Built from full/half blocks, so it needs the tiling stack (see --mono-blocks). */
+    font-family: var(--mono-blocks);
 }
 
 /* The scramble-revealed name banner. Block glyphs only, so it renders the same
    width everywhere; centred and sized to fit a 9-glyph row on small screens. */
+/*
+  The scramble-revealed name banner. Block glyphs only, so it renders the same
+  width everywhere.
+
+  Three things matter here and all of them are about legibility:
+
+  - It uses `--mono-blocks`, not the site font. JetBrains Mono's full-block glyph
+    does not fill its cell, so every block leaves a seam and the dot-matrix
+    letters dissolve into speckle. See the note on `--mono-blocks`. This is the
+    actual cause of the "smeared" look; the glow below was a second, smaller
+    contributor.
+  - No large glow. It previously carried `text-shadow: 0 0 18px`, which on an
+    11px font blooms about 1.6x the glyph size and closes the counters. Anything
+    above roughly a 6px blur starts smearing again.
+  - It is sized up from 11px, which was too small for what is effectively the
+    page's title card. `AsciiBanner` scales it down to fit narrow viewports.
+
+  `line-height` stays just over 1 so the 7 block rows tile without seams.
+*/
 .tuiBoot__banner {
     align-self: center;
     white-space: pre;
     color: var(--accent);
-    font-family: var(--mono);
-    font-size: clamp(8px, 1.6vw, 14px);
-    line-height: 1.05;
-    text-shadow: 0 0 18px var(--glow);
+    font-family: var(--mono-blocks);
+    font-size: clamp(11px, 2.1vw, 21px);
+    line-height: 1.07;
+    text-shadow: 0 0 5px rgba(57, 255, 136, 0.22);
     margin: 0;
 }
 
@@ -1161,9 +1210,10 @@ button {
         padding: 0.9rem 0.85rem 1.1rem;
     }
 
-    .tuiTable th:nth-child(3),
-    .tuiTable td:nth-child(3) {
-        display: none;
+    /* One column for the skill groups once there is no room for two. */
+    .tuiSkills {
+        grid-template-columns: 1fr;
+        gap: 1.1rem;
     }
 }
 
