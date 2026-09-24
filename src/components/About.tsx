@@ -1,27 +1,7 @@
 'use client';
 
 import TuiPane from './TuiPane';
-
-const education = [
-  {
-    degree: 'M.Sc. Artificial Intelligence',
-    school: 'Friedrich-Alexander-Universität Erlangen–Nürnberg',
-    period: '03/2024 – present',
-    place: 'Germany',
-  },
-  {
-    degree: 'B.Tech. Computer Science & Engineering',
-    school: 'National Institute of Technology, Meghalaya',
-    period: '04/2018 – 04/2022',
-    place: 'India',
-  },
-];
-
-const stats = [
-  { number: '5+', label: 'PROJECTS SHIPPED' },
-  { number: '3+', label: 'YEARS BUILDING' },
-  { number: '10+', label: 'TECHNOLOGIES' },
-];
+import { certifications, education, experience, stats } from '@/content/profile';
 
 const meter = (filled: number) => '█'.repeat(filled) + '░'.repeat(10 - filled);
 
@@ -32,17 +12,20 @@ export default function About() {
         <TuiPane title="~/about.md" status="read-only" command="cat about.md">
           <div className="tuiOutput" style={{ marginTop: 0, borderTop: 0, paddingTop: 0 }}>
             <p className="tuiLine tuiMuted">
-              I&apos;m an AI/ML engineer specialising in{' '}
-              <span className="tuiStrong">LLM orchestration</span> and{' '}
-              <span className="tuiStrong">RAG architectures</span>. Currently pursuing my
-              Master&apos;s in Artificial Intelligence at FAU Erlangen-Nürnberg, I build systems
-              that put large language models to work on real, structured problems.
+              I&apos;m an AI engineer working on{' '}
+              <span className="tuiStrong">production agent systems</span>. By day I build AI
+              agents at <span className="tuiStrong">Siemens Digital Industries Software</span>,
+              where the interesting part is everything the demo never shows you: latency, token
+              budgets, failing retries, and retrieval that quietly returns the wrong thing.
             </p>
             <p className="tuiLine tuiMuted">
-              My work spans <span className="tuiStrong">multi-agent workflows</span>,{' '}
-              <span className="tuiStrong">vector databases</span> and deploying AI services at
-              scale — mostly tooling that makes developers faster and takes the tedium out of
-              complex pipelines.
+              Alongside that I&apos;m finishing an{' '}
+              <span className="tuiStrong">M.Sc. in Artificial Intelligence</span> at FAU
+              Erlangen-Nürnberg, with a research affiliation at{' '}
+              <span className="tuiStrong">Institute FAPS</span>. My focus is{' '}
+              <span className="tuiStrong">Model-Based Systems Engineering</span> — using
+              fine-tuned LLMs and multi-agent workflows to generate and validate SysML v2 models
+              — plus the harnesses and tooling that make agents usable in practice.
             </p>
           </div>
 
@@ -51,10 +34,26 @@ export default function About() {
             <div className="tuiStats">
               {stats.map((stat, index) => (
                 <div className="tuiStat" key={stat.label}>
-                  <div className="tuiStat__num">{stat.number}</div>
+                  <div className="tuiStat__num">{stat.value}</div>
                   <div className="tuiStat__label">{stat.label}</div>
                   <div className="tuiMeter" aria-hidden="true">
                     {meter(4 + index * 3)}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="tuiOutput">
+            <span className="tuiLine tuiFaint">$ experience --list</span>
+            <div className="tuiEdu">
+              {experience.map((item) => (
+                <div className="tuiEdu__row" key={item.org}>
+                  <div className="tuiEdu__degree">
+                    {item.role} · {item.org}
+                  </div>
+                  <div className="tuiEdu__meta">
+                    {item.detail} ({item.place}, {item.period})
                   </div>
                 </div>
               ))}
@@ -69,6 +68,24 @@ export default function About() {
                   <div className="tuiEdu__degree">{item.degree}</div>
                   <div className="tuiEdu__meta">
                     {item.school} · {item.period} · {item.place}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="tuiOutput">
+            <span className="tuiLine tuiFaint">$ certs --verify</span>
+            <div className="tuiEdu">
+              {certifications.map((cert) => (
+                <div className="tuiEdu__row" key={cert.id}>
+                  <div className="tuiEdu__degree">
+                    <a href={cert.url} target="_blank" rel="noopener noreferrer">
+                      {cert.name}
+                    </a>
+                  </div>
+                  <div className="tuiEdu__meta">
+                    {cert.issuer} · {cert.issued} · id <span className="tuiValue">{cert.id}</span>
                   </div>
                 </div>
               ))}

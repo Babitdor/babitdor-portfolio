@@ -737,6 +737,13 @@ button {
     padding-top: 0.9rem;
 }
 
+.tuiProject__blurb {
+    color: var(--fg);
+    font-size: 13px;
+    line-height: 1.7;
+    margin-bottom: 0.5rem;
+}
+
 .tuiProject__desc {
     color: var(--fg-dim);
     font-size: 13px;
@@ -746,7 +753,17 @@ button {
 .tuiProject__links {
     margin-top: 0.9rem;
     display: flex;
-    gap: 0.5rem;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+/* Quiet marker for things that have no public repo to link to. */
+.tuiProject__stat {
+    color: var(--fg-faint);
+    font-size: 12px;
+    border: 1px dashed var(--border);
+    padding: 0.35rem 0.6rem;
 }
 
 /* ---------- Contact ---------- */

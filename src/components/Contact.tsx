@@ -1,35 +1,48 @@
 'use client';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEnvelope, faPhone, faPaperPlane } from '@fortawesome/free-solid-svg-icons';
+import { faEnvelope, faPhone, faPaperPlane, faBrain, faTerminal } from '@fortawesome/free-solid-svg-icons';
 import { faLinkedin, faSquareGithub } from '@fortawesome/free-brands-svg-icons';
 import TuiPane from './TuiPane';
 import { copyToClipboard } from '@/lib/toast';
+import { identity } from '@/content/profile';
 
 const contactMethods = [
   {
     icon: faEnvelope,
     label: 'EMAIL',
-    value: 'babitdorbryan14@gmail.com',
-    href: 'mailto:babitdorbryan14@gmail.com',
-  },
-  {
-    icon: faPhone,
-    label: 'PHONE',
-    value: '+49 176 37280448',
-    href: 'tel:+4917637280448',
+    value: identity.email,
+    href: `mailto:${identity.email}`,
   },
   {
     icon: faLinkedin,
     label: 'LINKEDIN',
     value: 'babitdor-kayang-khonglah',
-    href: 'https://www.linkedin.com/in/babitdor-kayang-khonglah-aa1b68207/',
+    href: identity.linkedin,
   },
   {
     icon: faSquareGithub,
     label: 'GITHUB',
     value: 'github.com/Babitdor',
-    href: 'https://github.com/Babitdor',
+    href: identity.github,
+  },
+  {
+    icon: faBrain,
+    label: 'HUGGING FACE',
+    value: identity.huggingfaceLabel,
+    href: identity.huggingface,
+  },
+  {
+    icon: faTerminal,
+    label: 'OLLAMA',
+    value: identity.ollamaLabel,
+    href: identity.ollama,
+  },
+  {
+    icon: faPhone,
+    label: 'PHONE',
+    value: identity.phone,
+    href: `tel:${identity.phone.replace(/[^+\d]/g, '')}`,
   },
 ];
 
@@ -40,8 +53,8 @@ export default function Contact() {
         <TuiPane title="babit@portfolio" status="connected" command="ssh babit@portfolio">
           <p className="tuiLine tuiMuted">
             <span className="tuiFaint"># </span>
-            Always open to new opportunities, research collaborations, or an interesting AI/ML
-            problem. Pick a channel below — click to copy.
+            Open to research collaborations, interesting agent problems, and good conversations
+            about what actually breaks in production. Click any channel to copy it.
           </p>
 
           <div className="tuiOutput">
@@ -64,7 +77,7 @@ export default function Contact() {
           </div>
 
           <div className="tuiHero__actions">
-            <a className="tuiBtn" href="mailto:babitdorbryan14@gmail.com">
+            <a className="tuiBtn" href={`mailto:${identity.email}`}>
               <FontAwesomeIcon icon={faPaperPlane} aria-hidden="true" />
               mail --compose
             </a>

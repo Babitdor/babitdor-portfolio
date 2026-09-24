@@ -4,7 +4,10 @@ This file provides guidance to AI assistants when working with code in this repo
 
 ## Project Overview
 
-A modern, interactive portfolio website for Babitdor Kayang Khonglah, an AI/ML engineer and developer. The site features a 3D interactive bedroom scene, smooth animations, dark/light theme support, and showcases projects, skills, and contact information.
+A terminal-styled portfolio site for Babitdor Kayang Khonglah, an AI engineer. The site
+presents as a TUI: a status bar, window panes and a prompt bar, with ASCII art animations
+(a rotating `donut.c` torus in the hero, an ambient character field behind the panes, and a
+scramble-revealed name banner on boot). Content lives in `src/content/`.
 
 ## Technology Stack
 
@@ -13,16 +16,11 @@ A modern, interactive portfolio website for Babitdor Kayang Khonglah, an AI/ML e
 - React 19.2.3
 - TypeScript 5
 
-**UI & Animation:**
-- Framer Motion 12.23.26 - Page and component animations
-- Three.js 0.182.0 - 3D graphics rendering
-- @react-three/fiber 9.5.0 - React renderer for Three.js
-- @react-three/drei 10.7.7 - Three.js helpers and abstractions
-
-**Icons & Styling:**
-- @fortawesome/react-fontawesome 3.1.1 - Icon components
-- @fortawesome/free-solid-svg-icons 7.1.0 - Solid icons
-- @fortawesome/free-brands-svg-icons 7.1.0 - Brand icons
+**UI, Animation and Effects:**
+- Lenis 1.3.26 - smooth scrolling (drives the section/stage state)
+- @fortawesome/react-fontawesome 3.1.1 - icons
+- No 3D library and no animation library: the ASCII effects are hand-written
+  character-cell renderers (see `src/lib/ascii.ts`, `donut.ts`, `field.ts`, `banner.ts`).
 
 **Development Tools:**
 - ESLint 9 - Code linting
@@ -33,49 +31,80 @@ A modern, interactive portfolio website for Babitdor Kayang Khonglah, an AI/ML e
 ```
 portfolio/
 ├── public/                    # Static assets
-│   ├── room/                 # 3D model files (GLB format)
-│   │   └── bedroom.glb       # Main 3D bedroom scene
-│   └── *.svg                 # Various SVG icons
 ├── src/
 │   ├── app/                  # Next.js App Router
-│   │   ├── layout.tsx        # Root layout with ThemeProvider, Navbar, Footer
+│   │   ├── layout.tsx        # Root layout: providers, status bar, prompt bar, boot
 │   │   ├── page.tsx          # Home page (Hero, About, Skills, Projects, Contact)
-│   │   ├── globals.css       # Global styles and theme variables
-│   │   └── favicon.ico       # Site favicon
-│   └── components/           # React components
-│       ├── ThemeProvider.tsx # Dark/light theme context
-│       ├── Navbar.tsx        # Navigation bar
-│       ├── Footer.tsx        # Footer component
-│       ├── Hero.tsx          # Hero section with 3D model
-│       ├── About.tsx         # About section
-│       ├── Skills.tsx        # Skills display
-│       ├── Projects.tsx      # Projects showcase
-│       ├── Contact.tsx       # Contact form/section
-│       ├── Model3D.tsx       # 3D model viewer component
-│       └── Animations.tsx    # Reusable animation variants
-├── .gitignore               # Git ignore rules
-├── package.json             # Dependencies and scripts
-├── tsconfig.json            # TypeScript configuration
-├── next.config.ts           # Next.js configuration
-├── eslint.config.mjs        # ESLint configuration
-└── README.md                # Project documentation
+│   │   └── globals.css       # Design system: palette, primitives, layout
+│   ├── content/              # ALL personal content. Edit facts here, not components.
+│   │   ├── profile.ts        # Identity, experience, education, certs, skills, stats
+│   │   └── projects.ts       # Project list with per-project repo links
+│   ├── components/           # React components
+│   │   ├── AsciiBackdrop.tsx # Ambient character field behind everything
+│   │   ├── AsciiDonut.tsx    # Rotating ASCII torus (hero centrepiece)
+│   │   ├── AsciiBanner.tsx   # Scramble-revealed name banner (boot)
+│   │   ├── BootSequence.tsx  # Boot log -> banner, once per tab
+│   │   ├── Hero.tsx          # Hero pane + donut figure
+│   │   ├── About.tsx         # about.md: bio, stats, experience, education, certs
+│   │   ├── Skills.tsx        # ~/stack/: filterable skill table + published models
+│   │   ├── Projects.tsx      # ~/projects/: expandable project list
+│   │   ├── Contact.tsx       # Channels, click-to-copy
+│   │   ├── TuiPane.tsx       # The window chrome every section wears
+│   │   ├── TuiStatusBar.tsx  # Top bar: path + section tabs
+│   │   ├── TuiPromptBar.tsx  # Bottom bar: current command + scroll readout
+│   │   ├── CommandPalette.tsx# Ctrl/Cmd+K
+│   │   ├── CopyToast.tsx     # Copy confirmation
+│   │   └── Footer.tsx
+│   └── lib/                  # Non-React logic
+│       ├── ascii.ts          # Character ramps + ramp-index helper
+│       ├── useAsciiLoop.ts   # The single hook driving every ASCII effect
+│       ├── donut.ts          # donut.c port (z-buffered ASCII torus)
+│       ├── field.ts          # Ambient field renderer
+│       ├── banner.ts         # 5x7 bitmap font + scramble reveal
+│       ├── scroll.ts         # Scroll state outside React + stage measurement
+│       ├── SmoothScrollProvider.tsx
+│       ├── toast.ts          # Copy-to-clipboard + toast store
+│       ├── useClient.ts      # Client / reduced-motion hooks
+│       └── useStage.ts       # Subscribes React to the discrete stage index
+├── .gitignore
+├── package.json
+├── tsconfig.json
+├── next.config.ts
+├── eslint.config.mjs
+└── README.md
 ```
+
+## Content Rules
+
+- **All personal facts live in `src/content/`.** Components read from there; do not
+  hardcode a name, link, date or skill in a component.
+- Every fact in `profile.ts` and `projects.ts` was verified against a primary source
+  (GitHub API, the certificate page, Hugging Face, Ollama, ORCID). If you add a claim,
+  verify it, or leave it out.
+- `Information.md`, `Projects.md` and `Last_Project.md` in the repo root are older raw
+  notes. They are NOT the source of truth and have drifted; `src/content/` wins.
+
+## ASCII Effects
+
+- One `<pre>` per effect, one `textContent` write per frame. Never a DOM node per cell.
+- Driven by `useAsciiLoop`, which throttles with a time accumulator (not a timer), pauses
+  when off-screen or on tab-hide, and renders a single still frame under
+  `prefers-reduced-motion`.
+- Renderers must be pure functions of `t` (no `Math.random`), so frames are reproducible.
+- `pre` gets `font-family: monospace` from the UA stylesheet, which outranks the inherited
+  font. Each ASCII layer must set `font-family: var(--mono)` explicitly.
+- The character cell is measured from the live font at runtime; do not hardcode a cell
+  width.
 
 ## Development Setup
 
 ### Prerequisites
 - Node.js (v20 or higher recommended)
-- npm, yarn, pnpm, or bun
 
 ### Installation
 
 ```bash
-# Install dependencies
 npm install
-# or
-yarn install
-# or
-pnpm install
 ```
 
 ### Environment Variables
@@ -85,7 +114,7 @@ No environment variables are currently required for this project.
 ## Development Commands
 
 ```bash
-# Start development server (http://localhost:3000)
+# Start development server (prints the actual port; 3000 is often taken)
 npm run dev
 
 # Build for production
@@ -96,7 +125,14 @@ npm start
 
 # Run ESLint
 npm run lint
+
+# Type-check (the build does this too, but this is faster)
+npx tsc --noEmit
 ```
+
+**Do not run `npm run build` while the dev server is running.** Both write to `.next` and
+the dev server will start serving stale or broken output.
+
 
 ## Architecture
 

@@ -6,15 +6,16 @@ import { faEnvelope } from '@fortawesome/free-solid-svg-icons';
 import TuiPane from './TuiPane';
 import AsciiDonut from './AsciiDonut';
 import { scrollToSectionId } from '@/lib/scroll';
+import { identity, focusAreas } from '@/content/profile';
 
 const socials = [
-  { icon: faGithub, href: 'https://github.com/Babitdor', label: 'github.com/Babitdor' },
+  { icon: faGithub, href: identity.github, label: 'github.com/Babitdor' },
   {
     icon: faLinkedin,
-    href: 'https://www.linkedin.com/in/babitdor-kayang-khonglah-aa1b68207/',
+    href: identity.linkedin,
     label: 'linkedin.com/in/babitdor',
   },
-  { icon: faEnvelope, href: 'mailto:babitdorbryan14@gmail.com', label: 'babitdorbryan14@gmail.com' },
+  { icon: faEnvelope, href: `mailto:${identity.email}`, label: identity.email },
 ];
 
 export default function Hero() {
@@ -24,25 +25,30 @@ export default function Hero() {
         <TuiPane title="babit@portfolio: ~" status="bash" command="whoami">
           <div className="tuiHero__badge">
             <span className="tuiDot" aria-hidden="true" />
-            status: available for work
+            AI Engineer @ Siemens Digital Industries Software
           </div>
 
-          <h1 className="tuiHero__name">Babitdor Kayang Khonglah</h1>
+          <h1 className="tuiHero__name">{identity.name}</h1>
 
           <p className="tuiHero__role">
-            AI / ML engineer — LLM orchestration, RAG architectures, multi-agent systems.
+            {identity.role} — I build AI agent systems that hold up in production: LLM
+            orchestration, RAG architectures and multi-agent workflows.
           </p>
 
           <div className="tuiOutput">
             <span className="tuiLine">
               <span className="tuiKey">location</span> <span className="tuiFaint">:</span>{' '}
-              <span className="tuiValue">Erlangen, Germany</span>
+              <span className="tuiValue">{identity.location}</span>
+            </span>
+            <span className="tuiLine">
+              <span className="tuiKey">current</span> <span className="tuiFaint">:</span>{' '}
+              <span className="tuiValue">
+                M.Sc. AI @ FAU Erlangen-Nürnberg · AI Engineer @ Siemens
+              </span>
             </span>
             <span className="tuiLine">
               <span className="tuiKey">focus</span> <span className="tuiFaint">:</span>{' '}
-              <span className="tuiValue">
-                LangGraph · LangChain · RAG · vector databases · Docker
-              </span>
+              <span className="tuiValue">{focusAreas.join(' · ')}</span>
             </span>
           </div>
 

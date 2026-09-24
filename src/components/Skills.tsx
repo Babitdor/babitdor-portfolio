@@ -2,31 +2,18 @@
 
 import { useMemo, useState } from 'react';
 import TuiPane from './TuiPane';
+import { publishedModels, skillGroups } from '@/content/profile';
 
-const skills = [
-  { name: 'Python', category: 'LANGUAGE' },
-  { name: 'JavaScript', category: 'LANGUAGE' },
-  { name: 'TypeScript', category: 'LANGUAGE' },
-  { name: 'C++', category: 'LANGUAGE' },
-  { name: 'LangGraph', category: 'AI/ML' },
-  { name: 'LangChain', category: 'AI/ML' },
-  { name: 'CrewAI', category: 'AI/ML' },
-  { name: 'RAG', category: 'AI/ML' },
-  { name: 'LLM', category: 'AI/ML' },
-  { name: 'Docker', category: 'DEVOPS' },
-  { name: 'Git', category: 'DEVOPS' },
-  { name: 'PostgreSQL', category: 'DATABASE' },
-  { name: 'MongoDB', category: 'DATABASE' },
-  { name: 'Vector DB', category: 'DATABASE' },
-  { name: 'React', category: 'FRONTEND' },
-  { name: 'Node.js', category: 'BACKEND' },
-];
+/** Flattened for the table, keeping each item's group for filtering. */
+const skills = skillGroups.flatMap((group) =>
+  group.items.map((name) => ({ name, category: group.category })),
+);
 
 export default function Skills() {
   const [filter, setFilter] = useState('ALL');
 
   const categories = useMemo(
-    () => ['ALL', ...Array.from(new Set(skills.map((skill) => skill.category)))],
+    () => ['ALL', ...skillGroups.map((group) => group.category)],
     [],
   );
 
@@ -65,7 +52,7 @@ export default function Skills() {
             </thead>
             <tbody>
               {visible.map((skill, index) => (
-                <tr key={skill.name}>
+                <tr key={`${skill.category}-${skill.name}`}>
                   <td className="tuiTable__num">{String(index + 1).padStart(2, '0')}</td>
                   <td className="tuiValue">{skill.name}</td>
                   <td>
@@ -78,6 +65,23 @@ export default function Skills() {
               ))}
             </tbody>
           </table>
+
+          {/* The published models are the most concrete thing here: real weights,
+              real download counts, checkable on Ollama. */}
+          <div className="tuiOutput">
+            <span className="tuiLine tuiFaint">$ ollama list --mine</span>
+            <div className="tuiEdu">
+              {publishedModels.map((model) => (
+                <div className="tuiEdu__row" key={model.name}>
+                  <div className="tuiEdu__degree">{model.name}</div>
+                  <div className="tuiEdu__meta">
+                    {model.pulls} pulls · {model.note} · published on{' '}
+                    <span className="tuiValue">Ollama &amp; Hugging Face</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         </TuiPane>
       </div>
     </section>
