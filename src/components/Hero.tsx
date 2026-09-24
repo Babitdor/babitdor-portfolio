@@ -1,117 +1,77 @@
 'use client';
 
-import { motion } from 'framer-motion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGithub, faLinkedin } from '@fortawesome/free-brands-svg-icons';
-import { faEnvelope, faMapMarkerAlt, faArrowRight } from '@fortawesome/free-solid-svg-icons';
-import Model3D from './Model3D';
+import { faEnvelope } from '@fortawesome/free-solid-svg-icons';
+import TuiPane from './TuiPane';
+import { scrollToSectionId } from '@/lib/scroll';
 
-const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-        opacity: 1,
-        transition: {
-            staggerChildren: 0.15,
-            delayChildren: 0.2,
-        },
-    },
-};
-
-const itemVariants = {
-    hidden: { opacity: 0, y: 30 },
-    visible: {
-        opacity: 1,
-        y: 0,
-        transition: { duration: 0.6, ease: [0.25, 0.25, 0, 1] as const },
-    },
-};
-
-const iconVariants = {
-    hidden: { opacity: 0, scale: 0 },
-    visible: {
-        opacity: 1,
-        scale: 1,
-        transition: { type: 'spring' as const, stiffness: 200, damping: 15 },
-    },
-};
+const socials = [
+  { icon: faGithub, href: 'https://github.com/Babitdor', label: 'github.com/Babitdor' },
+  {
+    icon: faLinkedin,
+    href: 'https://www.linkedin.com/in/babitdor-kayang-khonglah-aa1b68207/',
+    label: 'linkedin.com/in/babitdor',
+  },
+  { icon: faEnvelope, href: 'mailto:babitdorbryan14@gmail.com', label: 'babitdorbryan14@gmail.com' },
+];
 
 export default function Hero() {
-    return (
-        <section id="home" className="hero">
-            <div className="container">
-                <motion.div
-                    className="heroContent"
-                    variants={containerVariants}
-                    initial="hidden"
-                    animate="visible"
-                >
-                    <motion.div className="heroBadge" variants={itemVariants}>
-                        <span>Available for work</span>
-                    </motion.div>
+  return (
+    <section id="home" className="tuiSection">
+      <div className="tuiSection__inner">
+        <TuiPane title="babit@portfolio: ~" status="bash" command="whoami">
+          <div className="tuiHero__badge">
+            <span className="tuiDot" aria-hidden="true" />
+            status: available for work
+          </div>
 
-                    <motion.h1 variants={itemVariants}>
-                        Hi, I&apos;m{' '}
-                        <motion.span
-                            className="gradient-text"
-                            style={{ display: 'inline-block' }}
-                        >
-                            Babitdor Kayang Khonglah
-                        </motion.span>
-                    </motion.h1>
+          <h1 className="tuiHero__name">Babitdor Kayang Khonglah</h1>
 
-                    <motion.p className="heroSubtitle" variants={itemVariants}>
-                        AI/ML Engineer specializing in LLM orchestration, RAG architectures,
-                        and building intelligent systems that scale.
-                    </motion.p>
+          <p className="tuiHero__role">
+            AI / ML engineer — LLM orchestration, RAG architectures, multi-agent systems.
+          </p>
 
-                    <motion.div className="heroLocation" variants={itemVariants}>
-                        <FontAwesomeIcon icon={faMapMarkerAlt} />
-                        <span>Erlangen, Germany</span>
-                    </motion.div>
+          <div className="tuiOutput">
+            <span className="tuiLine">
+              <span className="tuiKey">location</span> <span className="tuiFaint">:</span>{' '}
+              <span className="tuiValue">Erlangen, Germany</span>
+            </span>
+            <span className="tuiLine">
+              <span className="tuiKey">focus</span> <span className="tuiFaint">:</span>{' '}
+              <span className="tuiValue">
+                LangGraph · LangChain · RAG · vector databases · Docker
+              </span>
+            </span>
+          </div>
 
-                    <motion.div className="heroButtons" variants={itemVariants}>
-                        <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
-                            <a href="#projects" className="btnPrimary">
-                                View Projects
-                                <FontAwesomeIcon icon={faArrowRight} />
-                            </a>
-                        </motion.div>
-                        <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
-                            <a href="#contact" className="btnSecondary">
-                                Get In Touch
-                            </a>
-                        </motion.div>
-                    </motion.div>
+          <div className="tuiHero__actions">
+            <button type="button" className="tuiBtn" onClick={() => scrollToSectionId('projects')}>
+              ./projects --list
+            </button>
+            <button
+              type="button"
+              className="tuiBtn tuiBtn--ghost"
+              onClick={() => scrollToSectionId('contact')}
+            >
+              ./contact
+            </button>
+          </div>
 
-                    <motion.div className="socialLinks" variants={itemVariants}>
-                        {[
-                            { icon: faGithub, href: 'https://github.com/Babitdor', label: 'GitHub' },
-                            { icon: faLinkedin, href: 'https://www.linkedin.com/in/babitdor-kayang-khonglah-aa1b68207/', label: 'LinkedIn' },
-                            { icon: faEnvelope, href: 'mailto:babitdorbryan14@gmail.com', label: 'Email' },
-                        ].map((social, i) => (
-                            <motion.a
-                                key={social.label}
-                                href={social.href}
-                                className="socialIcon"
-                                aria-label={social.label}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                variants={iconVariants}
-                                whileHover={{ scale: 1.15, y: -5 }}
-                                whileTap={{ scale: 0.95 }}
-                                transition={{ delay: 0.6 + i * 0.1 }}
-                            >
-                                <FontAwesomeIcon icon={social.icon} size="lg" />
-                            </motion.a>
-                        ))}
-                    </motion.div>
+          <div className="tuiSocials">
+            {socials.map((social) => (
+              <a key={social.label} href={social.href} target="_blank" rel="noopener noreferrer">
+                <FontAwesomeIcon icon={social.icon} aria-hidden="true" /> {social.label}
+              </a>
+            ))}
+          </div>
 
-                </motion.div>
-
-                <div className="hero3DBackground">
-                    <Model3D />
-                </div>
-            </div>
-        </section>
-    );
+          <p className="tuiLine tuiFaint" style={{ marginTop: '1.5rem', fontSize: '12px' }}>
+            tip: press <span className="tuiKey">ctrl/cmd + k</span> for the command palette — the
+            keyboard behind this pane types <span className="tuiStrong">Babit</span> as you scroll.
+          </p>
+        </TuiPane>
+      </div>
+    </section>
+  );
 }

@@ -1,55 +1,30 @@
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+/* ============================================================
+   babit-os — terminal design system
+   Palette, primitives and layout for the whole site.
+   ============================================================ */
 
 :root {
-    /* Light Theme - Modern & Clean */
-    --bg-primary: #fafafa;
-    --bg-secondary: #ffffff;
-    --bg-tertiary: #f5f5f7;
-    --bg-card: #ffffff;
-    --text-primary: #1d1d1f;
-    --text-secondary: #6e6e73;
-    --text-muted: #86868b;
-    --accent: #0066cc;
-    --accent-hover: #0055b3;
-    --accent-light: #e8f4ff;
-    --accent-glow: rgba(0, 102, 204, 0.15);
-    --border: #e5e5e7;
-    --border-light: #f0f0f2;
-    --shadow: rgba(0, 0, 0, 0.08);
-    --shadow-lg: rgba(0, 0, 0, 0.12);
-    --shadow-hover: rgba(0, 102, 204, 0.25);
-    --gradient-start: #0066cc;
-    --gradient-end: #5b4fff;
-    --gradient-primary: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
-    --gradient-subtle: linear-gradient(135deg, #f5f5f7 0%, #e8e8ed 100%);
-    --nav-bg: rgba(255, 255, 255, 0.85);
-    --card-gradient: linear-gradient(145deg, #ffffff 0%, #fafafa 100%);
-}
+    --bg: #050806;
+    --bg-panel: #080d0a;
+    --bg-panel-2: #0b120e;
+    --fg: #c9f5d3;
+    --fg-dim: #7fae8d;
+    --fg-faint: #4a7358;
+    --accent: #39ff88;
+    --accent-2: #7cf5ff;
+    --warn: #ffcc66;
+    --error: #ff5f6d;
+    --border: rgba(57, 255, 136, 0.22);
+    --border-strong: rgba(57, 255, 136, 0.45);
+    --glow: rgba(57, 255, 136, 0.35);
+    --keycap: #151b19;
 
-[data-theme="dark"] {
-    /* Dark Theme - Sophisticated & Deep */
-    --bg-primary: #000000;
-    --bg-secondary: #0a0a0a;
-    --bg-tertiary: #1a1a1a;
-    --bg-card: #141414;
-    --text-primary: #f5f5f7;
-    --text-secondary: #a1a1a6;
-    --text-muted: #6e6e73;
-    --accent: #2997ff;
-    --accent-hover: #409cff;
-    --accent-light: #1a1a2e;
-    --accent-glow: rgba(41, 151, 255, 0.15);
-    --border: #2a2a2a;
-    --border-light: #1f1f1f;
-    --shadow: rgba(0, 0, 0, 0.4);
-    --shadow-lg: rgba(0, 0, 0, 0.6);
-    --shadow-hover: rgba(41, 151, 255, 0.3);
-    --gradient-start: #2997ff;
-    --gradient-end: #9d4edd;
-    --gradient-primary: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
-    --gradient-subtle: linear-gradient(145deg, #1a1a1a 0%, #141414 100%);
-    --nav-bg: rgba(10, 10, 10, 0.8);
-    --card-gradient: linear-gradient(145deg, #1a1a1a 0%, #0d0d0d 100%);
+    --mono: var(--font-mono), ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas,
+        'Liberation Mono', monospace;
+
+    --bar-top-h: 46px;
+    --bar-bottom-h: 42px;
+    --gutter: 1.5rem;
 }
 
 * {
@@ -59,1049 +34,1197 @@
 }
 
 html {
-    scroll-behavior: smooth;
-    scroll-padding-top: 80px;
+    /* Lenis owns scrolling. `scroll-behavior: smooth` fights it and must stay off. */
+    scroll-behavior: auto;
+    background: var(--bg);
 }
 
 body {
-    font-family: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    background-color: var(--bg-primary);
-    color: var(--text-primary);
-    line-height: 1.6;
-    transition: background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1), color 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    font-family: var(--mono);
+    font-size: 14px;
+    line-height: 1.65;
+    background-color: var(--bg);
+    color: var(--fg);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
 }
 
-h1, h2, h3, h4, h5, h6 {
-    font-family: 'Space Grotesk', sans-serif;
+h1, h2, h3, h4 {
+    font-family: var(--mono);
     font-weight: 600;
-    line-height: 1.2;
+    line-height: 1.25;
+    letter-spacing: -0.01em;
 }
 
-.container {
-    max-width: 1280px;
-    margin: 0 auto;
-    padding: 0 2.5rem;
-}
-
-/* Utility Classes */
-.gradient-text {
-    background: var(--gradient-primary);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-}
-
-.glass {
-    background: var(--nav-bg);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-}
-
-.card {
-    background: var(--card-gradient);
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-/* Navbar */
-.navbar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    background: var(--nav-bg);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    z-index: 1000;
-    padding: 1rem 0;
-    border-bottom: 1px solid var(--border);
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.navbar.scrolled {
-    padding: 0.75rem 0;
-    background: rgba(255, 255, 255, 0.95);
-    box-shadow: 0 4px 30px var(--shadow);
-}
-
-[data-theme="dark"] .navbar.scrolled {
-    background: rgba(10, 10, 10, 0.95);
-}
-
-.navContainer {
-    max-width: 1280px;
-    margin: 0 auto;
-    padding: 0 2.5rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.logo {
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: 1.5rem;
-    font-weight: 700;
-    background: var(--gradient-primary);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    text-decoration: none;
-    transition: all 0.3s ease;
-}
-
-.logo:hover {
-    transform: scale(1.02);
-}
-
-.navLinks {
-    display: flex;
-    list-style: none;
-    gap: 0.5rem;
-}
-
-.navLinks a {
-    color: var(--text-secondary);
-    text-decoration: none;
-    font-weight: 500;
-    font-size: 0.95rem;
-    padding: 0.6rem 1.2rem;
-    border-radius: 12px;
-    transition: all 0.3s ease;
-    position: relative;
-}
-
-.navLinks a::after {
-    content: '';
-    position: absolute;
-    bottom: 0.4rem;
-    left: 50%;
-    width: 0;
-    height: 2px;
-    background: var(--gradient-primary);
-    transition: all 0.3s ease;
-    transform: translateX(-50%);
-    border-radius: 2px;
-}
-
-.navLinks a:hover {
+a {
     color: var(--accent);
-    background: var(--accent-light);
+    text-decoration: none;
 }
 
-.navLinks a:hover::after {
-    width: 40%;
+button {
+    font: inherit;
+    color: inherit;
 }
 
-.navActions {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-}
-
-.themeToggle {
-    background: var(--bg-tertiary);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    width: 44px;
-    height: 44px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    color: var(--text-secondary);
-}
-
-.themeToggle:hover {
+::selection {
     background: var(--accent);
-    border-color: var(--accent);
-    color: white;
-    transform: scale(1.05);
-    box-shadow: 0 8px 25px var(--shadow-hover);
+    color: var(--bg);
 }
 
-.mobileMenuBtn {
-    display: none;
-    background: transparent;
-    border: none;
-    color: var(--text-primary);
-    cursor: pointer;
-    padding: 0.5rem;
+:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
 }
 
-/* Hero Section */
-.hero {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    padding: 8rem 0 4rem;
-    position: relative;
-    overflow: hidden;
-}
+/* ---------- WebGL layer ---------- */
 
-.hero > .container {
-    display: flex;
-    align-items: center;
-    width: 100%;
-    max-width: 1280px;
-    margin: 0 auto;
-    padding: 0 2.5rem;
-    flex-wrap: wrap;
-}
-
-.hero::before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    right: -20%;
-    width: 80%;
-    height: 150%;
-    background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
-    pointer-events: none;
-    z-index: 0;
-}
-
-.hero3DBackground {
-    position: relative;
-    width: 55%;
-    height: 100vh;
-    min-height: 600px;
+.keyboardScene {
+    position: fixed;
+    inset: 0;
     z-index: 0;
     pointer-events: none;
-    flex-shrink: 0;
-    margin-left: auto;
 }
 
-.hero3DBackground canvas {
+.keyboardScene canvas {
     width: 100% !important;
     height: 100% !important;
+    display: block;
 }
 
-.heroContent {
-    flex: 1;
-    max-width: 700px;
-    position: relative;
-    z-index: 1;
+/* ---------- CRT overlay ---------- */
+
+.tuiOverlay {
+    position: fixed;
+    inset: 0;
+    z-index: 40;
+    pointer-events: none;
 }
 
-.heroBadge {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    background: var(--accent-light);
-    border: 1px solid var(--accent);
-    border-radius: 50px;
-    padding: 0.5rem 1rem;
-    font-size: 0.875rem;
-    font-weight: 500;
-    color: var(--accent);
-    margin-bottom: 1.5rem;
-    animation: fadeInUp 0.6s ease-out;
-}
-
-.heroBadge::before {
-    content: '';
-    width: 8px;
-    height: 8px;
-    background: var(--accent);
-    border-radius: 50%;
-    animation: pulse 2s infinite;
-}
-
-.hero h1 {
-    font-size: clamp(2.5rem, 5vw, 4rem);
-    font-weight: 700;
-    margin-bottom: 1.5rem;
-    color: var(--text-primary);
-    letter-spacing: -0.02em;
-    animation: fadeInUp 0.6s ease-out 0.1s both;
-}
-
-.heroSubtitle {
-    font-size: clamp(1.1rem, 2vw, 1.35rem);
-    color: var(--text-secondary);
-    margin-bottom: 2rem;
-    line-height: 1.7;
-    animation: fadeInUp 0.6s ease-out 0.2s both;
-}
-
-.heroLocation {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    color: var(--text-muted);
-    font-size: 0.95rem;
-    margin-bottom: 2.5rem;
-    animation: fadeInUp 0.6s ease-out 0.3s both;
-}
-
-.heroButtons {
-    display: flex;
-    gap: 1rem;
-    margin-bottom: 3rem;
-    flex-wrap: wrap;
-    animation: fadeInUp 0.6s ease-out 0.4s both;
-}
-
-.btnPrimary {
-    padding: 1rem 2rem;
-    border-radius: 14px;
-    font-weight: 600;
-    font-size: 1rem;
-    text-decoration: none;
-    background: var(--gradient-primary);
-    color: white;
-    border: none;
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    cursor: pointer;
-    box-shadow: 0 4px 20px var(--accent-glow);
-}
-
-.btnPrimary:hover {
-    transform: translateY(-3px) scale(1.02);
-    box-shadow: 0 12px 40px var(--shadow-hover);
-}
-
-.btnSecondary {
-    padding: 1rem 2rem;
-    border-radius: 14px;
-    font-weight: 600;
-    font-size: 1rem;
-    text-decoration: none;
-    background: transparent;
-    color: var(--accent);
-    border: 2px solid var(--accent);
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    cursor: pointer;
-}
-
-.btnSecondary:hover {
-    background: var(--accent-light);
-    transform: translateY(-3px) scale(1.02);
-}
-
-.socialLinks {
-    display: flex;
-    gap: 1rem;
-    animation: fadeInUp 0.6s ease-out 0.5s both;
-}
-
-.socialIcon {
-    width: 48px;
-    height: 48px;
-    border-radius: 14px;
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--text-secondary);
-    text-decoration: none;
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.socialIcon:hover {
-    background: var(--accent);
-    border-color: var(--accent);
-    color: white;
-    transform: translateY(-5px) scale(1.1);
-    box-shadow: 0 10px 30px var(--shadow-hover);
-}
-
-.heroImage {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-/* Section Styles */
-section {
-    padding: 7rem 0;
-    position: relative;
-}
-
-.sectionHeader {
-    text-align: center;
-    margin-bottom: 4rem;
-}
-
-.sectionTitle {
-    font-size: clamp(2rem, 4vw, 2.75rem);
-    font-weight: 700;
-    margin-bottom: 1rem;
-    color: var(--text-primary);
-    letter-spacing: -0.02em;
-}
-
-.sectionSubtitle {
-    font-size: 1.125rem;
-    color: var(--text-secondary);
-    max-width: 600px;
-    margin: 0 auto;
-}
-
-/* About Section */
-.about {
-    position: relative;
-}
-
-.aboutGrid {
-    display: grid;
-    grid-template-columns: 1fr 1.5fr;
-    gap: 4rem;
-    align-items: start;
-}
-
-.aboutImage {
-    position: relative;
-}
-
-.aboutImagePlaceholder {
-    width: 100%;
-    aspect-ratio: 1;
-    background: var(--gradient-primary);
-    border-radius: 24px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 6rem;
-    color: rgba(255, 255, 255, 0.9);
-    position: relative;
-    overflow: hidden;
-}
-
-.aboutImagePlaceholder::before {
-    content: '';
+.tuiOverlay__scanlines {
     position: absolute;
     inset: 0;
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, transparent 50%);
+    background: repeating-linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0) 0px,
+        rgba(0, 0, 0, 0) 2px,
+        rgba(0, 0, 0, 0.16) 3px,
+        rgba(0, 0, 0, 0.16) 4px
+    );
+    opacity: 0.5;
 }
 
-.aboutContent {
-    max-width: 700px;
-}
-
-.aboutText p {
-    font-size: 1.1rem;
-    color: var(--text-secondary);
-    margin-bottom: 1.5rem;
-    line-height: 1.8;
-}
-
-.aboutStats {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1.5rem;
-    margin-top: 3rem;
-}
-
-.statItem {
-    text-align: center;
-    padding: 1.5rem;
-    background: var(--bg-tertiary);
-    border-radius: 16px;
-    border: 1px solid var(--border);
-    transition: all 0.3s ease;
-}
-
-.statItem:hover {
-    transform: translateY(-5px);
-    border-color: var(--accent);
-    box-shadow: 0 10px 30px var(--shadow);
-}
-
-.statNumber {
-    font-size: 2rem;
-    font-weight: 700;
-    background: var(--gradient-primary);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-}
-
-.statLabel {
-    font-size: 0.875rem;
-    color: var(--text-muted);
-    margin-top: 0.25rem;
-}
-
-.educationList {
-    margin-top: 2.5rem;
-}
-
-.educationItem {
-    padding: 1.5rem;
-    background: var(--bg-tertiary);
-    border-radius: 16px;
-    border: 1px solid var(--border);
-    margin-bottom: 1rem;
-    transition: all 0.3s ease;
-}
-
-.educationItem:hover {
-    transform: translateX(10px);
-    border-color: var(--accent);
-    box-shadow: -5px 10px 30px var(--shadow);
-}
-
-.educationItem h4 {
-    font-size: 1.1rem;
-    color: var(--text-primary);
-    margin-bottom: 0.5rem;
-}
-
-.educationItem p {
-    font-size: 0.9rem;
-    color: var(--text-secondary);
-}
-
-/* Skills Section */
-.skills {
-    background: var(--bg-secondary);
-    position: relative;
-}
-
-.skillsGrid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-    gap: 1.25rem;
-    max-width: 1000px;
-    margin: 0 auto;
-}
-
-.skillCard {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    padding: 2rem 1.5rem;
-    text-align: center;
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    cursor: default;
-}
-
-.skillCard:hover {
-    transform: translateY(-8px) scale(1.02);
-    box-shadow: 0 20px 50px var(--shadow);
-    border-color: var(--accent);
-}
-
-.skillIconWrapper {
-    width: 64px;
-    height: 64px;
-    margin: 0 auto 1.25rem;
-    background: var(--accent-light);
-    border-radius: 18px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.75rem;
-    color: var(--accent);
-    transition: all 0.3s ease;
-}
-
-.skillCard:hover .skillIconWrapper {
-    background: var(--gradient-primary);
-    color: white;
-    transform: scale(1.1) rotate(5deg);
-}
-
-.skillCard h3 {
-    font-size: 1rem;
-    font-weight: 600;
-    color: var(--text-primary);
-}
-
-.skillCard p {
-    font-size: 0.8rem;
-    color: var(--text-muted);
-    margin-top: 0.25rem;
-}
-
-/* Projects Section */
-.projectsGrid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-    gap: 2rem;
-    max-width: 1280px;
-    margin: 0 auto;
-}
-
-.projectCard {
-    background: var(--card-gradient);
-    border: 1px solid var(--border);
-    border-radius: 24px;
-    overflow: hidden;
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    position: relative;
-}
-
-.projectCard::before {
-    content: '';
+.tuiOverlay__vignette {
     position: absolute;
-    top: 0;
+    inset: 0;
+    background: radial-gradient(
+        ellipse at center,
+        rgba(0, 0, 0, 0) 45%,
+        rgba(0, 0, 0, 0.55) 100%
+    );
+}
+
+.tuiBracket {
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    border: 1px solid var(--border-strong);
+    opacity: 0.5;
+}
+
+.tuiBracket--tl { top: 8px; left: 8px; border-right: 0; border-bottom: 0; }
+.tuiBracket--tr { top: 8px; right: 8px; border-left: 0; border-bottom: 0; }
+.tuiBracket--bl { bottom: 8px; left: 8px; border-right: 0; border-top: 0; }
+.tuiBracket--br { bottom: 8px; right: 8px; border-left: 0; border-top: 0; }
+
+/* ---------- Bars ---------- */
+
+.tuiBar {
+    position: fixed;
     left: 0;
     right: 0;
-    height: 4px;
-    background: var(--gradient-primary);
-    transform: scaleX(0);
-    transition: transform 0.4s ease;
+    z-index: 60;
+    background: rgba(5, 8, 6, 0.92);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
 }
 
-.projectCard:hover {
-    transform: translateY(-10px) scale(1.01);
-    box-shadow: 0 25px 60px var(--shadow-lg);
-    border-color: var(--accent);
+.tuiBar--top {
+    top: 0;
+    height: var(--bar-top-h);
+    border-bottom: 1px solid var(--border);
 }
 
-.projectCard:hover::before {
-    transform: scaleX(1);
-}
-
-.projectImage {
-    height: 220px;
-    background: var(--gradient-subtle);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    overflow: hidden;
-}
-
-.projectImage::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(circle at center, var(--accent-glow) 0%, transparent 70%);
-    opacity: 0;
-    transition: opacity 0.4s ease;
-}
-
-.projectCard:hover .projectImage::after {
-    opacity: 1;
-}
-
-.projectImageIcon {
-    font-size: 4rem;
-    color: var(--accent);
-    transition: all 0.4s ease;
-}
-
-.projectCard:hover .projectImageIcon {
-    transform: scale(1.15);
-    color: var(--accent-hover);
-}
-
-.projectInfo {
-    padding: 1.75rem;
-}
-
-.projectInfo h3 {
-    font-size: 1.25rem;
-    font-weight: 600;
-    margin-bottom: 0.75rem;
-    color: var(--text-primary);
-    transition: color 0.3s ease;
-}
-
-.projectInfo p {
-    color: var(--text-secondary);
-    margin-bottom: 1.25rem;
-    font-size: 0.95rem;
-    line-height: 1.7;
-}
-
-.projectTags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-}
-
-.projectTags span {
-    background: var(--accent-light);
-    color: var(--accent);
-    padding: 0.4rem 0.9rem;
-    border-radius: 20px;
-    font-size: 0.8rem;
-    font-weight: 500;
-    transition: all 0.3s ease;
-}
-
-.projectTags span:hover {
-    background: var(--accent);
-    color: white;
-    transform: scale(1.05);
-}
-
-.projectLinks {
-    display: flex;
-    gap: 0.75rem;
-    margin-top: 1.25rem;
-    padding-top: 1.25rem;
+.tuiBar--bottom {
+    bottom: 0;
+    height: var(--bar-bottom-h);
     border-top: 1px solid var(--border);
 }
 
-.projectLink {
+.tuiBar__inner {
+    max-width: 1400px;
+    height: 100%;
+    margin: 0 auto;
+    padding: 0 var(--gutter);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.tuiBar__brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 600;
+    color: var(--fg);
+    white-space: nowrap;
+}
+
+.tuiDot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 8px var(--accent);
+    animation: tuiPulse 2.4s ease-in-out infinite;
+}
+
+.tuiBar__path {
+    color: var(--fg-faint);
+    white-space: nowrap;
+    font-size: 12px;
+}
+
+.tuiTabs {
+    display: flex;
+    list-style: none;
+    gap: 0.25rem;
+    margin-left: auto;
+    flex-wrap: wrap;
+}
+
+.tuiTab {
     display: inline-flex;
     align-items: center;
     gap: 0.4rem;
-    padding: 0.5rem 1rem;
-    background: var(--bg-tertiary);
-    border-radius: 10px;
-    color: var(--text-secondary);
-    text-decoration: none;
-    font-size: 0.85rem;
-    font-weight: 500;
-    transition: all 0.3s ease;
+    padding: 0.3rem 0.6rem;
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    color: var(--fg-dim);
+    border: 1px solid transparent;
+    transition: color 0.2s ease, background 0.2s ease, border-color 0.2s ease;
 }
 
-.projectLink:hover {
+.tuiTab:hover {
+    color: var(--accent);
+    border-color: var(--border);
+}
+
+.tuiTab.is-active {
     background: var(--accent);
-    color: white;
+    color: var(--bg);
+    font-weight: 700;
+    border-color: var(--accent);
+}
+
+.tuiTab__num {
+    opacity: 0.6;
+    font-size: 10px;
+}
+
+.tuiTab.is-active .tuiTab__num {
+    opacity: 0.75;
+}
+
+.tuiMenuBtn {
+    display: none;
+    margin-left: auto;
+    background: transparent;
+    border: 1px solid var(--border);
+    padding: 0.25rem 0.6rem;
+    cursor: pointer;
+    color: var(--accent);
+    font-size: 12px;
+}
+
+.tuiMobileMenu {
+    position: fixed;
+    inset: var(--bar-top-h) 0 var(--bar-bottom-h) 0;
+    z-index: 55;
+    background: rgba(5, 8, 6, 0.98);
+    backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.tuiMobileMenu__inner {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    width: min(320px, 80vw);
+}
+
+.tuiMobileMenu__link {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.85rem 1rem;
+    border: 1px solid var(--border);
+    color: var(--fg);
+    font-size: 14px;
+    letter-spacing: 0.06em;
+}
+
+.tuiMobileMenu__link.is-active {
+    background: var(--accent);
+    color: var(--bg);
+    font-weight: 700;
+}
+
+/* ---------- Prompt bar ---------- */
+
+.tuiPrompt {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.tuiPrompt__path { color: var(--accent); }
+.tuiPrompt__sep { color: var(--fg-faint); }
+.tuiPrompt__dir { color: var(--accent-2); }
+.tuiPrompt__sigil { color: var(--accent); font-weight: 700; }
+.tuiPrompt__cmd { color: var(--fg); }
+
+.tuiPrompt__output {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-left: 0.5rem;
+    padding-left: 1rem;
+    border-left: 1px solid var(--border);
+    white-space: nowrap;
+}
+
+.tuiPrompt__label {
+    color: var(--fg-faint);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+}
+
+.tuiPrompt__word {
+    color: var(--accent);
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-shadow: 0 0 10px var(--glow);
+}
+
+.tuiCursor {
+    display: inline-block;
+    width: 8px;
+    height: 15px;
+    background: var(--accent);
+    animation: tuiBlink 1.05s steps(1, end) infinite;
+}
+
+.tuiPrompt__meta {
+    margin-left: auto;
+    display: inline-flex;
+    gap: 1.25rem;
+    color: var(--fg-faint);
+    font-size: 11px;
+    white-space: nowrap;
+}
+
+.tuiPrompt__meta b {
+    color: var(--fg-dim);
+    font-weight: 600;
+}
+
+/* ---------- Window / pane ---------- */
+
+.tuiWindow {
+    border: 1px solid var(--border);
+    background: rgba(8, 13, 10, 0.88);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.6);
+}
+
+.tuiWindow__bar {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.4rem 0.7rem;
+    background: var(--bg-panel-2);
+    border-bottom: 1px solid var(--border);
+    font-size: 12px;
+}
+
+.tuiWindow__dots {
+    display: inline-flex;
+    gap: 4px;
+}
+
+.tuiWindow__dots i {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--fg-faint);
+    display: block;
+}
+
+.tuiWindow__dots i:first-child { background: var(--error); }
+.tuiWindow__dots i:nth-child(2) { background: var(--warn); }
+.tuiWindow__dots i:last-child { background: var(--accent); }
+
+.tuiWindow__title {
+    color: var(--fg-dim);
+    letter-spacing: 0.04em;
+}
+
+.tuiWindow__status {
+    margin-left: auto;
+    color: var(--fg-faint);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+}
+
+.tuiWindow__cmd {
+    padding: 0.6rem 1.1rem 0;
+    color: var(--fg-dim);
+    font-size: 13px;
+}
+
+.tuiWindow__body {
+    padding: 1.1rem 1.25rem 1.4rem;
+}
+
+/* ---------- Layout ---------- */
+
+.tuiMain {
+    position: relative;
+    z-index: 10;
+    padding-top: var(--bar-top-h);
+    padding-bottom: var(--bar-bottom-h);
+}
+
+.tuiSection {
+    min-height: 100vh;
+    min-height: 100svh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem var(--gutter);
+    scroll-margin-top: var(--bar-top-h);
+}
+
+.tuiSection__inner {
+    width: 100%;
+    max-width: 940px;
+}
+
+.tuiSection__inner--wide {
+    max-width: 1120px;
+}
+
+/* ---------- Typographic primitives ---------- */
+
+.tuiComment { color: var(--fg-faint); }
+.tuiKey { color: var(--accent-2); }
+.tuiValue { color: var(--fg); }
+.tuiMuted { color: var(--fg-dim); }
+.tuiFaint { color: var(--fg-faint); }
+.tuiStrong { color: var(--accent); font-weight: 700; }
+
+.tuiLine {
+    display: block;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+.tuiOutput {
+    margin-top: 0.85rem;
+    border-top: 1px dashed var(--border);
+    padding-top: 0.85rem;
+}
+
+.tuiOutput > * + * {
+    margin-top: 0.5rem;
+}
+
+/* ---------- Chips, tags, meters ---------- */
+
+.tuiChip {
+    display: inline-block;
+    padding: 0.1rem 0.5rem;
+    border: 1px solid var(--border);
+    color: var(--fg-dim);
+    font-size: 11px;
+    letter-spacing: 0.03em;
+    white-space: nowrap;
+}
+
+.tuiChip--accent {
+    color: var(--accent);
+    border-color: var(--border-strong);
+}
+
+.tuiTagRow {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-top: 0.75rem;
+}
+
+.tuiMeter {
+    display: inline-block;
+    color: var(--accent);
+    letter-spacing: -1px;
+}
+
+/* ---------- Table ---------- */
+
+.tuiTable {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+
+.tuiTable th,
+.tuiTable td {
+    text-align: left;
+    padding: 0.5rem 0.75rem;
+    border-bottom: 1px solid rgba(57, 255, 136, 0.12);
+    vertical-align: top;
+}
+
+.tuiTable th {
+    color: var(--fg-faint);
+    font-weight: 500;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    border-bottom-color: var(--border);
+}
+
+.tuiTable tr:last-child td {
+    border-bottom: 0;
+}
+
+.tuiTable tbody tr:hover {
+    background: rgba(57, 255, 136, 0.05);
+}
+
+.tuiTable__num {
+    color: var(--fg-faint);
+    width: 3ch;
+}
+
+/* ---------- Hero ---------- */
+
+.tuiHero__badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    border: 1px solid var(--border-strong);
+    color: var(--accent);
+    padding: 0.2rem 0.6rem;
+    font-size: 12px;
+    margin-bottom: 1.25rem;
+}
+
+.tuiHero__name {
+    font-size: clamp(1.9rem, 5vw, 3.1rem);
+    color: var(--fg);
+    letter-spacing: -0.02em;
+    text-shadow: 0 0 26px rgba(57, 255, 136, 0.18);
+}
+
+.tuiHero__role {
+    color: var(--fg-dim);
+    margin-top: 0.6rem;
+    font-size: clamp(0.95rem, 2vw, 1.1rem);
+}
+
+.tuiHero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 1.75rem;
+}
+
+.tuiBtn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.6rem 1.1rem;
+    border: 1px solid var(--border-strong);
+    color: var(--accent);
+    font-size: 13px;
+    letter-spacing: 0.03em;
+    background: rgba(57, 255, 136, 0.05);
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+
+.tuiBtn:hover {
+    background: var(--accent);
+    color: var(--bg);
     transform: translateY(-2px);
 }
 
-/* Contact Section */
-.contact {
-    background: var(--bg-secondary);
-    text-align: center;
+.tuiBtn--ghost {
+    background: transparent;
+    border-color: var(--border);
+    color: var(--fg-dim);
 }
 
-.contactContent {
-    max-width: 700px;
-    margin: 0 auto;
-}
-
-.contactText {
-    font-size: 1.15rem;
-    color: var(--text-secondary);
-    margin-bottom: 3rem;
-    line-height: 1.8;
-}
-
-.contactGrid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1.5rem;
-    margin-bottom: 3rem;
-}
-
-.contactCard {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    padding: 2rem;
-    text-align: center;
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.contactCard:hover {
-    transform: translateY(-8px);
+.tuiBtn--ghost:hover {
+    background: transparent;
     border-color: var(--accent);
-    box-shadow: 0 20px 50px var(--shadow);
+    color: var(--accent);
 }
 
-.contactIcon {
-    width: 56px;
-    height: 56px;
-    margin: 0 auto 1rem;
-    background: var(--accent-light);
-    border-radius: 16px;
+.tuiSocials {
     display: flex;
-    align-items: center;
-    justify-content: center;
+    flex-wrap: wrap;
+    gap: 1.25rem;
+    margin-top: 1.75rem;
+    font-size: 13px;
+}
+
+.tuiSocials a {
+    color: var(--fg-dim);
+    border-bottom: 1px dashed transparent;
+}
+
+.tuiSocials a:hover {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+}
+
+/* ---------- Stats / education ---------- */
+
+.tuiStats {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.75rem;
+    margin-top: 1.25rem;
+}
+
+.tuiStat {
+    border: 1px solid var(--border);
+    padding: 0.85rem 1rem;
+    background: rgba(11, 18, 14, 0.7);
+}
+
+.tuiStat__num {
     font-size: 1.5rem;
     color: var(--accent);
-    transition: all 0.3s ease;
+    font-weight: 700;
 }
 
-.contactCard:hover .contactIcon {
-    background: var(--gradient-primary);
-    color: white;
-    transform: scale(1.1);
+.tuiStat__label {
+    color: var(--fg-faint);
+    font-size: 11px;
+    letter-spacing: 0.06em;
 }
 
-.contactCard h4 {
-    font-size: 1rem;
-    color: var(--text-primary);
-    margin-bottom: 0.25rem;
-}
-
-.contactCard p {
-    font-size: 0.9rem;
-    color: var(--text-secondary);
-}
-
-.contactCTA {
+.tuiEdu {
     display: flex;
-    justify-content: center;
-    gap: 1rem;
+    flex-direction: column;
+    gap: 0.6rem;
+    margin-top: 0.5rem;
+}
+
+.tuiEdu__row {
+    border-left: 2px solid var(--border-strong);
+    padding: 0.2rem 0 0.2rem 0.9rem;
+}
+
+.tuiEdu__degree {
+    color: var(--fg);
+    font-weight: 600;
+}
+
+.tuiEdu__meta {
+    color: var(--fg-faint);
+    font-size: 12px;
+}
+
+/* ---------- Skills ---------- */
+
+.tuiFilters {
+    display: flex;
     flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-bottom: 1.1rem;
 }
 
-/* Footer */
-.footer {
-    background: var(--bg-primary);
+.tuiFilter {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--fg-dim);
+    padding: 0.2rem 0.65rem;
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.tuiFilter:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+}
+
+.tuiFilter.is-active {
+    background: var(--accent);
+    color: var(--bg);
+    border-color: var(--accent);
+    font-weight: 700;
+}
+
+/* ---------- Projects ---------- */
+
+.tuiProjects {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.tuiProject {
+    border: 1px solid var(--border);
+    background: rgba(11, 18, 14, 0.72);
+    transition: border-color 0.25s ease, background 0.25s ease;
+}
+
+.tuiProject:hover {
+    border-color: var(--border-strong);
+    background: rgba(11, 18, 14, 0.92);
+}
+
+.tuiProject__head {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    width: 100%;
+    text-align: left;
+    padding: 0.85rem 1rem;
+    background: transparent;
+    border: 0;
+    cursor: pointer;
+}
+
+.tuiProject__index {
+    color: var(--fg-faint);
+    font-size: 12px;
+    flex-shrink: 0;
+}
+
+.tuiProject__title {
+    color: var(--fg);
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.tuiProject__toggle {
+    margin-left: auto;
+    color: var(--accent);
+    flex-shrink: 0;
+}
+
+.tuiProject__body {
+    padding: 0 1rem 1.1rem;
+    border-top: 1px dashed var(--border);
+    margin-top: 0;
+    padding-top: 0.9rem;
+}
+
+.tuiProject__desc {
+    color: var(--fg-dim);
+    font-size: 13px;
+    line-height: 1.75;
+}
+
+.tuiProject__links {
+    margin-top: 0.9rem;
+    display: flex;
+    gap: 0.5rem;
+}
+
+/* ---------- Contact ---------- */
+
+.tuiContact {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 0.75rem;
+}
+
+.tuiContact__row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    border: 1px solid var(--border);
+    background: rgba(11, 18, 14, 0.72);
+    padding: 0.8rem 0.95rem;
+    cursor: pointer;
+    text-align: left;
+    transition: border-color 0.2s ease, transform 0.2s ease;
+}
+
+.tuiContact__row:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+}
+
+.tuiContact__label {
+    color: var(--fg-faint);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    display: block;
+}
+
+.tuiContact__value {
+    color: var(--fg);
+    font-size: 13px;
+    word-break: break-word;
+}
+
+.tuiContact__icon {
+    color: var(--accent);
+    flex-shrink: 0;
+}
+
+/* ---------- Footer ---------- */
+
+.tuiFooter {
+    position: relative;
+    z-index: 10;
     border-top: 1px solid var(--border);
-    padding: 3rem 2.5rem;
+    background: rgba(5, 8, 6, 0.94);
+    backdrop-filter: blur(10px);
+    padding: 1.1rem var(--gutter);
 }
 
-.footerContent {
-    max-width: 1280px;
+.tuiFooter__inner {
+    max-width: 1400px;
     margin: 0 auto;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
     flex-wrap: wrap;
-    gap: 1.5rem;
+    align-items: center;
+    gap: 0.75rem 1.5rem;
+    font-size: 12px;
+    color: var(--fg-faint);
 }
 
-.footerLinks {
+.tuiFooter__links {
     display: flex;
-    gap: 2rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-left: auto;
 }
 
-.footerLinks a {
-    color: var(--text-muted);
-    text-decoration: none;
-    font-size: 0.9rem;
-    transition: color 0.3s ease;
+.tuiFooter__links a {
+    color: var(--fg-dim);
 }
 
-.footerLinks a:hover {
+.tuiFooter__links a:hover {
     color: var(--accent);
 }
 
-.footerSocial {
-    display: flex;
-    gap: 1rem;
+.tuiMode {
+    color: var(--accent);
+    animation: tuiBlink 1.6s steps(1, end) infinite;
 }
 
-.footerSocial a {
-    width: 40px;
-    height: 40px;
-    border-radius: 12px;
-    background: var(--bg-tertiary);
+/* ---------- Boot ---------- */
+
+.tuiBoot {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    background: var(--bg);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0 clamp(1rem, 8vw, 8rem);
+    font-size: 13px;
+}
+
+.tuiBoot__log {
+    white-space: pre-wrap;
+    color: var(--fg-dim);
+    font-family: var(--mono);
+}
+
+.tuiBoot__bar {
+    margin-top: 1rem;
+    color: var(--accent);
+}
+
+/* ---------- Toast ---------- */
+
+.tuiToast {
+    position: fixed;
+    left: 50%;
+    bottom: calc(var(--bar-bottom-h) + 16px);
+    transform: translateX(-50%);
+    z-index: 150;
+    background: var(--bg-panel-2);
+    border: 1px solid var(--accent);
+    color: var(--fg);
+    padding: 0.5rem 0.9rem;
+    font-size: 12px;
+    max-width: min(90vw, 520px);
+    word-break: break-word;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.7);
+}
+
+.tuiToast__sigil {
+    color: var(--accent);
+    margin-right: 0.4rem;
+}
+
+/* ---------- Reveal curtain ---------- */
+
+/* Two fabric halves that part from the centre after the boot log ends. Sits
+   above everything (the palette is the only higher layer) and is inert to
+   pointer events, so it never blocks a click while it is on screen. */
+.tuiCurtain {
+    position: fixed;
+    inset: 0;
+    z-index: 400;
+    pointer-events: none;
+    --curtain-dur: 1.35s;
+    --curtain-delay: 0.15s;
+}
+
+.tuiCurtain__half {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 50.5%; /* slight overlap so no seam of page shows mid-part */
+    background:
+        repeating-linear-gradient(
+            to right,
+            rgba(0, 0, 0, 0.55) 0px,
+            rgba(0, 0, 0, 0) 26px,
+            rgba(255, 255, 255, 0.05) 52px,
+            rgba(0, 0, 0, 0.55) 78px
+        ),
+        linear-gradient(180deg, #0a1410 0%, #050806 60%, #020403 100%);
+    animation-duration: var(--curtain-dur);
+    animation-delay: var(--curtain-delay);
+    animation-timing-function: cubic-bezier(0.72, 0, 0.22, 1);
+    animation-fill-mode: forwards;
+}
+
+.tuiCurtain__half--left {
+    left: 0;
+    animation-name: tuiCurtainLeft;
+}
+
+.tuiCurtain__half--right {
+    right: 0;
+    animation-name: tuiCurtainRight;
+}
+
+/* The lit leading edge, like the hem catching the light as it pulls back. */
+.tuiCurtain__edge {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: var(--accent);
+    box-shadow:
+        0 0 12px var(--accent),
+        0 0 42px var(--glow);
+    opacity: 0.9;
+}
+
+.tuiCurtain__half--left .tuiCurtain__edge { right: 0; }
+.tuiCurtain__half--right .tuiCurtain__edge { left: 0; }
+
+/* A brief bright seam down the centre, gone by the time the halves move. */
+.tuiCurtain__seam {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: 1px;
+    transform: translateX(-50%);
+    background: linear-gradient(
+        180deg,
+        rgba(57, 255, 136, 0) 0%,
+        rgba(57, 255, 136, 0.75) 50%,
+        rgba(57, 255, 136, 0) 100%
+    );
+    animation: tuiCurtainSeam 0.5s ease-out forwards;
+}
+
+@keyframes tuiCurtainLeft {
+    from { transform: translateX(0); }
+    to { transform: translateX(-101%); }
+}
+
+@keyframes tuiCurtainRight {
+    from { transform: translateX(0); }
+    to { transform: translateX(101%); }
+}
+
+@keyframes tuiCurtainSeam {
+    from { opacity: 0; }
+    30% { opacity: 1; }
+    to { opacity: 0; }
+}
+
+/* ---------- Command palette ---------- */
+
+.tuiPalette {
+    position: fixed;
+    inset: 0;
+    z-index: 300;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: 12vh;
+}
+
+.tuiPalette__scrim {
+    position: absolute;
+    inset: 0;
+    background: rgba(2, 4, 3, 0.72);
+    backdrop-filter: blur(3px);
+}
+
+.tuiPalette__window {
+    position: relative;
+    width: min(560px, 92vw);
+}
+
+.tuiPalette__input {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.7rem 1rem;
+    border-bottom: 1px solid var(--border);
+}
+
+.tuiPalette__input input {
+    flex: 1;
+    background: transparent;
+    border: 0;
+    outline: none;
+    color: var(--fg);
+    font-family: var(--mono);
+    font-size: 14px;
+}
+
+.tuiPalette__input input::placeholder {
+    color: var(--fg-faint);
+}
+
+.tuiPalette__list {
+    list-style: none;
+    max-height: 46vh;
+    overflow-y: auto;
+    padding: 0.35rem;
+}
+
+.tuiPalette__item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    width: 100%;
+    text-align: left;
+    background: transparent;
+    border: 0;
+    padding: 0.55rem 0.75rem;
+    cursor: pointer;
+    color: var(--fg-dim);
+    font-size: 13px;
+}
+
+.tuiPalette__item.is-active {
+    background: rgba(57, 255, 136, 0.12);
+    color: var(--accent);
+}
+
+.tuiPalette__itemHint {
+    margin-left: auto;
+    color: var(--fg-faint);
+    font-size: 11px;
+}
+
+.tuiPalette__empty {
+    padding: 0.9rem 0.75rem;
+    color: var(--fg-faint);
+    font-size: 12px;
+}
+
+/* ---------- WebGL fallback ---------- */
+
+.keyboardFallback {
+    position: fixed;
+    left: 50%;
+    bottom: calc(var(--bar-bottom-h) + 8px);
+    transform: translateX(-50%) perspective(700px) rotateX(38deg);
+    z-index: 1;
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    gap: 4px;
+    padding: 10px;
     border: 1px solid var(--border);
+    background: rgba(8, 13, 10, 0.7);
+    opacity: 0.9;
+}
+
+.keyboardFallback__key {
+    width: clamp(18px, 3.2vw, 34px);
+    aspect-ratio: 1;
+    /* Like the 3D board, the KEY stays dark and the LEGEND carries the colour:
+       hue is baked per key in the component. */
+    border: 1px solid hsl(var(--key-hue, 150) 60% 30% / 0.45);
+    background: var(--keycap);
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--text-secondary);
-    text-decoration: none;
-    transition: all 0.3s ease;
+    font-size: 10px;
+    font-weight: 600;
+    color: hsl(var(--key-hue, 150) 100% 62%);
+    text-shadow: 0 0 8px hsl(var(--key-hue, 150) 100% 55% / 0.75);
 }
 
-.footerSocial a:hover {
-    background: var(--accent);
-    border-color: var(--accent);
-    color: white;
-    transform: translateY(-3px);
+.keyboardFallback__key.is-lit {
+    border-color: hsl(var(--key-hue, 150) 100% 70% / 0.9);
+    color: #ffffff;
+    font-weight: 700;
+    text-shadow:
+        0 0 6px #ffffff,
+        0 0 16px hsl(var(--key-hue, 150) 100% 65% / 0.95);
 }
 
-/* Animations */
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(30px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+.keyboardFallback__word {
+    position: absolute;
+    top: -2.1rem;
+    left: 50%;
+    transform: translateX(-50%) rotateX(-38deg);
+    color: var(--accent);
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-shadow: 0 0 14px var(--glow);
 }
 
-@keyframes pulse {
-    0%, 100% {
-        opacity: 1;
-        transform: scale(1);
-    }
-    50% {
-        opacity: 0.5;
-        transform: scale(1.2);
-    }
+/* ---------- Animations ---------- */
+
+@keyframes tuiBlink {
+    0%, 49% { opacity: 1; }
+    50%, 100% { opacity: 0; }
 }
 
-@keyframes float {
-    0%, 100% {
-        transform: translateY(0);
-    }
-    50% {
-        transform: translateY(-10px);
-    }
+@keyframes tuiPulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.45; transform: scale(0.85); }
 }
 
-/* Scroll animations */
-.animate-on-scroll {
-    opacity: 0;
-    transform: translateY(40px);
-    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-}
+/* ---------- Responsive ---------- */
 
-.animate-on-scroll.visible {
-    opacity: 1;
-    transform: translateY(0);
-}
-
-/* Responsive Design */
-@media (max-width: 1024px) {
-    .hero3DBackground {
-        width: 45%;
-    }
-
-    .aboutGrid {
-        grid-template-columns: 1fr;
-        gap: 3rem;
-    }
-
-    .aboutImage {
-        max-width: 400px;
-        margin: 0 auto;
+@media (max-width: 900px) {
+    .tuiBar__path {
+        display: none;
     }
 }
 
-@media (max-width: 768px) {
-    .container {
-        padding: 0 1.5rem;
-    }
-
-    .navContainer {
-        padding: 0 1.5rem;
-    }
-
-    .navLinks {
+@media (max-width: 820px) {
+    .tuiTabs {
         display: none;
     }
 
-    .mobileMenuBtn {
+    .tuiMenuBtn {
         display: block;
     }
 
-    .hero {
-        flex-direction: column;
-        text-align: center;
-        padding-top: 6rem;
+    /* Text over a busy canvas is hard to read at phone widths: make panes solid. */
+    .tuiWindow {
+        background: var(--bg-panel);
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
     }
 
-    .hero::before {
-        top: -20%;
-        right: -30%;
-        width: 100%;
-        height: 120%;
+    .tuiSection {
+        padding: 2rem 1rem;
     }
 
-    .hero3DBackground {
-        position: relative;
-        width: 100%;
-        height: 300px;
-        right: auto;
-        margin-top: 0;
-        margin-bottom: 2rem;
-        order: -1;
-    }
-
-    .heroContent {
-        order: 1;
-    }
-
-    .heroButtons {
-        justify-content: center;
-    }
-
-    .socialLinks {
-        justify-content: center;
-    }
-
-    .aboutStats {
-        grid-template-columns: repeat(2, 1fr);
-    }
-
-    .projectsGrid {
-        grid-template-columns: 1fr;
-    }
-
-    .footerContent {
-        flex-direction: column;
-        text-align: center;
-    }
-
-    .footerLinks {
-        flex-wrap: wrap;
-        justify-content: center;
-    }
-}
-
-@media (max-width: 480px) {
-    .hero h1 {
-        font-size: 2rem;
-    }
-
-    .hero::before {
-        top: -10%;
-        right: -40%;
-        width: 120%;
-        height: 100%;
-    }
-
-    .sectionTitle {
-        font-size: 1.75rem;
-    }
-
-    .skillsGrid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-
-    .aboutStats {
-        grid-template-columns: 1fr;
-    }
-}
-
-/* Mobile Menu */
-.mobileMenu {
-    position: fixed;
-    top: 0;
-    right: 0;
-    width: 100%;
-    height: 100vh;
-    background: var(--bg-primary);
-    z-index: 999;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.mobileMenuContent {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-    text-align: center;
-}
-
-.mobileMenuContent a {
-    font-size: 1.75rem;
-    font-weight: 600;
-    color: var(--text-primary);
-    text-decoration: none;
-    padding: 1rem 2rem;
-    border-radius: 16px;
-    transition: all 0.3s ease;
-}
-
-.mobileMenuContent a:hover {
-    background: var(--accent-light);
-    color: var(--accent);
-}
-
-@media (min-width: 769px) {
-    .mobileMenu {
+    .tuiPrompt__meta {
         display: none;
+    }
+
+    .tuiStats {
+        grid-template-columns: 1fr;
+    }
+
+    .tuiOverlay__scanlines {
+        opacity: 0.32;
+    }
+}
+
+@media (max-width: 560px) {
+    :root {
+        --gutter: 0.85rem;
+    }
+
+    .tuiHero__name {
+        font-size: 1.6rem;
+    }
+
+    .tuiPrompt__label {
+        display: none;
+    }
+
+    .tuiContact {
+        grid-template-columns: 1fr;
+    }
+
+    .tuiWindow__body {
+        padding: 0.9rem 0.85rem 1.1rem;
+    }
+
+    .tuiTable th:nth-child(3),
+    .tuiTable td:nth-child(3) {
+        display: none;
+    }
+}
+
+/* ---------- Reduced motion ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+    .tuiCursor,
+    .tuiDot,
+    .tuiMode {
+        animation: none;
+    }
+
+    /* Backstop for the `?boot=1` force path, which mounts the curtain even when
+       motion is reduced. BootSequence also declines to mount it; this catches
+       the forced case. */
+    .tuiCurtain {
+        display: none;
+    }
+
+    .tuiOverlay__scanlines {
+        opacity: 0.25;
+    }
+
+    .tuiBtn:hover,
+    .tuiContact__row:hover {
+        transform: none;
+    }
+
+    * {
+        transition-duration: 0.01ms !important;
     }
 }

@@ -1,12 +1,27 @@
 import type { Metadata } from "next";
+import { JetBrains_Mono } from "next/font/google";
 import "./globals.css";
-import { ThemeProvider } from "@/components/ThemeProvider";
-import Navbar from "@/components/Navbar";
+import { SmoothScrollProvider } from "@/lib/SmoothScrollProvider";
+import KeyboardScene from "@/components/KeyboardScene";
+import KeyboardFallback from "@/components/KeyboardFallback";
+import TuiFrame from "@/components/TuiFrame";
+import TuiStatusBar from "@/components/TuiStatusBar";
+import TuiPromptBar from "@/components/TuiPromptBar";
+import BootSequence from "@/components/BootSequence";
+import CommandPalette from "@/components/CommandPalette";
+import CopyToast from "@/components/CopyToast";
 import Footer from "@/components/Footer";
 
+const mono = JetBrains_Mono({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-mono",
+});
+
 export const metadata: Metadata = {
-  title: "Babitdor Kayang Khonglah",
-  description: "My personal portfolio website",
+  title: "babit@portfolio:~$",
+  description:
+    "Babitdor Kayang Khonglah — AI/ML engineer working on LLM orchestration, RAG architectures and multi-agent systems.",
 };
 
 export default function RootLayout({
@@ -15,13 +30,25 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" className={mono.variable}>
       <body>
-        <ThemeProvider>
-          <Navbar />
-          <main>{children}</main>
-          <Footer />
-        </ThemeProvider>
+        <SmoothScrollProvider>
+          <KeyboardScene />
+          <KeyboardFallback />
+
+          <TuiFrame>
+            <TuiStatusBar />
+
+            <main className="tuiMain">{children}</main>
+
+            <Footer />
+
+            <TuiPromptBar />
+            <BootSequence />
+            <CommandPalette />
+            <CopyToast />
+          </TuiFrame>
+        </SmoothScrollProvider>
       </body>
     </html>
   );
