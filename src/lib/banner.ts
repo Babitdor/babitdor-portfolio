@@ -7,8 +7,17 @@
  * banner. Only the glyphs the site actually spells are defined.
  */
 
-/** Each glyph is 7 rows of 5 bits, MSB = leftmost column. */
+/**
+ * Each glyph is 7 rows of 5 bits, MSB = leftmost column.
+ *
+ * Both cases are defined: the name is set in title case ("Babitdor"), so the
+ * banner needs a lowercase set to go with the capitals. Lowercase letters sit on
+ * the baseline at row 6 with an x-height from row 2 (5 rows); ascenders (`b`,
+ * `d`, `t`) start at row 0 or 1, and `i` gets its dot above a normal x-height
+ * stem. Only the glyphs the site actually spells are defined.
+ */
 const GLYPHS: Record<string, number[]> = {
+  // Capitals
   B: [0b11110, 0b10001, 0b10001, 0b11110, 0b10001, 0b10001, 0b11110],
   A: [0b01110, 0b10001, 0b10001, 0b11111, 0b10001, 0b10001, 0b10001],
   I: [0b11111, 0b00100, 0b00100, 0b00100, 0b00100, 0b00100, 0b11111],
@@ -22,6 +31,16 @@ const GLYPHS: Record<string, number[]> = {
   G: [0b01110, 0b10001, 0b10000, 0b10111, 0b10001, 0b10001, 0b01111],
   L: [0b10000, 0b10000, 0b10000, 0b10000, 0b10000, 0b10000, 0b11111],
   H: [0b10001, 0b10001, 0b10001, 0b11111, 0b10001, 0b10001, 0b10001],
+
+  // Lowercase
+  a: [0b00000, 0b00000, 0b01110, 0b00001, 0b01111, 0b10001, 0b01111],
+  b: [0b10000, 0b10000, 0b11110, 0b10001, 0b10001, 0b10001, 0b11110],
+  d: [0b00001, 0b00001, 0b01111, 0b10001, 0b10001, 0b10001, 0b01111],
+  i: [0b00100, 0b00000, 0b00100, 0b00100, 0b00100, 0b00100, 0b00100],
+  o: [0b00000, 0b00000, 0b01110, 0b10001, 0b10001, 0b10001, 0b01110],
+  r: [0b00000, 0b00000, 0b01110, 0b10001, 0b10000, 0b10000, 0b10000],
+  t: [0b00000, 0b00100, 0b01110, 0b00100, 0b00100, 0b00100, 0b01110],
+
   ' ': [0, 0, 0, 0, 0, 0, 0],
 };
 
@@ -30,9 +49,15 @@ export const GLYPH_H = 7;
 const GAP = 1;
 const ON = '\u2588'; // full block
 
-/** Build the settled banner for `text` as `GLYPH_H` strings. */
+/**
+ * Build the settled banner for `text` as `GLYPH_H` strings.
+ *
+ * Case is preserved. This deliberately does NOT uppercase: the banner spells the
+ * name in title case, and shouting it in caps read as a different word. Unknown
+ * characters fall back to a space rather than throwing.
+ */
 export function buildBanner(text: string): string[] {
-  const chars = text.toUpperCase().split('');
+  const chars = [...text];
   const rows: string[] = [];
 
   for (let y = 0; y < GLYPH_H; y++) {
@@ -64,8 +89,10 @@ export type RevealOptions = {
 
 /** The text the banner spells, and the reveal timing. Exported so the boot
  *  sequence can size its own schedule from the same numbers the reveal uses
- *  (they were previously duplicated, and the overlay cut the reveal off). */
-export const BANNER_TEXT = 'BABITDOR';
+ *  (they were previously duplicated, and the overlay cut the reveal off).
+ *
+ *  Title case, matching the name as it is written everywhere else on the site. */
+export const BANNER_TEXT = 'Babitdor';
 export const BANNER_REVEAL: RevealOptions = { colDelay: 0.055, rowDelay: 0.045, band: 0.28 };
 
 /**
