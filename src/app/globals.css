@@ -739,6 +739,79 @@ button {
     gap: 0.4rem;
 }
 
+/* ---------- About + ASCII portrait ---------- */
+
+/*
+ * The portrait is a fixed 136x76 character grid, so every dimension is derived
+ * from the container width rather than chosen:
+ *
+ *   advance    = font-size * 0.6      (0.6em is the monospace advance)
+ *   font-size  = container-width / (cols * 0.6)
+ *   line-height= 1.073 * font-size    (so the cells come out square)
+ *
+ * Deriving it means the art fits its column exactly, at any viewport, with no
+ * breakpoints and no risk of a clipped column.
+ *
+ * The units are `cqw` (container query width), not `%` or `vw`. This is
+ * deliberate: a percentage in `font-size` resolves against the PARENT'S FONT
+ * SIZE, not the box width, so `calc(100% / 136 / 0.6)` collapses the text to
+ * ~0.17px. `cqw` measures the container, which is what the grid actually needs,
+ * and unlike `vw` it keeps working when the portrait is one column of a grid.
+ *
+ * `ch` cannot be used either: the ASCII glyphs in the art (and the block glyphs
+ * elsewhere on the site) do not share the Latin advance width that `1ch` reports.
+ */
+.tuiPortrait {
+    margin: 0;
+    min-width: 0;
+    container-type: inline-size;
+}
+
+.tuiPortrait__art {
+    --portrait-cols: 136;
+    margin: 0;
+    font-family: var(--mono);
+    font-size: calc(100cqw / (var(--portrait-cols) * 0.6));
+    line-height: 1.073;
+    color: var(--accent);
+    white-space: pre;
+    user-select: none;
+    -webkit-user-select: none;
+    /* A faint glow, deliberately small: a large blur closes the counters on fine
+       character detail and the portrait turns to mush. */
+    text-shadow: 0 0 6px rgba(57, 255, 136, 0.18);
+}
+
+.tuiAbout {
+    display: grid;
+    grid-template-columns: minmax(240px, 440px) minmax(0, 1fr);
+    gap: 1.5rem 2rem;
+    align-items: start;
+}
+
+.tuiAbout__prose {
+    min-width: 0;
+}
+
+.tuiPortrait__cap {
+    margin-top: 0.6rem;
+    color: var(--fg-faint);
+    font-size: 12px;
+    letter-spacing: 0.02em;
+}
+
+@media (max-width: 860px) {
+    .tuiAbout {
+        grid-template-columns: 1fr;
+    }
+
+    /* Cap the width so the portrait does not become enormous when it has a full
+       row to itself. */
+    .tuiPortrait {
+        max-width: 420px;
+    }
+}
+
 /* ---------- Projects ---------- */
 
 .tuiProjects {

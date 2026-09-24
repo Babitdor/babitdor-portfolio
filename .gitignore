@@ -36,6 +36,15 @@ dev.log
 # env files (can opt-in for committing if needed)
 .env*
 
+# Source photo for the ASCII portrait.
+#
+# Deliberately NOT published: the site shows the generated ASCII art, not the
+# photograph. The generated output (src/content/portrait.ts) IS committed, so the
+# build does not need this file; it is only the input to
+# `node scripts/generate-portrait.mjs`, which you run by hand after changing the
+# photo.
+/Me.jpg
+
 # vercel
 .vercel
 
