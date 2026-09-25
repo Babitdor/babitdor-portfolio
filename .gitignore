@@ -36,14 +36,17 @@ dev.log
 # env files (can opt-in for committing if needed)
 .env*
 
-# Source photo for the ASCII portrait.
+# Source images for the ASCII portrait.
 #
-# Deliberately NOT published: the site shows the generated ASCII art, not the
-# photograph. The generated output (src/content/portrait.ts) IS committed, so the
-# build does not need this file; it is only the input to
-# `node scripts/generate-portrait.mjs`, which you run by hand after changing the
-# photo.
+# Deliberately NOT published: the site shows the generated art, not the source.
+# The generated output (public/ascii-portrait.png) IS committed, so the build does
+# not need these; they are only inputs to `scripts/ascii-portrait.ps1`, which you
+# run by hand after changing an image.
+#
+# ASCII.png is the current source: a raster ASCII-art render, 8.5 MB. Me.jpg is
+# the earlier photograph, kept for provenance.
 /Me.jpg
+/ASCII.png
 
 # vercel
 .vercel

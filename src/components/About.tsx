@@ -1,26 +1,28 @@
 'use client';
 
+import Image from 'next/image';
 import TuiPane from './TuiPane';
 import { certifications, education, experience, stats } from '@/content/profile';
-import { PORTRAIT_COLS, portraitArt } from '@/content/portrait';
 
 const meter = (filled: number) => '█'.repeat(filled) + '░'.repeat(10 - filled);
 
 /**
  * About, with an ASCII portrait beside the prose.
  *
- * The portrait is a static string, not a live effect: it is generated once by
- * `scripts/generate-portrait.mjs` and committed, so it costs one text run rather
- * than a JPEG decode plus image processing on the main thread.
+ * The portrait is a generated image (`scripts/ascii-portrait.ps1`), committed as
+ * `public/ascii-portrait.png`. It is the source artwork's glyph grid rendered to
+ * RGBA: each pixel's original luminance becomes alpha and is tinted with
+ * `--accent`, so the art composites onto the pane with no black matte around it.
+ * The source draws a *dark* figure on a lit glyph field, so the mapping also had
+ * to lift the subject and fade the frame edge, where that field is brightest and
+ * would otherwise show as a bright band.
  *
- * It is `aria-hidden`. A 136x76 character grid is 10,000 characters of noise to a
- * screen reader, and the portrait carries no information the prose does not
- * already state, so the caption is the readable part.
+ * It is `aria-hidden`: the artwork is decorative, so the caption is the readable
+ * part and the portrait adds nothing a screen reader needs.
  *
- * Sizing note: the grid is designed square (136x76 cells at ~0.6em advance, with
- * `line-height` 1.073, maps to a square). The CSS derives the font size from the
- * container width so the art always fits exactly, rather than picking a size and
- * hoping. See `.tuiPortrait` in globals.css.
+ * Sizing: `width`/`height` are the asset's true pixel size, so the aspect ratio
+ * is fixed and the image cannot shift layout. `.tuiAbout__portrait` sets the
+ * displayed width, so no `sizes` attribute is needed.
  */
 export default function About() {
   return (
@@ -29,13 +31,14 @@ export default function About() {
         <TuiPane title="~/about.md" status="read-only" command="cat about.md">
           <div className="tuiAbout">
             <figure className="tuiPortrait">
-              <pre
-                className="tuiPortrait__art"
+              <Image
+                className="tuiAbout__portrait"
+                src="/ascii-portrait.png"
+                alt=""
                 aria-hidden="true"
-                style={{ '--portrait-cols': PORTRAIT_COLS } as React.CSSProperties}
-              >
-                {portraitArt}
-              </pre>
+                width={1000}
+                height={984}
+              />
               <figcaption className="tuiPortrait__cap">
                 <span className="tuiKey">$</span> whoami --portrait
               </figcaption>

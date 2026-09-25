@@ -48,6 +48,15 @@ export default function Skills() {
             ))}
           </div>
 
+          {/* Empty state. Unreachable today, because `categories` is derived
+              from `skillGroups`, so every filter that can be selected matches at
+              least one group. It exists for the case this content is edited
+              later and the two stop agreeing: without it, that shows a titled
+              pane with nothing under it and reads as a rendering fault. */}
+          {total === 0 && (
+            <div className="tuiLine tuiFaint"># no entries in this category</div>
+          )}
+
           <div className={`tuiSkills${filter === 'ALL' ? '' : ' is-single'}`}>
             {visible.map((group) => (
               <div className="tuiSkillGroup" key={group.category}>

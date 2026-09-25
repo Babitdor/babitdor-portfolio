@@ -9,7 +9,7 @@
     --bg-panel-2: #0b120e;
     --fg: #c9f5d3;
     --fg-dim: #7fae8d;
-    --fg-faint: #4a7358;
+    --fg-faint: #5f8a6c;
     --accent: #39ff88;
     --accent-2: #7cf5ff;
     --warn: #ffcc66;
@@ -40,6 +40,7 @@
     --bar-top-h: 46px;
     --bar-bottom-h: 42px;
     --gutter: 1.5rem;
+    --ease: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 * {
@@ -232,7 +233,11 @@ button {
     letter-spacing: 0.04em;
     color: var(--fg-dim);
     border: 1px solid transparent;
-    transition: color 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+    transition:
+        color 0.2s var(--ease),
+        background 0.2s var(--ease),
+        border-color 0.2s var(--ease),
+        transform 0.2s var(--ease);
 }
 
 .tuiTab:hover {
@@ -569,7 +574,10 @@ button {
     letter-spacing: 0.03em;
     background: rgba(57, 255, 136, 0.05);
     cursor: pointer;
-    transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+    transition:
+        background 0.2s var(--ease),
+        color 0.2s var(--ease),
+        transform 0.2s var(--ease);
 }
 
 .tuiBtn:hover {
@@ -612,15 +620,22 @@ button {
 
 .tuiStats {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 0.75rem;
+    grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr) minmax(0, 1fr);
+    gap: 0;
     margin-top: 1.25rem;
+    border-top: 1px solid var(--border);
 }
 
 .tuiStat {
-    border: 1px solid var(--border);
-    padding: 0.85rem 1rem;
-    background: rgba(11, 18, 14, 0.7);
+    border: 0;
+    border-bottom: 1px solid var(--border);
+    padding: 0.85rem 1rem 0.85rem 0;
+    background: transparent;
+}
+
+.tuiStat + .tuiStat {
+    border-left: 1px solid var(--border);
+    padding-left: 1rem;
 }
 
 .tuiStat__num {
@@ -674,7 +689,11 @@ button {
     font-size: 11px;
     letter-spacing: 0.06em;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition:
+        color 0.2s var(--ease),
+        background 0.2s var(--ease),
+        border-color 0.2s var(--ease),
+        transform 0.2s var(--ease);
 }
 
 .tuiFilter:hover {
@@ -742,44 +761,23 @@ button {
 /* ---------- About + ASCII portrait ---------- */
 
 /*
- * The portrait is a fixed 136x76 character grid, so every dimension is derived
- * from the container width rather than chosen:
+ * The portrait is a generated image, not a character grid. The grid-era sizing
+ * (font-size derived from `cqw`, line-height 1.073) went with it: an image has
+ * no font, and the glyph pitch is already baked into the pixels.
  *
- *   advance    = font-size * 0.6      (0.6em is the monospace advance)
- *   font-size  = container-width / (cols * 0.6)
- *   line-height= 1.073 * font-size    (so the cells come out square)
- *
- * Deriving it means the art fits its column exactly, at any viewport, with no
- * breakpoints and no risk of a clipped column.
- *
- * The units are `cqw` (container query width), not `%` or `vw`. This is
- * deliberate: a percentage in `font-size` resolves against the PARENT'S FONT
- * SIZE, not the box width, so `calc(100% / 136 / 0.6)` collapses the text to
- * ~0.17px. `cqw` measures the container, which is what the grid actually needs,
- * and unlike `vw` it keeps working when the portrait is one column of a grid.
- *
- * `ch` cannot be used either: the ASCII glyphs in the art (and the block glyphs
- * elsewhere on the site) do not share the Latin advance width that `1ch` reports.
+ * The asset is 60:59 and the figure is centred, so a full-width block needs no
+ * breakpoints. `width`/`height` on the element fix the aspect ratio, so this rule
+ * only has to set the displayed width.
  */
 .tuiPortrait {
     margin: 0;
     min-width: 0;
-    container-type: inline-size;
 }
 
-.tuiPortrait__art {
-    --portrait-cols: 136;
-    margin: 0;
-    font-family: var(--mono);
-    font-size: calc(100cqw / (var(--portrait-cols) * 0.6));
-    line-height: 1.073;
-    color: var(--accent);
-    white-space: pre;
-    user-select: none;
-    -webkit-user-select: none;
-    /* A faint glow, deliberately small: a large blur closes the counters on fine
-       character detail and the portrait turns to mush. */
-    text-shadow: 0 0 6px rgba(57, 255, 136, 0.18);
+.tuiAbout__portrait {
+    display: block;
+    width: 100%;
+    height: auto;
 }
 
 .tuiAbout {
@@ -823,7 +821,9 @@ button {
 .tuiProject {
     border: 1px solid var(--border);
     background: rgba(11, 18, 14, 0.72);
-    transition: border-color 0.25s ease, background 0.25s ease;
+    transition:
+        border-color 0.25s var(--ease),
+        background 0.25s var(--ease);
 }
 
 .tuiProject:hover {
@@ -914,7 +914,9 @@ button {
     padding: 0.8rem 0.95rem;
     cursor: pointer;
     text-align: left;
-    transition: border-color 0.2s ease, transform 0.2s ease;
+    transition:
+        border-color 0.2s var(--ease),
+        transform 0.2s var(--ease);
 }
 
 .tuiContact__row:hover {
@@ -1283,6 +1285,19 @@ button {
         grid-template-columns: 1fr;
     }
 
+    /*
+     * Grid and flex items default to `min-width: auto`, so their minimum size is
+     * their content. The ASCII torus is ~530px wide at 13px, which set the
+     * column floor and pushed the document 156px past a 390px viewport: the
+     * hero art was clipped and the page scrolled sideways. Zeroing it lets the
+     * column take the real width; the torus re-measures its box and redraws to
+     * fit, and `.asciiDonut` hides the transition.
+     */
+    .tuiHeroGrid > *,
+    .asciiDonut {
+        min-width: 0;
+    }
+
     .tuiHeroArt {
         min-height: 220px;
     }
@@ -1293,6 +1308,16 @@ button {
 
     .tuiStats {
         grid-template-columns: 1fr;
+    }
+
+    /*
+     * Stacked, the vertical rules have nothing to divide, so the row dividers
+     * (each stat bottom border) take over. Without this the second and third
+     * stat keep a left rule that hangs off the left edge of the block.
+     */
+    .tuiStat + .tuiStat {
+        border-left: 0;
+        padding-left: 0;
     }
 
     .tuiOverlay__scanlines {
@@ -1357,4 +1382,32 @@ button {
     * {
         transition-duration: 0.01ms !important;
     }
+}
+
+/* ---------- Tactile press feedback ----------
+
+   Every interactive control here has a hover state but, until now, no pressed
+   state: clicking gave no acknowledgement at all. These add the physical
+   "push" the interaction was missing, and they are deliberately tiny (1px
+   down, 2% in) so a control does not appear to lurch when clicked.
+
+   Source order matters: this sits after the hover rules, so with the mouse
+   down both :hover and :active match and the press wins. Elements whose
+   transition list did not already name transform get one here, otherwise
+   the press would snap instead of easing.
+*/
+.tuiPalette__item,
+.tuiProject__head,
+.tuiMenuBtn {
+    transition: transform 0.15s var(--ease);
+}
+
+.tuiBtn:active,
+.tuiFilter:active,
+.tuiTab:active,
+.tuiPalette__item:active,
+.tuiProject__head:active,
+.tuiContact__row:active,
+.tuiMenuBtn:active {
+    transform: translateY(1px) scale(0.98);
 }
