@@ -482,10 +482,29 @@ button {
     margin-top: 0.75rem;
 }
 
+/*
+ * A 10-cell gauge built from `█`/`░` (see `meter()` in About.tsx).
+ *
+ * The font is `--mono-blocks`, not the inherited site font: JetBrains Mono ships
+ * as a *latin* subset with no `U+2588`/`U+2591`, so those glyphs fall back per
+ * character to a face whose advance is ~0.95em (~13.35px at 14px) instead of a
+ * monospace 0.55-0.6em. Ten cells then measure 123.5px instead of 67px, which
+ * overflows the narrower stats tracks. Block glyphs are meant to take this stack
+ * anyway (see the note on `--mono-blocks`); here it is the metrics that matter,
+ * not the tiling, since the fallback face happens to tile solid.
+ *
+ * `max-width`/`overflow` are the backstop for the fluid grid tracks: in the last
+ * stretch of the two-column About layout (just above the 860px stack) tracks 2
+ * and 3 leave a ~53px content box, and the gauge must clip its unfilled tail
+ * rather than spill over the column rule.
+ */
 .tuiMeter {
-    display: inline-block;
     color: var(--accent);
+    font-family: var(--mono-blocks);
     letter-spacing: -1px;
+    margin-top: auto;
+    max-width: 100%;
+    overflow: hidden;
 }
 
 /* ---------- Hero ---------- */
@@ -626,7 +645,17 @@ button {
     border-top: 1px solid var(--border);
 }
 
+/*
+ * A column flex so the meter can be pushed to the bottom of the cell.
+ * `MODELS PUBLISHED` wraps to two lines while the other labels stay on one, and
+ * the grid stretches every cell to equal height: without this, that cell's meter
+ * sits a line lower than its neighbours' and the three bars miss a shared
+ * baseline. With `margin-top: auto` on the meter the bar follows the cell's
+ * bottom edge, which every cell has in common.
+ */
 .tuiStat {
+    display: flex;
+    flex-direction: column;
     border: 0;
     border-bottom: 1px solid var(--border);
     padding: 0.85rem 1rem 0.85rem 0;
