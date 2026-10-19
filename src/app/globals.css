@@ -803,10 +803,46 @@ button {
     min-width: 0;
 }
 
+.tuiPortrait__frame {
+    position: relative;
+}
+
 .tuiAbout__portrait {
     display: block;
     width: 100%;
     height: auto;
+    border: 1px solid var(--border-strong);
+    background: var(--bg-panel);
+    transition: border-color 0.2s var(--ease);
+}
+
+.tuiAbout__portrait:hover {
+    border-color: var(--accent);
+}
+
+/*
+ * Shimmer placeholder shown until the photo loads. It is absolutely positioned
+ * over `.tuiPortrait__frame`, which is sized by the image's `width`/`height`
+ * (a definite box even before the pixels arrive), so the pane does not reflow
+ * when the photo loads and the skeleton unmounts.
+ */
+.tuiPortrait__shimmer {
+    position: absolute;
+    inset: 0;
+    border: 1px solid var(--border);
+    background: linear-gradient(
+        100deg,
+        var(--bg-panel) 40%,
+        var(--bg-panel-2) 50%,
+        var(--bg-panel) 60%
+    );
+    background-size: 200% 100%;
+    animation: tuiShimmer 1.4s linear infinite;
+}
+
+@keyframes tuiShimmer {
+    from { background-position: 200% 0; }
+    to { background-position: -200% 0; }
 }
 
 .tuiAbout {

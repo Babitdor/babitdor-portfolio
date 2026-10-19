@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import Image from 'next/image';
 import TuiPane from './TuiPane';
 import { certifications, education, experience, stats } from '@/content/profile';
@@ -7,38 +8,44 @@ import { certifications, education, experience, stats } from '@/content/profile'
 const meter = (filled: number) => '█'.repeat(filled) + '░'.repeat(10 - filled);
 
 /**
- * About, with an ASCII portrait beside the prose.
+ * About, with a photo portrait beside the prose.
  *
- * The portrait is a generated image (`scripts/ascii-portrait.ps1`), committed as
- * `public/ascii-portrait.png`. It is the source artwork's glyph grid rendered to
- * RGBA: each pixel's original luminance becomes alpha and is tinted with
- * `--accent`, so the art composites onto the pane with no black matte around it.
- * The source draws a *dark* figure on a lit glyph field, so the mapping also had
- * to lift the subject and fade the frame edge, where that field is brightest and
- * would otherwise show as a bright band.
+ * The portrait is a real photograph (`Me.jpg`, the subject's own picture),
+ * downscaled and compressed to `public/portrait.jpg` for the web. It is a
+ * meaningful image, not decoration, so it carries a real `alt` and is not
+ * `aria-hidden`; the caption below it is the terminal-flavoured label.
  *
- * It is `aria-hidden`: the artwork is decorative, so the caption is the readable
- * part and the portrait adds nothing a screen reader needs.
+ * It is wrapped in `.tuiPortrait__frame`, which draws the terminal-style
+ * border and hosts a shimmer skeleton (`.tuiPortrait__shimmer`) that shows
+ * until the image fires `onLoad`. The skeleton occupies the image's box, so
+ * the pane does not reflow when the photo arrives.
  *
  * Sizing: `width`/`height` are the asset's true pixel size, so the aspect ratio
  * is fixed and the image cannot shift layout. `.tuiAbout__portrait` sets the
  * displayed width, so no `sizes` attribute is needed.
  */
 export default function About() {
+  const [imgLoaded, setImgLoaded] = useState(false);
+
   return (
     <section id="about" className="tuiSection">
       <div className="tuiSection__inner">
         <TuiPane title="~/about.md" status="read-only" command="cat about.md">
           <div className="tuiAbout">
             <figure className="tuiPortrait">
-              <Image
-                className="tuiAbout__portrait"
-                src="/ascii-portrait.png"
-                alt=""
-                aria-hidden="true"
-                width={1000}
-                height={984}
-              />
+              <div className="tuiPortrait__frame">
+                {!imgLoaded && <div className="tuiPortrait__shimmer" aria-hidden="true" />}
+                <Image
+                  className="tuiAbout__portrait"
+                  src="/portrait.jpg"
+                  alt="Portrait of Babitdor Kayang Khonglah"
+                  width={900}
+                  height={966}
+                  loading="lazy"
+                  decoding="async"
+                  onLoad={() => setImgLoaded(true)}
+                />
+              </div>
               <figcaption className="tuiPortrait__cap">
                 <span className="tuiKey">$</span> whoami --portrait
               </figcaption>

@@ -48,6 +48,9 @@ dev.log
 /Me.jpg
 /ASCII.png
 
+# agent scratch (wiki clippings, plans) — never part of the site
+/.nova/
+
 # vercel
 .vercel
 
