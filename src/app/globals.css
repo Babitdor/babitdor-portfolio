@@ -1,46 +1,113 @@
 /* ============================================================
-   babit-os — terminal design system
-   Palette, primitives and layout for the whole site.
+   babit-os
+   A production console, not a green terminal. Body copy is warm
+   white; mint is an accent reserved for state and action.
    ============================================================ */
 
 :root {
-    --bg: #050806;
-    --bg-panel: #080d0a;
-    --bg-panel-2: #0b120e;
-    --fg: #c9f5d3;
-    --fg-dim: #7fae8d;
-    --fg-faint: #5f8a6c;
-    --accent: #39ff88;
-    --accent-2: #7cf5ff;
-    --warn: #ffcc66;
-    --error: #ff5f6d;
-    --border: rgba(57, 255, 136, 0.22);
-    --border-strong: rgba(57, 255, 136, 0.45);
-    --glow: rgba(57, 255, 136, 0.35);
+    color-scheme: dark;
+    --bg: #070a08;
+    --bg-panel: #0a0f0c;
+    --bg-panel-2: #0d1410;
+    --bg-elevated: #101812;
+
+    --fg: #e3eee6;
+    --fg-dim: #a3b5a8;
+    --fg-faint: #85998c;
+
+    --accent: #8dffb2;
+    --accent-2: #8ad7ff;
+    --warn: #ffd166;
+    --error: #ff7a85;
+
+    --accent-rgb: 141, 255, 178;
+    --bg-rgb: 7, 10, 8;
+    --accent-hover: #a8ffc5;
+    --accent-faded: rgba(141, 255, 178, 0.48);
+    --bracket: rgba(141, 255, 178, 0.24);
+
+    --border: rgba(227, 238, 230, 0.13);
+    --border-strong: rgba(141, 255, 178, 0.34);
+    --accent-soft: rgba(141, 255, 178, 0.075);
+    --glow: rgba(141, 255, 178, 0.24);
+
+    --window-bg: rgba(10, 15, 12, 0.93);
+    --window-shadow: 0 24px 64px rgba(0, 0, 0, 0.34);
+    --toast-shadow: 0 14px 44px rgba(0, 0, 0, 0.55);
+    --channel-bg: rgba(13, 20, 16, 0.5);
+    --trace-bg: rgba(10, 15, 12, 0.58);
+    --scrim: rgba(3, 6, 4, 0.76);
+
+    --scanline: rgba(0, 0, 0, 0.14);
+    --scanline-opacity: 0.34;
+    --vignette: rgba(0, 0, 0, 0.34);
 
     --mono: var(--font-mono), ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas,
         'Liberation Mono', monospace;
 
     /*
-     * Font stack for artwork built from solid block glyphs (U+2588 and friends).
-
-     * Deliberately excludes the site font. JetBrains Mono's `U+2588 FULL BLOCK`
-     * is drawn slightly smaller than its cell, so adjacent blocks leave a seam
-     * on every edge. For a dot-matrix banner that is fatal: at 11px the seams
-     * merge into a mush and the word reads as smeared noise. Every stack below
-     * was rendered side by side and tiles solid; JetBrains Mono was the only one
-     * that did not.
-     *
-     * Line-drawn ASCII ramps (`.:-=+*#%@`) are unaffected and still use --mono,
-     * because those are ordinary characters that do not need to tile.
+     * Block glyphs are drawn by a fallback face on purpose. JetBrains Mono ships
+     * without U+2588 in its Latin subset, and the fallback is what tiles solid.
+     * Line-drawn ASCII still uses --mono.
      */
     --mono-blocks: Consolas, ui-monospace, 'DejaVu Sans Mono', 'Liberation Mono',
         'Courier New', monospace;
 
-    --bar-top-h: 46px;
-    --bar-bottom-h: 42px;
-    --gutter: 1.5rem;
+    --bar-top-h: 54px;
+    --bar-bottom-h: 44px;
+    --gutter: clamp(1rem, 4vw, 2.5rem);
+    --measure: 1180px;
     --ease: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@property --spot {
+    syntax: "<length>";
+    inherits: false;
+    initial-value: 0px;
+}
+
+/*
+ * Daylight terminal. The phosphor is printed green on warm paper, not a
+ * mechanical inversion of the dark palette: shadows soften, scans lighten,
+ * and the accent darkens far enough to carry small text.
+ */
+:root[data-theme="light"] {
+    color-scheme: light;
+    --bg: #f2efe4;
+    --bg-panel: #fbf8ef;
+    --bg-panel-2: #f3efe3;
+    --bg-elevated: #fffdf8;
+
+    --fg: #14241b;
+    --fg-dim: #43564a;
+    --fg-faint: #54685a;
+
+    --accent: #0a6b3d;
+    --accent-2: #0c637a;
+    --warn: #8a5d00;
+    --error: #b3261e;
+
+    --accent-rgb: 10, 107, 61;
+    --bg-rgb: 242, 239, 228;
+    --accent-hover: #07552f;
+    --accent-faded: rgba(10, 107, 61, 0.76);
+    --bracket: rgba(10, 107, 61, 0.28);
+
+    --border: rgba(20, 36, 27, 0.14);
+    --border-strong: rgba(10, 107, 61, 0.38);
+    --accent-soft: rgba(10, 107, 61, 0.075);
+    --glow: rgba(10, 107, 61, 0.16);
+
+    --window-bg: rgba(251, 248, 239, 0.97);
+    --window-shadow: 0 24px 64px rgba(37, 48, 39, 0.12);
+    --toast-shadow: 0 14px 44px rgba(30, 42, 33, 0.18);
+    --channel-bg: rgba(255, 253, 247, 0.6);
+    --trace-bg: rgba(255, 253, 247, 0.55);
+    --scrim: rgba(17, 28, 20, 0.42);
+
+    --scanline: rgba(24, 38, 28, 0.05);
+    --scanline-opacity: 0.45;
+    --vignette: rgba(75, 62, 30, 0.06);
 }
 
 * {
@@ -50,15 +117,20 @@
 }
 
 html {
-    /* Lenis owns scrolling. `scroll-behavior: smooth` fights it and must stay off. */
+    /* Lenis owns scrolling; native smooth scrolling fights it. */
     scroll-behavior: auto;
     background: var(--bg);
 }
 
+html.tuiMenuOpen,
+html.tuiMenuOpen body {
+    overflow: hidden;
+}
+
 body {
     font-family: var(--mono);
-    font-size: 14px;
-    line-height: 1.65;
+    font-size: 15px;
+    line-height: 1.68;
     background-color: var(--bg);
     color: var(--fg);
     -webkit-font-smoothing: antialiased;
@@ -66,21 +138,42 @@ body {
     overflow-x: hidden;
 }
 
-h1, h2, h3, h4 {
+h1,
+h2,
+h3,
+h4 {
     font-family: var(--mono);
     font-weight: 600;
-    line-height: 1.25;
-    letter-spacing: -0.01em;
+    line-height: 1.18;
+    letter-spacing: -0.025em;
+    text-wrap: balance;
+}
+
+p {
+    text-wrap: pretty;
 }
 
 a {
-    color: var(--accent);
+    color: inherit;
     text-decoration: none;
 }
 
 button {
     font: inherit;
     color: inherit;
+    background: none;
+    border: 0;
+    cursor: pointer;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+ul,
+ol {
+    list-style: none;
 }
 
 ::selection {
@@ -90,21 +183,34 @@ button {
 
 :focus-visible {
     outline: 2px solid var(--accent);
-    outline-offset: 2px;
+    outline-offset: 3px;
 }
 
-/* ---------- Boot guard ---------- */
+/* ---------- Skip link ---------- */
 
-/*
-  Covers the page from the first paint until the boot animation takes over.
-  Server-rendered and self-removing (see the script in layout.tsx); z-index 500
-  puts it above everything except the command palette, which cannot open before
-  hydration anyway.
+.tuiSkip {
+    position: fixed;
+    top: 0.65rem;
+    left: 0.65rem;
+    z-index: 600;
+    padding: 0.7rem 1rem;
+    background: var(--accent);
+    color: var(--bg);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    transform: translateY(-160%);
+    transition: transform 0.2s var(--ease);
+}
 
-  It starts fully opaque with no transition: it must be opaque at first paint,
-  and fading it in would defeat the purpose. The reveal is a discrete removal by
-  the script, so there is no exit transition to coordinate.
-*/
+.tuiSkip:focus-visible {
+    transform: translateY(0);
+    outline-color: var(--fg);
+}
+
+/* ---------- First-paint guard ---------- */
+
 .tuiBootGuard {
     position: fixed;
     inset: 0;
@@ -113,7 +219,7 @@ button {
     pointer-events: none;
 }
 
-/* ---------- CRT overlay ---------- */
+/* ---------- CRT frame ---------- */
 
 .tuiOverlay {
     position: fixed;
@@ -127,47 +233,68 @@ button {
     inset: 0;
     background: repeating-linear-gradient(
         to bottom,
-        rgba(0, 0, 0, 0) 0px,
-        rgba(0, 0, 0, 0) 2px,
-        rgba(0, 0, 0, 0.16) 3px,
-        rgba(0, 0, 0, 0.16) 4px
+        transparent 0px,
+        transparent 3px,
+        var(--scanline) 4px
     );
-    opacity: 0.5;
+    opacity: var(--scanline-opacity);
 }
 
 .tuiOverlay__vignette {
     position: absolute;
     inset: 0;
     background: radial-gradient(
-        ellipse at center,
-        rgba(0, 0, 0, 0) 45%,
-        rgba(0, 0, 0, 0.55) 100%
+        ellipse at 50% 42%,
+        transparent 40%,
+        var(--vignette) 100%
     );
 }
 
 .tuiBracket {
     position: absolute;
-    width: 18px;
-    height: 18px;
-    border: 1px solid var(--border-strong);
-    opacity: 0.5;
+    width: 22px;
+    height: 22px;
+    border: 1px solid var(--bracket);
 }
 
-.tuiBracket--tl { top: 8px; left: 8px; border-right: 0; border-bottom: 0; }
-.tuiBracket--tr { top: 8px; right: 8px; border-left: 0; border-bottom: 0; }
-.tuiBracket--bl { bottom: 8px; left: 8px; border-right: 0; border-top: 0; }
-.tuiBracket--br { bottom: 8px; right: 8px; border-left: 0; border-top: 0; }
+.tuiBracket--tl {
+    top: 10px;
+    left: 10px;
+    border-right: 0;
+    border-bottom: 0;
+}
 
-/* ---------- Bars ---------- */
+.tuiBracket--tr {
+    top: 10px;
+    right: 10px;
+    border-left: 0;
+    border-bottom: 0;
+}
+
+.tuiBracket--bl {
+    bottom: 10px;
+    left: 10px;
+    border-right: 0;
+    border-top: 0;
+}
+
+.tuiBracket--br {
+    bottom: 10px;
+    right: 10px;
+    border-left: 0;
+    border-top: 0;
+}
+
+/* ---------- Fixed bars ---------- */
 
 .tuiBar {
     position: fixed;
     left: 0;
     right: 0;
     z-index: 60;
-    background: rgba(5, 8, 6, 0.92);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    background: rgba(var(--bg-rgb), 0.98);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
 }
 
 .tuiBar--top {
@@ -183,127 +310,262 @@ button {
 }
 
 .tuiBar__inner {
-    max-width: 1400px;
+    max-width: 1320px;
     height: 100%;
     margin: 0 auto;
     padding: 0 var(--gutter);
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: clamp(0.75rem, 2vw, 1.5rem);
+    min-width: 0;
 }
 
 .tuiBar__brand {
     display: inline-flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.55rem;
+    min-height: 36px;
     font-weight: 600;
+    font-size: 13px;
     color: var(--fg);
     white-space: nowrap;
 }
 
+.tuiBar__brandText {
+    transition: color 0.18s var(--ease);
+}
+
+.tuiBar__brand:hover .tuiBar__brandText {
+    color: var(--accent);
+}
+
 .tuiDot {
-    width: 8px;
-    height: 8px;
+    width: 7px;
+    height: 7px;
     border-radius: 50%;
     background: var(--accent);
     box-shadow: 0 0 8px var(--accent);
     animation: tuiPulse 2.4s ease-in-out infinite;
+    flex: 0 0 auto;
 }
 
 .tuiBar__path {
     color: var(--fg-faint);
     white-space: nowrap;
-    font-size: 12px;
+    font-size: 11px;
+    letter-spacing: 0.02em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-width: 0;
 }
 
 .tuiTabs {
     display: flex;
-    list-style: none;
-    gap: 0.25rem;
+    gap: 0.2rem;
     margin-left: auto;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
 }
 
 .tuiTab {
     display: inline-flex;
     align-items: center;
     gap: 0.4rem;
-    padding: 0.3rem 0.6rem;
-    font-size: 12px;
-    letter-spacing: 0.04em;
+    min-height: 36px;
+    padding: 0.35rem 0.65rem;
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
     color: var(--fg-dim);
     border: 1px solid transparent;
     transition:
-        color 0.2s var(--ease),
-        background 0.2s var(--ease),
-        border-color 0.2s var(--ease),
-        transform 0.2s var(--ease);
+        color 0.18s var(--ease),
+        background 0.18s var(--ease),
+        border-color 0.18s var(--ease),
+        transform 0.18s var(--ease);
 }
 
 .tuiTab:hover {
     color: var(--accent);
-    border-color: var(--border);
+    border-color: var(--border-strong);
+    background: var(--accent-soft);
+    transform: translateY(-1px);
 }
 
 .tuiTab.is-active {
     background: var(--accent);
     color: var(--bg);
-    font-weight: 700;
     border-color: var(--accent);
 }
 
+.tuiTab.is-active:hover {
+    background: var(--accent-hover);
+    border-color: var(--accent-hover);
+    color: var(--bg);
+}
+
 .tuiTab__num {
-    opacity: 0.6;
-    font-size: 10px;
+    opacity: 0.55;
+    font-size: 9px;
+    letter-spacing: 0.04em;
 }
 
 .tuiTab.is-active .tuiTab__num {
-    opacity: 0.75;
+    opacity: 0.72;
 }
 
 .tuiMenuBtn {
     display: none;
     margin-left: auto;
+    min-width: 44px;
+    min-height: 36px;
+    padding: 0.3rem 0.6rem;
     background: transparent;
     border: 1px solid var(--border);
-    padding: 0.25rem 0.6rem;
-    cursor: pointer;
     color: var(--accent);
-    font-size: 12px;
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    transition:
+        background 0.18s var(--ease),
+        border-color 0.18s var(--ease);
+}
+
+.tuiMenuBtn:hover {
+    background: var(--accent-soft);
+    border-color: var(--accent);
+}
+
+/* ---------- Theme switch ---------- */
+
+.tuiTheme {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.45rem;
+    min-width: 44px;
+    min-height: 36px;
+    margin-left: 0.35rem;
+    padding: 0.35rem 0.55rem;
+    border: 1px solid var(--border);
+    color: var(--fg-dim);
+    font-size: 9.5px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    transition:
+        color 0.18s var(--ease),
+        background 0.18s var(--ease),
+        border-color 0.18s var(--ease),
+        transform 0.18s var(--ease);
+}
+
+.tuiTheme:hover {
+    color: var(--accent);
+    background: var(--accent-soft);
+    border-color: var(--border-strong);
+    transform: translateY(-1px);
+}
+
+.tuiTheme__icons {
+    position: relative;
+    width: 14px;
+    height: 14px;
+    flex: 0 0 auto;
+}
+
+.tuiTheme__icons svg {
+    position: absolute;
+    inset: 0;
+    width: 14px;
+    height: 14px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.4;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    transition:
+        opacity 0.3s var(--ease),
+        transform 0.45s var(--ease);
+}
+
+.tuiTheme__sun {
+    opacity: 0;
+    transform: rotate(-90deg) scale(0.55);
+}
+
+:root[data-theme="light"] .tuiTheme__sun {
+    opacity: 1;
+    transform: rotate(0deg) scale(1);
+}
+
+:root[data-theme="light"] .tuiTheme__moon {
+    opacity: 0;
+    transform: rotate(90deg) scale(0.55);
+}
+
+.tuiTheme__label {
+    min-width: 3.4em;
+    text-align: left;
+}
+
+.tuiTheme__labelLight {
+    display: none;
+}
+
+:root[data-theme="light"] .tuiTheme__labelDark {
+    display: none;
+}
+
+:root[data-theme="light"] .tuiTheme__labelLight {
+    display: inline;
 }
 
 .tuiMobileMenu {
     position: fixed;
     inset: var(--bar-top-h) 0 var(--bar-bottom-h) 0;
     z-index: 55;
-    background: rgba(5, 8, 6, 0.98);
-    backdrop-filter: blur(8px);
+    background: rgba(var(--bg-rgb), 0.985);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     display: flex;
-    align-items: center;
-    justify-content: center;
+    align-items: flex-start;
+    justify-content: flex-start;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    animation: tuiFade 0.18s var(--ease);
 }
 
 .tuiMobileMenu__inner {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
-    width: min(320px, 80vw);
+    width: min(360px, 84vw);
+    margin: auto;
 }
 
 .tuiMobileMenu__link {
     display: flex;
     align-items: center;
-    gap: 0.6rem;
-    padding: 0.85rem 1rem;
+    gap: 0.75rem;
+    min-height: 52px;
+    padding: 0.8rem 1rem;
     border: 1px solid var(--border);
     color: var(--fg);
-    font-size: 14px;
+    font-size: 13px;
     letter-spacing: 0.06em;
+    transition:
+        background 0.18s var(--ease),
+        border-color 0.18s var(--ease);
+}
+
+.tuiMobileMenu__link:hover {
+    background: var(--accent-soft);
+    border-color: var(--border-strong);
 }
 
 .tuiMobileMenu__link.is-active {
     background: var(--accent);
     color: var(--bg);
+    border-color: var(--accent);
     font-weight: 700;
 }
 
@@ -313,32 +575,55 @@ button {
     display: inline-flex;
     align-items: center;
     gap: 0.35rem;
-    white-space: nowrap;
+    min-width: 0;
+    font-size: 12px;
     overflow: hidden;
-    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
-.tuiPrompt__path { color: var(--accent); }
-.tuiPrompt__sep { color: var(--fg-faint); }
-.tuiPrompt__dir { color: var(--accent-2); }
-.tuiPrompt__sigil { color: var(--accent); font-weight: 700; }
-.tuiPrompt__cmd { color: var(--fg); }
+.tuiPrompt__path {
+    color: var(--accent);
+    flex: 0 0 auto;
+}
+
+.tuiPrompt__sep {
+    color: var(--fg-faint);
+}
+
+.tuiPrompt__dir {
+    color: var(--accent-2);
+}
+
+.tuiPrompt__sigil {
+    color: var(--accent);
+    font-weight: 700;
+}
+
+.tuiPrompt__cmd {
+    color: var(--fg-dim);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-width: 0;
+}
 
 .tuiCursor {
     display: inline-block;
-    width: 8px;
-    height: 15px;
+    width: 7px;
+    height: 14px;
     background: var(--accent);
+    flex: 0 0 auto;
     animation: tuiBlink 1.05s steps(1, end) infinite;
 }
 
 .tuiPrompt__meta {
     margin-left: auto;
     display: inline-flex;
-    gap: 1.25rem;
+    gap: 1.4rem;
     color: var(--fg-faint);
-    font-size: 11px;
+    font-size: 10.5px;
+    letter-spacing: 0.04em;
     white-space: nowrap;
+    flex: 0 0 auto;
 }
 
 .tuiPrompt__meta b {
@@ -346,66 +631,7 @@ button {
     font-weight: 600;
 }
 
-/* ---------- Window / pane ---------- */
-
-.tuiWindow {
-    border: 1px solid var(--border);
-    background: rgba(8, 13, 10, 0.88);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
-    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.6);
-}
-
-.tuiWindow__bar {
-    display: flex;
-    align-items: center;
-    gap: 0.6rem;
-    padding: 0.4rem 0.7rem;
-    background: var(--bg-panel-2);
-    border-bottom: 1px solid var(--border);
-    font-size: 12px;
-}
-
-.tuiWindow__dots {
-    display: inline-flex;
-    gap: 4px;
-}
-
-.tuiWindow__dots i {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: var(--fg-faint);
-    display: block;
-}
-
-.tuiWindow__dots i:first-child { background: var(--error); }
-.tuiWindow__dots i:nth-child(2) { background: var(--warn); }
-.tuiWindow__dots i:last-child { background: var(--accent); }
-
-.tuiWindow__title {
-    color: var(--fg-dim);
-    letter-spacing: 0.04em;
-}
-
-.tuiWindow__status {
-    margin-left: auto;
-    color: var(--fg-faint);
-    font-size: 11px;
-    letter-spacing: 0.06em;
-}
-
-.tuiWindow__cmd {
-    padding: 0.6rem 1.1rem 0;
-    color: var(--fg-dim);
-    font-size: 13px;
-}
-
-.tuiWindow__body {
-    padding: 1.1rem 1.25rem 1.4rem;
-}
-
-/* ---------- Layout ---------- */
+/* ---------- Page frame ---------- */
 
 .tuiMain {
     position: relative;
@@ -414,33 +640,104 @@ button {
     padding-bottom: var(--bar-bottom-h);
 }
 
+.tuiMain:focus {
+    outline: none;
+}
+
 .tuiSection {
-    min-height: 100vh;
-    min-height: 100svh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 3rem var(--gutter);
-    scroll-margin-top: var(--bar-top-h);
+    position: relative;
+    padding: clamp(4.5rem, 9vh, 8rem) var(--gutter);
+    scroll-margin-top: calc(var(--bar-top-h) + 8px);
 }
 
 .tuiSection__inner {
     width: 100%;
-    max-width: 940px;
+    max-width: 1080px;
+    margin: 0 auto;
 }
 
 .tuiSection__inner--wide {
-    max-width: 1120px;
+    max-width: var(--measure);
+}
+
+.tuiSection--hero {
+    min-height: calc(100svh - var(--bar-top-h) - var(--bar-bottom-h));
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-top: clamp(2.5rem, 6vh, 4.5rem);
+    padding-bottom: clamp(2.5rem, 6vh, 4rem);
+}
+
+/* ---------- Section heads ---------- */
+
+.tuiSectionHead {
+    display: grid;
+    grid-template-columns: 3.5rem minmax(0, 1fr);
+    gap: clamp(1rem, 2.5vw, 2rem);
+    align-items: start;
+    margin-bottom: clamp(1.8rem, 4vh, 3rem);
+}
+
+.tuiSectionHead__index {
+    display: block;
+    padding-top: 0.45rem;
+    border-top: 1px solid var(--border-strong);
+    color: var(--accent);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+}
+
+.tuiSectionHead__title {
+    max-width: 20ch;
+    font-size: clamp(1.8rem, 3.8vw, 2.9rem);
+    line-height: 1.08;
+    letter-spacing: -0.045em;
+}
+
+.tuiSectionHead__note {
+    margin-top: 0.85rem;
+    max-width: 60ch;
+    color: var(--fg-dim);
+    font-size: 14px;
+    line-height: 1.7;
 }
 
 /* ---------- Typographic primitives ---------- */
 
-.tuiComment { color: var(--fg-faint); }
-.tuiKey { color: var(--accent-2); }
-.tuiValue { color: var(--fg); }
-.tuiMuted { color: var(--fg-dim); }
-.tuiFaint { color: var(--fg-faint); }
-.tuiStrong { color: var(--accent); font-weight: 700; }
+.tuiComment {
+    color: var(--fg-faint);
+}
+
+.tuiKey {
+    color: var(--accent-2);
+}
+
+.tuiValue {
+    color: var(--fg);
+}
+
+.tuiMuted {
+    color: var(--fg-dim);
+}
+
+.tuiFaint {
+    color: var(--fg-faint);
+}
+
+.tuiStrong {
+    color: var(--fg);
+    font-weight: 600;
+    text-decoration: underline;
+    text-decoration-color: rgba(var(--accent-rgb), 0.48);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.22em;
+}
+
+.tuiSmall {
+    font-size: 12px;
+}
 
 .tuiLine {
     display: block;
@@ -449,75 +746,239 @@ button {
 }
 
 .tuiOutput {
-    margin-top: 0.85rem;
+    margin-top: 1.35rem;
     border-top: 1px dashed var(--border);
-    padding-top: 0.85rem;
+    padding-top: 1rem;
 }
 
 .tuiOutput > * + * {
-    margin-top: 0.5rem;
+    margin-top: 0.65rem;
 }
 
-/* ---------- Chips, tags, meters ---------- */
+/* ---------- Pane ---------- */
 
-.tuiChip {
-    display: inline-block;
-    padding: 0.1rem 0.5rem;
+.tuiWindow {
+    position: relative;
     border: 1px solid var(--border);
-    color: var(--fg-dim);
+    background: var(--window-bg);
+    box-shadow: var(--window-shadow);
+    min-width: 0;
+}
+
+.tuiWindow__bar {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    min-height: 38px;
+    padding: 0.4rem 0.9rem;
+    background: var(--bg-panel-2);
+    border-bottom: 1px solid var(--border);
     font-size: 11px;
+    min-width: 0;
+}
+
+.tuiWindow__dots {
+    display: inline-flex;
+    gap: 4px;
+    flex: 0 0 auto;
+}
+
+.tuiWindow__dots i {
+    display: block;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--fg-faint);
+}
+
+.tuiWindow__dots i:first-child {
+    background: var(--error);
+}
+
+.tuiWindow__dots i:nth-child(2) {
+    background: var(--warn);
+}
+
+.tuiWindow__dots i:last-child {
+    background: var(--accent);
+}
+
+.tuiWindow__title {
+    color: var(--fg-dim);
     letter-spacing: 0.03em;
     white-space: nowrap;
-}
-
-.tuiChip--accent {
-    color: var(--accent);
-    border-color: var(--border-strong);
-}
-
-.tuiTagRow {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.4rem;
-    margin-top: 0.75rem;
-}
-
-/*
- * A 10-cell gauge built from `█`/`░` (see `meter()` in About.tsx).
- *
- * The font is `--mono-blocks`, not the inherited site font: JetBrains Mono ships
- * as a *latin* subset with no `U+2588`/`U+2591`, so those glyphs fall back per
- * character to a face whose advance is ~0.95em (~13.35px at 14px) instead of a
- * monospace 0.55-0.6em. Ten cells then measure 123.5px instead of 67px, which
- * overflows the narrower stats tracks. Block glyphs are meant to take this stack
- * anyway (see the note on `--mono-blocks`); here it is the metrics that matter,
- * not the tiling, since the fallback face happens to tile solid.
- *
- * `max-width`/`overflow` are the backstop for the fluid grid tracks: in the last
- * stretch of the two-column About layout (just above the 860px stack) tracks 2
- * and 3 leave a ~53px content box, and the gauge must clip its unfilled tail
- * rather than spill over the column rule.
- */
-.tuiMeter {
-    color: var(--accent);
-    font-family: var(--mono-blocks);
-    letter-spacing: -1px;
-    margin-top: auto;
-    max-width: 100%;
     overflow: hidden;
+    text-overflow: ellipsis;
+    min-width: 0;
+}
+
+.tuiWindow__status {
+    margin-left: auto;
+    max-width: 46%;
+    color: var(--fg-faint);
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex: 0 1 auto;
+}
+
+.tuiWindow__cmd {
+    padding: 0.9rem clamp(1.1rem, 3vw, 1.9rem) 0;
+    color: var(--fg-faint);
+    font-size: 12px;
+    letter-spacing: 0.02em;
+}
+
+.tuiWindow__body {
+    padding: clamp(1.2rem, 3vw, 2rem);
+}
+
+/* ---------- Buttons ---------- */
+
+.tuiBtn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.55rem;
+    min-height: 44px;
+    padding: 0.65rem 1.05rem;
+    border: 1px solid var(--accent);
+    background: var(--accent);
+    color: var(--bg);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition:
+        background 0.18s var(--ease),
+        border-color 0.18s var(--ease),
+        color 0.18s var(--ease),
+        transform 0.18s var(--ease);
+}
+
+.tuiBtn:hover {
+    background: var(--accent-hover);
+    border-color: var(--accent-hover);
+    transform: translateY(-1px);
+}
+
+.tuiBtn--ghost {
+    background: transparent;
+    border-color: var(--border-strong);
+    color: var(--accent);
+}
+
+.tuiBtn--ghost:hover {
+    background: var(--accent-soft);
+    border-color: var(--accent);
+    color: var(--accent);
 }
 
 /* ---------- Hero ---------- */
 
-/* Two columns on wide screens: the whoami pane, and the ASCII torus beside it.
-   The figure is a column flex with a definite height, so the stage gets a
-   definite height from `flex: 1` and the renderer has a real box to fill. */
 .tuiHeroGrid {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 0.9fr);
-    gap: clamp(1.5rem, 4vw, 3.5rem);
+    grid-template-columns: minmax(0, 1.08fr) minmax(0, 0.92fr);
+    gap: clamp(1.25rem, 3.5vw, 3rem);
+    align-items: stretch;
+    max-width: var(--measure);
+    margin: 0 auto;
+    width: 100%;
+}
+
+.tuiHeroPane {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.tuiHeroPane .tuiWindow__body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: clamp(1.4rem, 3.4vw, 2.4rem);
+}
+
+.tuiHero__eyebrow {
+    display: flex;
     align-items: center;
-    max-width: 1180px;
+    gap: 0.55rem;
+    color: var(--fg-dim);
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+.tuiHero__name {
+    display: flex;
+    flex-direction: column;
+    margin-top: 1.15rem;
+    font-weight: 800;
+    line-height: 0.9;
+    letter-spacing: -0.06em;
+}
+
+.tuiHero__firstName {
+    font-size: clamp(3rem, 8.6vw, 7.2rem);
+    color: var(--fg);
+}
+
+.tuiHero__lastName {
+    margin-top: 0.6rem;
+    font-size: clamp(0.78rem, 1.55vw, 1.05rem);
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    line-height: 1.3;
+    text-transform: uppercase;
+    color: var(--accent);
+}
+
+.tuiHero__role {
+    margin-top: 1.35rem;
+    max-width: 34ch;
+    color: var(--fg-dim);
+    font-size: clamp(1rem, 1.6vw, 1.18rem);
+    line-height: 1.55;
+}
+
+.tuiHero__readout {
+    margin-top: 1.6rem;
+    border-top: 1px solid var(--border);
+}
+
+.tuiHero__readout > div {
+    display: grid;
+    grid-template-columns: 4rem minmax(0, 1fr);
+    gap: 0.85rem;
+    padding: 0.55rem 0;
+    border-bottom: 1px solid var(--border);
+}
+
+.tuiHero__readout dt {
+    color: var(--fg-faint);
+    font-size: 9.5px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding-top: 0.15rem;
+}
+
+.tuiHero__readout dd {
+    color: var(--fg-dim);
+    font-size: 12.5px;
+    line-height: 1.55;
+}
+
+.tuiHero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.7rem;
+    margin-top: 1.7rem;
 }
 
 .tuiHeroArt {
@@ -525,180 +986,241 @@ button {
     flex-direction: column;
     gap: 0.6rem;
     margin: 0;
-    min-height: clamp(320px, 56vh, 520px);
+    min-width: 0;
+    min-height: clamp(320px, 58vh, 560px);
+}
+
+.tuiHeroArt__stage {
+    position: relative;
+    flex: 1 1 auto;
+    min-height: 0;
+    border: 1px solid var(--border);
+    background:
+        linear-gradient(rgba(var(--accent-rgb), 0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(var(--accent-rgb), 0.035) 1px, transparent 1px),
+        radial-gradient(circle at 50% 48%, rgba(var(--accent-rgb), 0.055), transparent 62%),
+        var(--bg-panel);
+    background-size: 32px 32px, 32px 32px, auto, auto;
+    overflow: hidden;
+    display: flex;
 }
 
 .tuiHeroArt__cap {
-    flex: 0 0 auto;
-    align-self: flex-start;
-    color: var(--fg-faint);
-    font-size: 12px;
-    letter-spacing: 0.02em;
-    /* Sits over both the torus and the ambient field, so it needs its own
-       background to stay readable. */
-    background: var(--bg);
-    border: 1px solid var(--border);
-    padding: 0.25rem 0.6rem;
     display: flex;
     flex-wrap: wrap;
     align-items: baseline;
+    justify-content: space-between;
     gap: 0.5rem;
+    padding: 0.5rem 0.7rem;
+    border: 1px solid var(--border);
+    background: var(--bg-panel-2);
+    color: var(--fg-faint);
+    font-size: 10.5px;
+    letter-spacing: 0.02em;
 }
 
-/* The interaction hint, styled like a trailing shell comment. */
 .tuiHeroArt__hint {
     color: var(--accent);
-    opacity: 0.75;
+    opacity: 0.8;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
 }
 
-.tuiHero__badge {
+.tuiHero__scroll {
     display: inline-flex;
+    align-self: center;
     align-items: center;
     gap: 0.5rem;
-    border: 1px solid var(--border-strong);
-    color: var(--accent);
-    padding: 0.2rem 0.6rem;
-    font-size: 12px;
-    margin-bottom: 1.25rem;
-}
-
-.tuiHero__name {
-    font-size: clamp(1.9rem, 5vw, 3.1rem);
-    color: var(--fg);
-    letter-spacing: -0.02em;
-    text-shadow: 0 0 26px rgba(57, 255, 136, 0.18);
-}
-
-.tuiHero__role {
-    color: var(--fg-dim);
-    margin-top: 0.6rem;
-    font-size: clamp(0.95rem, 2vw, 1.1rem);
-}
-
-.tuiHero__actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.75rem;
-    margin-top: 1.75rem;
-}
-
-.tuiBtn {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.6rem 1.1rem;
-    border: 1px solid var(--border-strong);
-    color: var(--accent);
-    font-size: 13px;
-    letter-spacing: 0.03em;
-    background: rgba(57, 255, 136, 0.05);
-    cursor: pointer;
+    margin-top: clamp(1.8rem, 4vh, 3rem);
+    padding: 0.35rem 0;
+    color: var(--fg-faint);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    border-bottom: 1px solid transparent;
     transition:
-        background 0.2s var(--ease),
-        color 0.2s var(--ease),
-        transform 0.2s var(--ease);
+        color 0.18s var(--ease),
+        border-color 0.18s var(--ease),
+        transform 0.18s var(--ease);
 }
 
-.tuiBtn:hover {
-    background: var(--accent);
-    color: var(--bg);
-    transform: translateY(-2px);
+.tuiHero__scroll:hover {
+    color: var(--accent);
+    border-bottom-color: var(--border-strong);
+    transform: translateY(2px);
 }
 
-.tuiBtn--ghost {
-    background: transparent;
-    border-color: var(--border);
-    color: var(--fg-dim);
+/* ---------- About ---------- */
+
+.tuiAbout {
+    display: grid;
+    grid-template-columns: minmax(220px, 310px) minmax(0, 1fr);
+    gap: clamp(1.5rem, 4vw, 2.75rem);
+    align-items: start;
 }
 
-.tuiBtn--ghost:hover {
-    background: transparent;
+.tuiPortrait {
+    margin: 0;
+    min-width: 0;
+}
+
+.tuiAbout__portrait {
+    display: block;
+    width: 100%;
+    border: 1px solid var(--border-strong);
+    background: var(--bg-panel);
+    filter: grayscale(1) contrast(1.04);
+    transition:
+        filter 0.4s var(--ease),
+        border-color 0.25s var(--ease);
+}
+
+.tuiPortrait:hover .tuiAbout__portrait {
+    filter: grayscale(0) contrast(1);
     border-color: var(--accent);
-    color: var(--accent);
 }
 
-.tuiSocials {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1.25rem;
-    margin-top: 1.75rem;
-    font-size: 13px;
+.tuiPortrait__cap {
+    margin-top: 0.55rem;
+    color: var(--fg-faint);
+    font-size: 10.5px;
+    letter-spacing: 0.03em;
 }
 
-.tuiSocials a {
+.tuiAbout__prose {
+    min-width: 0;
+}
+
+.tuiAbout__prose p {
     color: var(--fg-dim);
-    border-bottom: 1px dashed transparent;
+    font-size: 14.5px;
+    line-height: 1.75;
 }
 
-.tuiSocials a:hover {
-    color: var(--accent);
-    border-bottom-color: var(--accent);
+.tuiAbout__prose p + p {
+    margin-top: 0.95rem;
 }
 
-/* ---------- Stats / education ---------- */
+.tuiAbout__lead {
+    margin-bottom: 1.15rem;
+    padding-left: 1rem;
+    border-left: 2px solid var(--accent);
+    color: var(--fg) !important;
+    font-size: clamp(1rem, 1.5vw, 1.13rem) !important;
+    line-height: 1.65 !important;
+}
 
 .tuiStats {
     display: grid;
-    grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr) minmax(0, 1fr);
-    gap: 0;
-    margin-top: 1.25rem;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     border-top: 1px solid var(--border);
+    margin-top: 0.4rem;
 }
 
-/*
- * A column flex so the meter can be pushed to the bottom of the cell.
- * `MODELS PUBLISHED` wraps to two lines while the other labels stay on one, and
- * the grid stretches every cell to equal height: without this, that cell's meter
- * sits a line lower than its neighbours' and the three bars miss a shared
- * baseline. With `margin-top: auto` on the meter the bar follows the cell's
- * bottom edge, which every cell has in common.
- */
 .tuiStat {
     display: flex;
     flex-direction: column;
-    border: 0;
+    gap: 0.15rem;
+    padding: 0.9rem 0.85rem 0.9rem 0;
     border-bottom: 1px solid var(--border);
-    padding: 0.85rem 1rem 0.85rem 0;
-    background: transparent;
+    min-width: 0;
 }
 
 .tuiStat + .tuiStat {
     border-left: 1px solid var(--border);
-    padding-left: 1rem;
+    padding-left: 0.85rem;
 }
 
 .tuiStat__num {
-    font-size: 1.5rem;
     color: var(--accent);
-    font-weight: 700;
+    font-size: 1.55rem;
+    font-weight: 800;
+    letter-spacing: -0.035em;
+    line-height: 1.1;
 }
 
 .tuiStat__label {
     color: var(--fg-faint);
-    font-size: 11px;
-    letter-spacing: 0.06em;
+    font-size: 9.5px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    line-height: 1.4;
+}
+
+.tuiAbout__ledger {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(1.25rem, 3vw, 2.25rem);
+    margin-top: 1.8rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+}
+
+.tuiLedger {
+    min-width: 0;
+}
+
+.tuiLedger__title {
+    margin-bottom: 0.8rem;
+    color: var(--fg-dim);
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
 }
 
 .tuiEdu {
     display: flex;
     flex-direction: column;
-    gap: 0.6rem;
-    margin-top: 0.5rem;
+    gap: 0.75rem;
 }
 
 .tuiEdu__row {
-    border-left: 2px solid var(--border-strong);
-    padding: 0.2rem 0 0.2rem 0.9rem;
+    padding-left: 0.85rem;
+    border-left: 1px solid var(--border-strong);
+    min-width: 0;
 }
 
 .tuiEdu__degree {
     color: var(--fg);
+    font-size: 13px;
     font-weight: 600;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+}
+
+.tuiEdu__degree a {
+    display: inline-block;
+    min-height: 24px;
+    padding: 0.15rem 0.2rem;
+    margin: -0.15rem -0.2rem;
+    text-decoration: underline;
+    text-decoration-color: rgba(var(--accent-rgb), 0.42);
+    text-underline-offset: 0.2em;
+    transition:
+        color 0.18s var(--ease),
+        background 0.18s var(--ease),
+        transform 0.18s var(--ease);
+}
+
+.tuiEdu__degree a:hover {
+    color: var(--accent);
+    background: var(--accent-soft);
+    transform: translateX(2px);
 }
 
 .tuiEdu__meta {
+    margin-top: 0.15rem;
     color: var(--fg-faint);
-    font-size: 12px;
+    font-size: 11.5px;
+    line-height: 1.55;
+}
+
+.tuiEdu--two {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.9rem 1.5rem;
 }
 
 /* ---------- Skills ---------- */
@@ -707,48 +1229,47 @@ button {
     display: flex;
     flex-wrap: wrap;
     gap: 0.4rem;
-    margin-bottom: 1.1rem;
+    margin-bottom: 1.5rem;
 }
 
 .tuiFilter {
-    background: transparent;
+    min-height: 36px;
+    padding: 0.35rem 0.7rem;
     border: 1px solid var(--border);
+    background: transparent;
     color: var(--fg-dim);
-    padding: 0.2rem 0.65rem;
-    font-size: 11px;
-    letter-spacing: 0.06em;
-    cursor: pointer;
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: 0.07em;
     transition:
-        color 0.2s var(--ease),
-        background 0.2s var(--ease),
-        border-color 0.2s var(--ease),
-        transform 0.2s var(--ease);
+        color 0.18s var(--ease),
+        background 0.18s var(--ease),
+        border-color 0.18s var(--ease),
+        transform 0.18s var(--ease);
 }
 
 .tuiFilter:hover {
     color: var(--accent);
     border-color: var(--accent);
+    background: var(--accent-soft);
+    transform: translateY(-1px);
 }
 
 .tuiFilter.is-active {
     background: var(--accent);
-    color: var(--bg);
     border-color: var(--accent);
-    font-weight: 700;
+    color: var(--bg);
 }
 
-/*
-  Skills laid out as one block per category instead of a row per skill.
+.tuiFilter.is-active:hover {
+    background: var(--accent-hover);
+    border-color: var(--accent-hover);
+}
 
-  Two columns on wide screens keeps the whole section to three short rows, which
-  is what stops it running the length of the page. A single filter selection
-  drops to one column (`is-single`) so the chosen group is not squeezed into half
-  the width next to an empty cell.
-*/
 .tuiSkills {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 1.25rem 2.25rem;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.5rem 2rem;
 }
 
 .tuiSkills.is-single {
@@ -765,356 +1286,758 @@ button {
     justify-content: space-between;
     gap: 1rem;
     padding-bottom: 0.4rem;
-    margin-bottom: 0.6rem;
+    margin-bottom: 0.65rem;
     border-bottom: 1px solid var(--border);
 }
 
 .tuiSkillGroup__name {
     color: var(--accent);
-    font-size: 11px;
+    font-size: 10px;
     font-weight: 600;
     letter-spacing: 0.12em;
 }
 
 .tuiSkillGroup__count {
     color: var(--fg-faint);
-    font-size: 11px;
+    font-size: 10px;
 }
 
 .tuiSkillGroup__items {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.4rem;
+    gap: 0.35rem;
 }
 
-/* ---------- About + ASCII portrait ---------- */
-
-/*
- * The portrait is a generated image, not a character grid. The grid-era sizing
- * (font-size derived from `cqw`, line-height 1.073) went with it: an image has
- * no font, and the glyph pitch is already baked into the pixels.
- *
- * The asset is 60:59 and the figure is centred, so a full-width block needs no
- * breakpoints. `width`/`height` on the element fix the aspect ratio, so this rule
- * only has to set the displayed width.
- */
-.tuiPortrait {
-    margin: 0;
-    min-width: 0;
-}
-
-.tuiPortrait__frame {
-    position: relative;
-}
-
-.tuiAbout__portrait {
-    display: block;
-    width: 100%;
-    height: auto;
-    border: 1px solid var(--border-strong);
-    background: var(--bg-panel);
-    transition: border-color 0.2s var(--ease);
-}
-
-.tuiAbout__portrait:hover {
-    border-color: var(--accent);
-}
-
-/*
- * Shimmer placeholder shown until the photo loads. It is absolutely positioned
- * over `.tuiPortrait__frame`, which is sized by the image's `width`/`height`
- * (a definite box even before the pixels arrive), so the pane does not reflow
- * when the photo loads and the skeleton unmounts.
- */
-.tuiPortrait__shimmer {
-    position: absolute;
-    inset: 0;
+.tuiChip {
+    display: inline-block;
+    padding: 0.14rem 0.48rem;
     border: 1px solid var(--border);
-    background: linear-gradient(
-        100deg,
-        var(--bg-panel) 40%,
-        var(--bg-panel-2) 50%,
-        var(--bg-panel) 60%
-    );
-    background-size: 200% 100%;
-    animation: tuiShimmer 1.4s linear infinite;
+    color: var(--fg-dim);
+    font-size: 11px;
+    letter-spacing: 0.015em;
+    line-height: 1.65;
 }
 
-@keyframes tuiShimmer {
-    from { background-position: 200% 0; }
-    to { background-position: -200% 0; }
-}
-
-.tuiAbout {
-    display: grid;
-    grid-template-columns: minmax(240px, 440px) minmax(0, 1fr);
-    gap: 1.5rem 2rem;
-    align-items: start;
-}
-
-.tuiAbout__prose {
-    min-width: 0;
-}
-
-.tuiPortrait__cap {
-    margin-top: 0.6rem;
-    color: var(--fg-faint);
-    font-size: 12px;
-    letter-spacing: 0.02em;
-}
-
-@media (max-width: 860px) {
-    .tuiAbout {
-        grid-template-columns: 1fr;
-    }
-
-    /* Cap the width so the portrait does not become enormous when it has a full
-       row to itself. */
-    .tuiPortrait {
-        max-width: 420px;
-    }
-}
-
-/* ---------- Projects ---------- */
-
-.tuiProjects {
+.tuiManifest {
     display: flex;
     flex-direction: column;
-    gap: 0.75rem;
 }
 
-.tuiProject {
-    border: 1px solid var(--border);
-    background: rgba(11, 18, 14, 0.72);
-    transition:
-        border-color 0.25s var(--ease),
-        background 0.25s var(--ease);
-}
-
-.tuiProject:hover {
-    border-color: var(--border-strong);
-    background: rgba(11, 18, 14, 0.92);
-}
-
-.tuiProject__head {
+.tuiManifest__row {
     display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    width: 100%;
-    text-align: left;
-    padding: 0.85rem 1rem;
-    background: transparent;
-    border: 0;
-    cursor: pointer;
-}
-
-.tuiProject__index {
-    color: var(--fg-faint);
-    font-size: 12px;
-    flex-shrink: 0;
-}
-
-.tuiProject__title {
-    color: var(--fg);
-    font-weight: 600;
-    font-size: 14px;
-}
-
-.tuiProject__toggle {
-    margin-left: auto;
-    color: var(--accent);
-    flex-shrink: 0;
-}
-
-.tuiProject__body {
-    padding: 0 1rem 1.1rem;
-    border-top: 1px dashed var(--border);
-    margin-top: 0;
-    padding-top: 0.9rem;
-}
-
-.tuiProject__blurb {
-    color: var(--fg);
-    font-size: 13px;
-    line-height: 1.7;
-    margin-bottom: 0.5rem;
-}
-
-.tuiProject__desc {
-    color: var(--fg-dim);
-    font-size: 13px;
-    line-height: 1.75;
-}
-
-.tuiProject__links {
-    margin-top: 0.9rem;
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
     flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.25rem 1rem;
+    padding: 0.6rem 0;
+    border-bottom: 1px solid var(--border);
 }
 
-/* Quiet marker for things that have no public repo to link to. */
-.tuiProject__stat {
+.tuiManifest__row:first-child {
+    border-top: 1px solid var(--border);
+}
+
+.tuiManifest__name {
+    flex: 1 1 220px;
+    color: var(--fg);
+    font-size: 12.5px;
+    font-weight: 600;
+    overflow-wrap: anywhere;
+}
+
+.tuiManifest__meta {
     color: var(--fg-faint);
-    font-size: 12px;
-    border: 1px dashed var(--border);
-    padding: 0.35rem 0.6rem;
+    font-size: 11.5px;
+}
+
+/* ---------- Project index ---------- */
+
+.tuiIndex {
+    display: flex;
+    flex-direction: column;
+}
+
+.tuiIndexRow {
+    position: relative;
+    display: grid;
+    grid-template-columns: 3rem minmax(0, 1fr) minmax(170px, 0.55fr) 1.5rem;
+    gap: clamp(0.75rem, 2vw, 1.4rem);
+    align-items: center;
+    min-height: 96px;
+    padding: 1.1rem 0.4rem;
+    border-top: 1px solid var(--border);
+    color: var(--fg);
+    transition:
+        background 0.2s var(--ease),
+        box-shadow 0.2s var(--ease);
+}
+
+.tuiIndexRow:last-child {
+    border-bottom: 1px solid var(--border);
+}
+
+.tuiIndexRow:hover {
+    background: var(--accent-soft);
+    box-shadow: inset 2px 0 0 var(--accent);
+}
+
+.tuiIndexRow__index {
+    color: var(--fg-faint);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    align-self: start;
+    padding-top: 0.2rem;
+}
+
+.tuiIndexRow__body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    min-width: 0;
+}
+
+.tuiIndexRow__title {
+    color: var(--fg);
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.35;
+    transition: color 0.18s var(--ease);
+}
+
+.tuiIndexRow:hover .tuiIndexRow__title {
+    color: var(--accent);
+}
+
+.tuiIndexRow__blurb {
+    color: var(--fg-dim);
+    font-size: 12.5px;
+    line-height: 1.55;
+    max-width: 58ch;
+}
+
+.tuiIndexRow__meta {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    align-items: flex-end;
+    text-align: right;
+    min-width: 0;
+}
+
+.tuiIndexRow__stat {
+    color: var(--fg-dim);
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+
+.tuiIndexRow__tags {
+    color: var(--fg-faint);
+    font-size: 10.5px;
+    line-height: 1.5;
+}
+
+.tuiIndexRow__arrow {
+    color: var(--fg-faint);
+    font-size: 15px;
+    justify-self: end;
+    transition:
+        color 0.18s var(--ease),
+        transform 0.18s var(--ease);
+}
+
+.tuiIndexRow:hover .tuiIndexRow__arrow {
+    color: var(--accent);
+    transform: translateX(4px);
 }
 
 /* ---------- Contact ---------- */
 
-.tuiContact {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 0.75rem;
+.tuiContact__intro {
+    max-width: 62ch;
+    color: var(--fg-dim);
+    font-size: 14px;
+    line-height: 1.7;
 }
 
-.tuiContact__row {
+.tuiContact__primary {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+}
+
+.tuiContact__email {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.65rem;
+    min-width: 0;
+    padding-bottom: 0.2rem;
+    border-bottom: 1px solid var(--border-strong);
+    color: var(--fg);
+    font-size: clamp(1rem, 2.4vw, 1.45rem);
+    font-weight: 600;
+    letter-spacing: -0.025em;
+    line-height: 1.4;
+    overflow-wrap: anywhere;
+    transition:
+        color 0.18s var(--ease),
+        border-color 0.18s var(--ease),
+        background 0.18s var(--ease),
+        transform 0.18s var(--ease);
+}
+
+.tuiContact__email:hover {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+    background: var(--accent-soft);
+    transform: translateX(2px);
+}
+
+.tuiContact__email svg {
+    color: var(--accent);
+    flex: 0 0 auto;
+}
+
+.tuiContact__arrow {
+    color: var(--accent);
+    font-size: 0.82em;
+}
+
+.tuiContact__copy {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    min-height: 40px;
+    padding: 0.4rem 0.7rem;
+    border: 1px solid var(--border);
+    color: var(--fg-dim);
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    transition:
+        color 0.18s var(--ease),
+        background 0.18s var(--ease),
+        border-color 0.18s var(--ease);
+}
+
+.tuiContact__copy:hover {
+    color: var(--accent);
+    background: var(--accent-soft);
+    border-color: var(--accent);
+}
+
+.tuiContact__channels {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.55rem;
+    margin-top: 1.5rem;
+}
+
+.tuiContact__channel {
     display: flex;
     align-items: center;
     gap: 0.75rem;
+    min-width: 0;
+    min-height: 66px;
+    padding: 0.8rem 0.9rem;
     border: 1px solid var(--border);
-    background: rgba(11, 18, 14, 0.72);
-    padding: 0.8rem 0.95rem;
-    cursor: pointer;
-    text-align: left;
+    background: var(--channel-bg);
+    color: var(--fg);
     transition:
-        border-color 0.2s var(--ease),
-        transform 0.2s var(--ease);
+        background 0.18s var(--ease),
+        border-color 0.18s var(--ease),
+        transform 0.18s var(--ease);
 }
 
-.tuiContact__row:hover {
-    border-color: var(--accent);
-    transform: translateY(-2px);
+.tuiContact__channel:hover {
+    background: var(--accent-soft);
+    border-color: var(--border-strong);
+    transform: translateY(-1px);
+}
+
+.tuiContact__channel > svg {
+    color: var(--accent);
+    flex: 0 0 auto;
+    width: 1.1em;
+}
+
+.tuiContact__channelBody {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+    min-width: 0;
 }
 
 .tuiContact__label {
     color: var(--fg-faint);
-    font-size: 11px;
-    letter-spacing: 0.08em;
-    display: block;
+    font-size: 9.5px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
 }
 
 .tuiContact__value {
-    color: var(--fg);
-    font-size: 13px;
-    word-break: break-word;
+    color: var(--fg-dim);
+    font-size: 12px;
+    line-height: 1.45;
+    overflow-wrap: anywhere;
 }
 
-.tuiContact__icon {
+.tuiContact__channelArrow {
+    margin-left: auto;
+    color: var(--fg-faint);
+    font-size: 12px;
+    transition:
+        color 0.18s var(--ease),
+        transform 0.18s var(--ease);
+}
+
+.tuiContact__channel:hover .tuiContact__channelArrow {
     color: var(--accent);
-    flex-shrink: 0;
+    transform: translateX(3px);
 }
 
-/* ---------- Footer ---------- */
+.tuiContact__channel:last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+}
 
-.tuiFooter {
+.tuiContact__end {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.5rem 1.5rem;
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px dashed var(--border);
+    color: var(--fg-faint);
+    font-size: 10.5px;
+    letter-spacing: 0.03em;
+}
+
+/* ---------- Case file ---------- */
+
+.tuiRecord {
     position: relative;
     z-index: 10;
-    border-top: 1px solid var(--border);
-    background: rgba(5, 8, 6, 0.94);
-    backdrop-filter: blur(10px);
-    padding: 1.1rem var(--gutter);
+    padding: clamp(1.75rem, 4vh, 3rem) var(--gutter) clamp(4rem, 9vh, 6rem);
 }
 
-.tuiFooter__inner {
-    max-width: 1400px;
+.tuiRecord__inner {
+    width: 100%;
+    max-width: var(--measure);
     margin: 0 auto;
-    display: flex;
-    flex-wrap: wrap;
+}
+
+.tuiRecord__back {
+    display: inline-flex;
     align-items: center;
-    gap: 0.75rem 1.5rem;
-    font-size: 12px;
+    gap: 0.5rem;
+    min-height: 36px;
     color: var(--fg-faint);
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border-bottom: 1px solid transparent;
+    transition:
+        color 0.18s var(--ease),
+        border-color 0.18s var(--ease),
+        transform 0.18s var(--ease);
 }
 
-.tuiFooter__links {
+.tuiRecord__back:hover {
+    color: var(--accent);
+    border-bottom-color: var(--border-strong);
+    transform: translateX(-3px);
+}
+
+.tuiRecord__head {
+    max-width: 900px;
+    margin-top: clamp(1.75rem, 4vh, 2.75rem);
+    padding-bottom: clamp(1.5rem, 4vh, 2.5rem);
+    border-bottom: 1px solid var(--border);
+}
+
+.tuiRecord__context {
+    color: var(--fg-faint);
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.tuiRecord__title {
+    max-width: 18ch;
+    margin-top: 0.8rem;
+    font-size: clamp(2rem, 5vw, 4.1rem);
+    font-weight: 800;
+    line-height: 1.02;
+    letter-spacing: -0.055em;
+}
+
+.tuiRecord__blurb {
+    max-width: 62ch;
+    margin-top: 1.15rem;
+    color: var(--fg-dim);
+    font-size: clamp(1rem, 1.4vw, 1.12rem);
+    line-height: 1.65;
+}
+
+.tuiRecord__tags {
     display: flex;
     flex-wrap: wrap;
-    gap: 1rem;
-    margin-left: auto;
+    gap: 0.4rem;
+    margin-top: 1.3rem;
 }
 
-.tuiFooter__links a {
-    color: var(--fg-dim);
+.tuiRecord__tags li {
+    padding: 0.15rem 0.5rem;
+    border: 1px solid var(--border);
+    color: var(--fg-faint);
+    font-size: 10.5px;
+    line-height: 1.65;
 }
 
-.tuiFooter__links a:hover {
-    color: var(--accent);
+.tuiRecord__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 310px;
+    gap: clamp(1.25rem, 3vw, 2.5rem);
+    align-items: start;
+    margin-top: clamp(1.75rem, 4vh, 2.75rem);
 }
 
-.tuiMode {
-    color: var(--accent);
-    animation: tuiBlink 1.6s steps(1, end) infinite;
+.tuiRecord__main {
+    min-width: 0;
 }
 
-/* ---------- Boot ---------- */
-
-.tuiBoot {
-    position: fixed;
-    inset: 0;
-    z-index: 200;
-    background: var(--bg);
+.tuiRecord__blocks {
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    padding: 0 clamp(1rem, 8vw, 8rem);
-    font-size: 13px;
+    gap: 1.8rem;
 }
 
-.tuiBoot__log {
-    white-space: pre-wrap;
+.tuiRecordBlock__label {
+    display: flex;
+    align-items: baseline;
+    gap: 0.65rem;
+    color: var(--accent);
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
+}
+
+.tuiRecordBlock p {
+    max-width: 68ch;
+    margin-top: 0.55rem;
     color: var(--fg-dim);
-    font-family: var(--mono);
+    font-size: 14.5px;
+    line-height: 1.78;
 }
 
-.tuiBoot__bar {
-    margin-top: 1rem;
-    color: var(--accent);
-    /* Built from full/half blocks, so it needs the tiling stack (see --mono-blocks). */
-    font-family: var(--mono-blocks);
-}
-
-/* The scramble-revealed name banner. Block glyphs only, so it renders the same
-   width everywhere; centred and sized to fit a 9-glyph row on small screens. */
-/*
-  The scramble-revealed name banner. Block glyphs only, so it renders the same
-  width everywhere.
-
-  Three things matter here and all of them are about legibility:
-
-  - It uses `--mono-blocks`, not the site font. JetBrains Mono's full-block glyph
-    does not fill its cell, so every block leaves a seam and the dot-matrix
-    letters dissolve into speckle. See the note on `--mono-blocks`. This is the
-    actual cause of the "smeared" look; the glow below was a second, smaller
-    contributor.
-  - No large glow. It previously carried `text-shadow: 0 0 18px`, which on an
-    11px font blooms about 1.6x the glyph size and closes the counters. Anything
-    above roughly a 6px blur starts smearing again.
-  - It is sized up from 11px, which was too small for what is effectively the
-    page's title card. `AsciiBanner` scales it down to fit narrow viewports.
-
-  `line-height` stays just over 1 so the 7 block rows tile without seams.
-*/
-.tuiBoot__banner {
-    align-self: center;
-    white-space: pre;
-    color: var(--accent);
-    font-family: var(--mono-blocks);
-    font-size: clamp(11px, 2.1vw, 21px);
-    line-height: 1.07;
-    text-shadow: 0 0 5px rgba(57, 255, 136, 0.22);
-    margin: 0;
-}
-
-.tuiBoot__hint {
-    align-self: center;
+.tuiTraceBlock {
     margin-top: 1.5rem;
+}
+
+.tuiTraceBlock__head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 0.85rem;
+}
+
+.tuiTraceBlock__title {
+    color: var(--fg-dim);
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
+}
+
+.tuiTraceBlock__note {
     color: var(--fg-faint);
+    font-size: 10px;
+    letter-spacing: 0.04em;
+}
+
+.tuiTrace {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    border-top: 1px solid var(--border);
+    border-left: 1px solid var(--border);
+}
+
+.tuiTrace__step {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    min-height: 118px;
+    padding: 0.85rem 0.7rem;
+    border-right: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    background: var(--trace-bg);
+    min-width: 0;
+}
+
+.tuiTrace__index {
+    color: var(--accent);
+    font-size: 9.5px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+}
+
+.tuiTrace__label {
+    color: var(--fg);
     font-size: 12px;
-    letter-spacing: 0.18em;
-    animation: tuiBlink 1.6s steps(1, end) infinite;
+    font-weight: 600;
+    line-height: 1.35;
+    overflow-wrap: anywhere;
+}
+
+.tuiTrace__detail {
+    margin-top: auto;
+    color: var(--fg-faint);
+    font-size: 10.5px;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+}
+
+.tuiRecord__aside {
+    position: sticky;
+    top: calc(var(--bar-top-h) + 1.5rem);
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    min-width: 0;
+}
+
+.tuiRecordSide {
+    padding: 1rem;
+    border: 1px solid var(--border);
+    background: var(--bg-panel);
+}
+
+.tuiRecordSide__title {
+    margin-bottom: 0.85rem;
+    color: var(--fg-dim);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+.tuiMetrics {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0 0.85rem;
+}
+
+.tuiMetric {
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 0.1rem;
+    padding: 0.7rem 0;
+    border-top: 1px solid var(--border);
+    min-width: 0;
+}
+
+.tuiMetric dd {
+    color: var(--accent);
+    font-size: 1.25rem;
+    font-weight: 800;
+    letter-spacing: -0.035em;
+    line-height: 1.15;
+    overflow-wrap: anywhere;
+}
+
+.tuiMetric dt {
+    color: var(--fg-faint);
+    font-size: 9.5px;
+    letter-spacing: 0.05em;
+    line-height: 1.4;
+}
+
+.tuiFacts {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.tuiFacts dt {
+    color: var(--fg-faint);
+    font-size: 9.5px;
+    font-weight: 600;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+}
+
+.tuiFacts dd {
+    color: var(--fg-dim);
+    font-size: 11.5px;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+}
+
+.tuiFacts a {
+    color: var(--accent);
+    text-decoration: underline;
+    text-decoration-color: rgba(var(--accent-rgb), 0.4);
+    text-underline-offset: 0.2em;
+    transition: color 0.18s var(--ease);
+}
+
+.tuiFacts a:hover {
+    color: var(--fg);
+}
+
+.tuiRecordCta {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    min-height: 82px;
+    padding: 0.9rem 2.2rem 0.9rem 1rem;
+    border: 1px solid var(--border-strong);
+    background: var(--accent-soft);
+    color: var(--fg);
+    transition:
+        background 0.18s var(--ease),
+        border-color 0.18s var(--ease);
+}
+
+.tuiRecordCta:hover {
+    background: rgba(var(--accent-rgb), 0.12);
+    border-color: var(--accent);
+}
+
+.tuiRecordCta__label {
+    color: var(--fg-faint);
+    font-size: 9.5px;
+    font-weight: 600;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+}
+
+.tuiRecordCta__value {
+    color: var(--fg);
+    font-size: 13.5px;
+    font-weight: 600;
+    line-height: 1.4;
+}
+
+.tuiRecordCta__arrow {
+    position: absolute;
+    top: 50%;
+    right: 1rem;
+    color: var(--accent);
+    transform: translateY(-50%);
+    transition: transform 0.18s var(--ease);
+}
+
+.tuiRecordCta:hover .tuiRecordCta__arrow {
+    transform: translate(3px, -50%);
+}
+
+.tuiNext {
+    margin-top: clamp(2.5rem, 6vh, 4rem);
+    border-top: 1px solid var(--border);
+}
+
+.tuiNext__link {
+    display: flex;
+    align-items: baseline;
+    gap: clamp(1rem, 2.5vw, 2rem);
+    padding: 1.5rem 0;
+    color: var(--fg);
+}
+
+.tuiNext__label {
+    color: var(--fg-faint);
+    font-size: 9.5px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    flex: 0 0 auto;
+}
+
+.tuiNext__title {
+    font-size: clamp(1.25rem, 2.5vw, 1.85rem);
+    font-weight: 600;
+    letter-spacing: -0.035em;
+    line-height: 1.25;
+    transition: color 0.18s var(--ease);
+}
+
+.tuiNext__arrow {
+    margin-left: auto;
+    color: var(--accent);
+    font-size: 1.2rem;
+    transition: transform 0.18s var(--ease);
+}
+
+.tuiNext__link:hover .tuiNext__title {
+    color: var(--accent);
+}
+
+.tuiNext__link:hover .tuiNext__arrow {
+    transform: translateX(5px);
+}
+
+/* ---------- 404 ---------- */
+
+.tuiNotFound {
+    position: relative;
+    z-index: 10;
+    display: grid;
+    place-items: center;
+    min-height: calc(100svh - var(--bar-top-h) - var(--bar-bottom-h));
+    padding: clamp(2rem, 6vh, 4rem) var(--gutter);
+}
+
+.tuiNotFound__inner {
+    width: 100%;
+    max-width: 660px;
+}
+
+.tuiNotFound__code {
+    color: var(--accent-faded);
+    font-size: clamp(4.5rem, 16vw, 8rem);
+    font-weight: 800;
+    line-height: 0.8;
+    letter-spacing: -0.09em;
+    margin-bottom: 0.35rem;
+}
+
+.tuiNotFound__title {
+    font-size: clamp(1.7rem, 4vw, 2.45rem);
+    line-height: 1.1;
+    letter-spacing: -0.04em;
+}
+
+.tuiNotFound__copy {
+    max-width: 50ch;
+    margin-top: 0.85rem;
+    color: var(--fg-dim);
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+.tuiNotFound__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.7rem;
+    margin-top: 1.5rem;
+}
+
+.tuiNotFound__hint {
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px dashed var(--border);
+    color: var(--fg-faint);
+    font-size: 11px;
 }
 
 /* ---------- Toast ---------- */
@@ -1124,20 +2047,22 @@ button {
     left: 50%;
     bottom: calc(var(--bar-bottom-h) + 16px);
     transform: translateX(-50%);
-    z-index: 150;
-    background: var(--bg-panel-2);
+    z-index: 320;
+    max-width: min(90vw, 540px);
+    padding: 0.6rem 0.9rem;
     border: 1px solid var(--accent);
+    background: var(--bg-elevated);
     color: var(--fg);
-    padding: 0.5rem 0.9rem;
-    font-size: 12px;
-    max-width: min(90vw, 520px);
-    word-break: break-word;
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.7);
+    font-size: 11.5px;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+    box-shadow: var(--toast-shadow);
+    animation: tuiRise 0.18s var(--ease);
 }
 
 .tuiToast__sigil {
-    color: var(--accent);
     margin-right: 0.4rem;
+    color: var(--accent);
 }
 
 /* ---------- Command palette ---------- */
@@ -1155,25 +2080,28 @@ button {
 .tuiPalette__scrim {
     position: absolute;
     inset: 0;
-    background: rgba(2, 4, 3, 0.72);
+    background: var(--scrim);
     backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
 }
 
 .tuiPalette__window {
     position: relative;
-    width: min(560px, 92vw);
+    width: min(580px, 92vw);
 }
 
 .tuiPalette__input {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    padding: 0.7rem 1rem;
+    min-height: 50px;
+    padding: 0.6rem 1rem;
     border-bottom: 1px solid var(--border);
 }
 
 .tuiPalette__input input {
     flex: 1;
+    min-width: 0;
     background: transparent;
     border: 0;
     outline: none;
@@ -1187,9 +2115,9 @@ button {
 }
 
 .tuiPalette__list {
-    list-style: none;
-    max-height: 46vh;
+    max-height: min(46vh, 380px);
     overflow-y: auto;
+    overscroll-behavior: contain;
     padding: 0.35rem;
 }
 
@@ -1198,24 +2126,31 @@ button {
     align-items: center;
     gap: 1rem;
     width: 100%;
-    text-align: left;
-    background: transparent;
-    border: 0;
+    min-height: 42px;
     padding: 0.55rem 0.75rem;
-    cursor: pointer;
+    background: transparent;
+    border: 1px solid transparent;
     color: var(--fg-dim);
-    font-size: 13px;
+    font-size: 12.5px;
+    text-align: left;
+    transition:
+        color 0.15s var(--ease),
+        background 0.15s var(--ease),
+        border-color 0.15s var(--ease);
 }
 
-.tuiPalette__item.is-active {
-    background: rgba(57, 255, 136, 0.12);
+.tuiPalette__item.is-active,
+.tuiPalette__item:hover {
+    background: var(--accent-soft);
+    border-color: var(--border);
     color: var(--accent);
 }
 
 .tuiPalette__itemHint {
     margin-left: auto;
     color: var(--fg-faint);
-    font-size: 11px;
+    font-size: 10.5px;
+    text-align: right;
 }
 
 .tuiPalette__empty {
@@ -1224,11 +2159,8 @@ button {
     font-size: 12px;
 }
 
-/* ---------- ASCII art layers ---------- */
+/* ---------- ASCII layers ---------- */
 
-/* Ambient character field behind every pane. Sits under the frame (z-index 0)
-   and is inert to pointer events. The <pre> is written once per throttled frame
-   by the renderer; see src/lib/ascii.ts. */
 .asciiBackdrop {
     position: fixed;
     inset: 0;
@@ -1237,43 +2169,37 @@ button {
     overflow: hidden;
     mask-image: radial-gradient(
         ellipse 90% 75% at 50% 42%,
-        rgba(0, 0, 0, 0.18) 0%,
-        rgba(0, 0, 0, 0.55) 55%,
+        rgba(0, 0, 0, 0.1) 0%,
+        rgba(0, 0, 0, 0.5) 55%,
+        rgba(0, 0, 0, 1) 100%
+    );
+    -webkit-mask-image: radial-gradient(
+        ellipse 90% 75% at 50% 42%,
+        rgba(0, 0, 0, 0.1) 0%,
+        rgba(0, 0, 0, 0.5) 55%,
         rgba(0, 0, 0, 1) 100%
     );
 }
 
 .asciiBackdrop pre {
     margin: 0;
-    /* `pre` gets `font-family: monospace` from the UA stylesheet, which beats
-       the inherited value from `body`. Must be set explicitly or the ASCII
-       layers use the system monospace and the cell maths is wrong. */
     font-family: var(--mono);
     color: var(--accent);
-    opacity: 0.5;
+    opacity: 0.14;
     white-space: pre;
     user-select: none;
 }
 
-/* The hero centrepiece: a rotating ASCII torus you can drag to spin.
-   `.asciiDonut` is the stage the renderer measures (a definite box from
-   `flex: 1`); the <pre> is centred in it and is never used for measurement,
-   because it sizes to its own content. */
 .asciiDonut {
     position: relative;
     flex: 1 1 auto;
     min-height: 0;
+    width: 100%;
     display: grid;
     place-items: center;
     overflow: hidden;
-    /* Interactive: drag to spin. */
     pointer-events: auto;
     cursor: grab;
-    /*
-      Let the browser keep vertical panning, so a swipe up or down on a phone
-      still scrolls the page instead of grabbing the torus. Horizontal drags are
-      the ones that rotate it.
-    */
     touch-action: pan-y;
     user-select: none;
     -webkit-user-select: none;
@@ -1283,57 +2209,217 @@ button {
     cursor: grabbing;
 }
 
-/* Brighten on hover and while dragging, so it reads as interactive rather than
-   as a flat picture. Deliberately a brightness change only: increasing the glow
-   here washed the glyphs out and made the torus look blobby, the same way a
-   large text-shadow blurs any fine character detail. */
-.asciiDonut:hover pre,
+.asciiDonut pre {
+    margin: 0;
+    font-family: var(--mono);
+    color: var(--accent);
+    text-shadow: 0 0 12px var(--glow);
+    white-space: pre;
+    user-select: none;
+    opacity: 0.82;
+    transition: opacity 0.25s var(--ease);
+}
+
+/*
+ * The pointer spotlight is a background clipped to the glyphs. It is only
+ * painted on devices that actually hover: a touch repaint of 2,600 clipped
+ * characters every frame is wasted work and showed up in mobile FPS.
+ */
+@media (hover: hover) and (pointer: fine) {
+    .asciiDonut pre {
+        --spot: 0px;
+        --mx: 50%;
+        --my: 50%;
+        color: transparent;
+        background-image:
+            radial-gradient(
+                circle var(--spot) at var(--mx) var(--my),
+                var(--accent-2) 0%,
+                transparent 100%
+            ),
+            linear-gradient(var(--accent), var(--accent));
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        transition:
+            opacity 0.25s var(--ease),
+            --spot 0.32s var(--ease);
+    }
+
+    .asciiDonut:hover pre {
+        --spot: 120px;
+        opacity: 1;
+    }
+}
+
 .asciiDonut.is-dragging pre {
     opacity: 1;
 }
 
-.asciiDonut pre {
-    margin: 0;
-    /* See the note on `.asciiBackdrop pre`: the UA `monospace` default would
-       otherwise win over the inherited font. */
-    font-family: var(--mono);
-    color: var(--accent);
-    text-shadow: 0 0 18px var(--glow);
-    white-space: pre;
-    user-select: none;
-    opacity: 0.85;
+@media (forced-colors: active) {
+    .asciiDonut pre {
+        color: CanvasText;
+        background: none;
+        -webkit-text-fill-color: CanvasText;
+    }
 }
 
-/* ---------- Animations ---------- */
+/* ---------- Boot ---------- */
+
+.tuiBoot {
+    position: fixed;
+    inset: 0;
+    z-index: 400;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0 clamp(1.25rem, 9vw, 9rem);
+    background: var(--bg);
+    font-size: 13px;
+    opacity: 1;
+    transition:
+        opacity 0.32s var(--ease),
+        transform 0.32s var(--ease);
+}
+
+.tuiBoot.is-exiting {
+    opacity: 0;
+    transform: translateY(-1.5%);
+    pointer-events: none;
+}
+
+.tuiBoot__log {
+    color: var(--fg-dim);
+    font-family: var(--mono);
+    font-size: 12.5px;
+    line-height: 1.85;
+    white-space: pre-wrap;
+}
+
+.tuiBoot__bar {
+    margin-top: 1.1rem;
+    color: var(--accent);
+    font-family: var(--mono-blocks);
+    font-size: 12px;
+    letter-spacing: 0.02em;
+}
+
+.tuiBoot__banner {
+    align-self: center;
+    margin: 0;
+    color: var(--accent);
+    font-family: var(--mono-blocks);
+    font-size: clamp(11px, 2.1vw, 21px);
+    line-height: 1.07;
+    text-shadow: 0 0 5px rgba(var(--accent-rgb), 0.18);
+    white-space: pre;
+}
+
+.tuiBoot__hint {
+    align-self: center;
+    margin-top: 1.5rem;
+    color: var(--fg-faint);
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    animation: tuiBlink 1.6s steps(1, end) infinite;
+}
+
+/* ---------- Keyframes ---------- */
 
 @keyframes tuiBlink {
-    0%, 49% { opacity: 1; }
-    50%, 100% { opacity: 0; }
+    0%,
+    49% {
+        opacity: 1;
+    }
+    50%,
+    100% {
+        opacity: 0;
+    }
 }
 
 @keyframes tuiPulse {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.45; transform: scale(0.85); }
+    0%,
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.45;
+        transform: scale(0.82);
+    }
+}
+
+@keyframes tuiFade {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes tuiRise {
+    from {
+        opacity: 0;
+        transform: translate(-50%, 6px);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, 0);
+    }
 }
 
 /* ---------- Responsive ---------- */
 
-@media (max-width: 900px) {
-    .tuiBar__path {
-        display: none;
+@media (max-width: 1100px) {
+    .tuiSkills {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .tuiSkills.is-single {
+        grid-template-columns: 1fr;
+    }
+
+    .tuiRecord__grid {
+        grid-template-columns: minmax(0, 1fr) 280px;
+    }
+
+    .tuiTrace {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
     }
 }
 
-@media (max-width: 820px) {
+@media (max-width: 980px) {
+    .tuiBar__path {
+        display: none;
+    }
+
+    .tuiTabs {
+        gap: 0;
+    }
+
+    .tuiTab {
+        padding: 0.35rem 0.5rem;
+    }
+}
+
+@media (max-width: 900px) {
     .tuiTabs {
         display: none;
     }
 
-    .tuiMenuBtn {
-        display: block;
+    .tuiTheme {
+        margin-left: auto;
     }
 
-    /* Text over a busy canvas is hard to read at phone widths: make panes solid. */
+    .tuiMenuBtn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        margin-left: 0.35rem;
+    }
+
     .tuiWindow {
         background: var(--bg-panel);
         backdrop-filter: none;
@@ -1341,52 +2427,131 @@ button {
     }
 
     .tuiSection {
-        padding: 2rem 1rem;
+        padding-top: clamp(3.5rem, 7vh, 5rem);
+        padding-bottom: clamp(3.5rem, 7vh, 5rem);
     }
 
-    /* The torus needs horizontal room to read; below this it becomes a smear,
-       so drop it and let the pane have the full width. */
     .tuiHeroGrid {
         grid-template-columns: 1fr;
     }
 
-    /*
-     * Grid and flex items default to `min-width: auto`, so their minimum size is
-     * their content. The ASCII torus is ~530px wide at 13px, which set the
-     * column floor and pushed the document 156px past a 390px viewport: the
-     * hero art was clipped and the page scrolled sideways. Zeroing it lets the
-     * column take the real width; the torus re-measures its box and redraws to
-     * fit, and `.asciiDonut` hides the transition.
-     */
-    .tuiHeroGrid > *,
-    .asciiDonut {
-        min-width: 0;
-    }
-
     .tuiHeroArt {
-        min-height: 220px;
+        min-height: 300px;
     }
 
+    .tuiSection--hero {
+        padding-top: 2.5rem;
+        padding-bottom: 2.5rem;
+    }
+
+    .tuiAbout {
+        grid-template-columns: 1fr;
+    }
+
+    .tuiPortrait {
+        max-width: 320px;
+    }
+
+    .tuiContact__channels {
+        grid-template-columns: 1fr;
+    }
+
+    .tuiContact__channel:last-child:nth-child(odd) {
+        grid-column: auto;
+    }
+
+    .tuiRecord__grid {
+        grid-template-columns: 1fr;
+    }
+
+    .tuiRecord__aside {
+        position: static;
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .tuiRecordCta {
+        grid-column: 1 / -1;
+    }
+}
+
+@media (max-width: 820px) {
+    .tuiIndexRow {
+        grid-template-columns: 2rem minmax(0, 1fr) 1rem;
+        align-items: start;
+        gap: 0.6rem 0.85rem;
+        min-height: 0;
+        padding: 1rem 0.3rem;
+    }
+
+    .tuiIndexRow__meta {
+        grid-column: 2;
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-items: baseline;
+        gap: 0.25rem 0.65rem;
+        text-align: left;
+    }
+
+    .tuiIndexRow__arrow {
+        grid-column: 3;
+        grid-row: 1 / 3;
+        align-self: center;
+    }
+
+    .tuiAbout__ledger {
+        grid-template-columns: 1fr;
+    }
+
+    .tuiTrace {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 700px) {
     .tuiPrompt__meta {
         display: none;
+    }
+
+    .tuiEdu--two {
+        grid-template-columns: 1fr;
+    }
+
+    .tuiRecord__inner {
+        max-width: 100%;
+    }
+
+    .tuiRecord__title {
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 620px) {
+    .tuiSkills {
+        grid-template-columns: 1fr;
+        gap: 1.25rem;
     }
 
     .tuiStats {
         grid-template-columns: 1fr;
     }
 
-    /*
-     * Stacked, the vertical rules have nothing to divide, so the row dividers
-     * (each stat bottom border) take over. Without this the second and third
-     * stat keep a left rule that hangs off the left edge of the block.
-     */
     .tuiStat + .tuiStat {
         border-left: 0;
         padding-left: 0;
     }
 
-    .tuiOverlay__scanlines {
-        opacity: 0.32;
+    .tuiRecord__aside {
+        grid-template-columns: 1fr;
+    }
+
+    .tuiNext__link {
+        flex-wrap: wrap;
+        gap: 0.35rem 1rem;
+    }
+
+    .tuiNext__arrow {
+        margin-left: 0;
     }
 }
 
@@ -1395,22 +2560,103 @@ button {
         --gutter: 0.85rem;
     }
 
-    .tuiHero__name {
-        font-size: 1.6rem;
+    body {
+        font-size: 14px;
     }
 
-    .tuiContact {
-        grid-template-columns: 1fr;
+    .tuiTheme__label {
+        display: none;
+    }
+
+    .tuiTheme {
+        padding: 0.35rem;
+    }
+
+    .tuiBar__brandText {
+        font-size: 12px;
+    }
+
+    .tuiSectionHead {
+        grid-template-columns: 2.25rem minmax(0, 1fr);
+        gap: 0.85rem;
+    }
+
+    .tuiSectionHead__title {
+        font-size: 1.7rem;
     }
 
     .tuiWindow__body {
-        padding: 0.9rem 0.85rem 1.1rem;
+        padding: 1rem 0.9rem 1.2rem;
     }
 
-    /* One column for the skill groups once there is no room for two. */
-    .tuiSkills {
+    .tuiWindow__status {
+        max-width: 42%;
+    }
+
+    .tuiHero__readout > div {
+        grid-template-columns: 3.4rem minmax(0, 1fr);
+        gap: 0.65rem;
+    }
+
+    .tuiHero__firstName {
+        font-size: clamp(2.65rem, 13vw, 4.2rem);
+    }
+
+    .tuiHero__actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .tuiHero__actions .tuiBtn {
+        width: 100%;
+    }
+
+    .tuiPrompt__path {
+        display: none;
+    }
+
+    .tuiTrace {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .tuiTrace__step {
+        min-height: 104px;
+    }
+
+    .tuiContact__primary {
+        align-items: flex-start;
+    }
+
+    .tuiContact__email {
+        font-size: 0.98rem;
+    }
+
+    .tuiNotFound__links {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .tuiNotFound__links .tuiBtn {
+        width: 100%;
+    }
+}
+
+@media (max-width: 400px) {
+    .tuiBar__inner {
+        gap: 0.5rem;
+    }
+
+    .tuiBar__brandText {
+        font-size: 11px;
+    }
+
+    .tuiSectionHead {
         grid-template-columns: 1fr;
-        gap: 1.1rem;
+        gap: 0.5rem;
+    }
+
+    .tuiSectionHead__index {
+        width: 2.25rem;
     }
 }
 
@@ -1419,60 +2665,122 @@ button {
 @media (prefers-reduced-motion: reduce) {
     .tuiCursor,
     .tuiDot,
-    .tuiMode {
+    .tuiBoot__hint {
         animation: none;
     }
 
-    /* The ASCII layers are driven by rAF in JS; the renderers stop their loops
-       under reduced motion, so there is nothing to freeze here. Hide the
-       backdrop's motion source rather than showing a static field that reads
-       as a glitch. */
-    .asciiBackdrop pre {
-        opacity: 0.28;
+    .asciiDonut {
+        pointer-events: none;
+        cursor: default;
     }
 
-    .asciiDonut {
+    .asciiDonut pre {
+        opacity: 0.9;
+    }
+
+    .tuiHeroArt__hint {
         display: none;
     }
 
+    .asciiBackdrop pre {
+        opacity: 0.09;
+    }
+
     .tuiOverlay__scanlines {
-        opacity: 0.25;
+        opacity: 0.22;
     }
 
     .tuiBtn:hover,
-    .tuiContact__row:hover {
+    .tuiContact__channel:hover {
         transform: none;
     }
 
-    * {
+    *,
+    *::before,
+    *::after {
         transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
     }
 }
 
-/* ---------- Tactile press feedback ----------
-
-   Every interactive control here has a hover state but, until now, no pressed
-   state: clicking gave no acknowledgement at all. These add the physical
-   "push" the interaction was missing, and they are deliberately tiny (1px
-   down, 2% in) so a control does not appear to lurch when clicked.
-
-   Source order matters: this sits after the hover rules, so with the mouse
-   down both :hover and :active match and the press wins. Elements whose
-   transition list did not already name transform get one here, otherwise
-   the press would snap instead of easing.
-*/
-.tuiPalette__item,
-.tuiProject__head,
-.tuiMenuBtn {
-    transition: transform 0.15s var(--ease);
-}
+/* ---------- Press feedback ---------- */
 
 .tuiBtn:active,
 .tuiFilter:active,
 .tuiTab:active,
+.tuiTheme:active,
 .tuiPalette__item:active,
-.tuiProject__head:active,
-.tuiContact__row:active,
-.tuiMenuBtn:active {
-    transform: translateY(1px) scale(0.98);
+.tuiMenuBtn:active,
+.tuiMobileMenu__link:active,
+.tuiContact__copy:active,
+.tuiContact__channel:active {
+    transform: translateY(1px) scale(0.985);
+}
+
+.tuiIndexRow:active {
+    background: rgba(var(--accent-rgb), 0.11);
+}
+
+/* ---------- Theme switch motion ---------- */
+
+/* The old page is the backdrop; the new one is revealed from the button. */
+::view-transition-old(root),
+::view-transition-new(root) {
+    animation: none;
+    mix-blend-mode: normal;
+}
+
+::view-transition-old(root) {
+    z-index: 1;
+}
+
+::view-transition-new(root) {
+    z-index: 2;
+    animation: tuiThemeReveal 0.58s var(--ease) both;
+}
+
+@keyframes tuiThemeReveal {
+    from {
+        clip-path: circle(0px at var(--theme-x, 50%) var(--theme-y, 50%));
+    }
+    to {
+        clip-path: circle(var(--theme-r, 150vmax) at var(--theme-x, 50%) var(--theme-y, 50%));
+    }
+}
+
+/* Fallback for browsers without View Transitions: a short, opaque paper blink. */
+.tuiThemeVeil {
+    position: fixed;
+    inset: 0;
+    z-index: 700;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.16s linear;
+}
+
+.tuiThemeVeil.is-on {
+    opacity: 1;
+}
+
+/* Daylight surfaces need a lighter hand on the CRT layers. */
+:root[data-theme="light"] .asciiBackdrop pre {
+    opacity: 0.1;
+}
+
+:root[data-theme="light"] .tuiHeroArt__hint {
+    opacity: 1;
+}
+
+:root[data-theme="light"] .tuiTab__num,
+:root[data-theme="light"] .tuiMobileMenu__link .tuiTab__num {
+    opacity: 0.9;
+}
+
+:root[data-theme="light"] .tuiOverlay__scanlines {
+    opacity: 0.3;
+}
+
+:root[data-theme="light"] .tuiWindow__dots i {
+    opacity: 0.9;
 }

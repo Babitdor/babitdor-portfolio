@@ -24,8 +24,8 @@ type Drag = { x: number; y: number; at: number; moved: number; active: boolean }
  * The torus is decorative and carries no information, so it stays `aria-hidden`
  * and out of the tab order: it is a flourish you can play with if you have a
  * pointer, not a control, and adding a stop to keyboard navigation for it would
- * be noise. Under `prefers-reduced-motion` the stage is hidden and none of this
- * runs.
+ * be noise. Under `prefers-reduced-motion` the loop paints one still frame and
+ * stops; the stage stays visible but no longer accepts drags.
  */
 export default function AsciiDonut() {
   const ref = useRef<HTMLPreElement>(null);
@@ -45,10 +45,22 @@ export default function AsciiDonut() {
     const el = stageRef.current;
     if (!el) return;
 
+    // The pre is the background-clip target, so the spotlight coordinates must
+    // be relative to its own box, not the larger stage around it.
+    const paintSpot = (e: PointerEvent) => {
+      const pre = ref.current;
+      if (!pre) return;
+      const rect = pre.getBoundingClientRect();
+      if (!rect.width || !rect.height) return;
+      pre.style.setProperty('--mx', `${e.clientX - rect.left}px`);
+      pre.style.setProperty('--my', `${e.clientY - rect.top}px`);
+    };
+
     const onDown = (e: PointerEvent) => {
       // Primary button only, so a right-click menu is not swallowed.
       if (e.button !== 0) return;
       e.preventDefault();
+      paintSpot(e);
 
       dragRef.current = {
         x: e.clientX,
@@ -65,6 +77,8 @@ export default function AsciiDonut() {
     };
 
     const onMove = (e: PointerEvent) => {
+      paintSpot(e);
+
       const d = dragRef.current;
       if (!d.active) return;
 

@@ -1,93 +1,95 @@
 'use client';
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faGithub, faLinkedin } from '@fortawesome/free-brands-svg-icons';
-import { faEnvelope } from '@fortawesome/free-solid-svg-icons';
 import TuiPane from './TuiPane';
 import AsciiDonut from './AsciiDonut';
 import { scrollToSectionId } from '@/lib/scroll';
-import { identity, focusAreas } from '@/content/profile';
-
-const socials = [
-  { icon: faGithub, href: identity.github, label: 'github.com/Babitdor' },
-  {
-    icon: faLinkedin,
-    href: identity.linkedin,
-    label: 'linkedin.com/in/babitdor',
-  },
-  { icon: faEnvelope, href: `mailto:${identity.email}`, label: identity.email },
-];
+import { identity, focusAreas, positioning } from '@/content/profile';
 
 export default function Hero() {
   return (
-    <section id="home" className="tuiSection tuiSection--hero">
+    <section id="home" className="tuiSection tuiSection--hero" aria-labelledby="hero-title">
       <div className="tuiSection__inner tuiHeroGrid">
-        <TuiPane title="babit@portfolio: ~" status="bash" command="whoami">
-          <div className="tuiHero__badge">
+        <TuiPane
+          title="babit@portfolio: ~"
+          status="production"
+          command="whoami"
+          className="tuiHeroPane"
+        >
+          <p className="tuiHero__eyebrow">
             <span className="tuiDot" aria-hidden="true" />
-            AI Engineer @ Siemens Digital Industries Software
-          </div>
-
-          <h1 className="tuiHero__name">{identity.name}</h1>
-
-          <p className="tuiHero__role">
-            {identity.role} — I build AI agent systems that hold up in production: LLM
-            orchestration, RAG architectures and multi-agent workflows.
+            AI engineer at Siemens · {identity.location}
           </p>
 
-          <div className="tuiOutput">
-            <span className="tuiLine">
-              <span className="tuiKey">location</span> <span className="tuiFaint">:</span>{' '}
-              <span className="tuiValue">{identity.location}</span>
-            </span>
-            <span className="tuiLine">
-              <span className="tuiKey">current</span> <span className="tuiFaint">:</span>{' '}
-              <span className="tuiValue">
-                M.Sc. AI @ FAU Erlangen-Nürnberg · AI Engineer @ Siemens
-              </span>
-            </span>
-            <span className="tuiLine">
-              <span className="tuiKey">focus</span> <span className="tuiFaint">:</span>{' '}
-              <span className="tuiValue">{focusAreas.join(' · ')}</span>
-            </span>
-          </div>
+          <h1 className="tuiHero__name" id="hero-title">
+            <span className="tuiHero__firstName">Babitdor</span>
+            <span className="tuiHero__lastName">Kayang Khonglah</span>
+          </h1>
+
+          <p className="tuiHero__role">{positioning.line}</p>
+
+          <dl className="tuiHero__readout">
+            <div>
+              <dt>now</dt>
+              <dd>AI engineer @ Siemens · M.Sc. AI @ FAU</dd>
+            </div>
+            <div>
+              <dt>focus</dt>
+              <dd>{focusAreas.join(' · ')}</dd>
+            </div>
+            <div>
+              <dt>open</dt>
+              <dd>research collaborations · hard agent problems</dd>
+            </div>
+          </dl>
 
           <div className="tuiHero__actions">
-            <button type="button" className="tuiBtn" onClick={() => scrollToSectionId('projects')}>
-              ./projects --list
-            </button>
-            <button
-              type="button"
-              className="tuiBtn tuiBtn--ghost"
-              onClick={() => scrollToSectionId('contact')}
+            <a
+              href="#projects"
+              className="tuiBtn"
+              onClick={(event) => {
+                event.preventDefault();
+                scrollToSectionId('projects');
+              }}
             >
-              ./contact
-            </button>
+              view selected work
+              <span aria-hidden="true">→</span>
+            </a>
+            <a
+              href="#contact"
+              className="tuiBtn tuiBtn--ghost"
+              onClick={(event) => {
+                event.preventDefault();
+                scrollToSectionId('contact');
+              }}
+            >
+              start a conversation
+            </a>
           </div>
-
-          <div className="tuiSocials">
-            {socials.map((social) => (
-              <a key={social.label} href={social.href} target="_blank" rel="noopener noreferrer">
-                <FontAwesomeIcon icon={social.icon} aria-hidden="true" /> {social.label}
-              </a>
-            ))}
-          </div>
-
-          <p className="tuiLine tuiFaint" style={{ marginTop: '1.5rem', fontSize: '12px' }}>
-            tip: press <span className="tuiKey">ctrl/cmd + k</span> for the command palette.
-          </p>
         </TuiPane>
 
-        {/* The torus renders the caption's promise: it really does spin, and you
-            can throw it around. */}
         <figure className="tuiHeroArt">
-          <AsciiDonut />
+          <div className="tuiHeroArt__stage">
+            <AsciiDonut />
+          </div>
           <figcaption className="tuiHeroArt__cap">
-            <span className="tuiKey">$</span> ./donut --render=ascii --spin
-            <span className="tuiHeroArt__hint"># drag to spin it</span>
+            <span>
+              <span className="tuiKey">$</span> ./torus --ascii --idle
+            </span>
+            <span className="tuiHeroArt__hint">drag to spin</span>
           </figcaption>
         </figure>
       </div>
+
+      <a
+        href="#about"
+        className="tuiHero__scroll"
+        onClick={(event) => {
+          event.preventDefault();
+          scrollToSectionId('about');
+        }}
+      >
+        <span aria-hidden="true">↓</span> scroll --continue
+      </a>
     </section>
   );
 }

@@ -28,14 +28,14 @@ export const STAGE_COMMANDS: Record<StageId, string> = {
   home: 'whoami',
   about: 'cat about.md',
   skills: 'ls -la stack/',
-  projects: 'ls projects/',
+  projects: 'ls work/',
   contact: 'ssh babit@portfolio',
 };
 
 export type ScrollState = {
   /** Global scroll progress, 0..1 */
   progress: number;
-  /** Index of the section occupying the viewport centre */
+  /** Index of the section occupying the reading line */
   stage: number;
   /** Progress within the current section, 0..1 */
   stageT: number;
@@ -57,9 +57,21 @@ const listeners = new Set<() => void>();
 
 const clamp = (v: number, lo: number, hi: number) => (v < lo ? lo : v > hi ? hi : v);
 
-/** Measure section geometry from the DOM so keypresses line up with sections. */
-export function measureStages(): void {
-  if (typeof window === 'undefined') return;
+/** Height of the fixed top bar, read from the design tokens. */
+function topOffset(): number {
+  if (typeof window === 'undefined') return 0;
+  const raw = getComputedStyle(document.documentElement).getPropertyValue('--bar-top-h');
+  const value = Number.parseFloat(raw);
+  return Number.isFinite(value) ? value : 46;
+}
+
+/**
+ * Measure section geometry from the DOM so navigation and the active tab line
+ * up with sections. Sections no longer have to be a viewport tall: this is the
+ * reason the page can use a content rhythm instead of five empty screens.
+ */
+export function measureStages(): boolean {
+  if (typeof window === 'undefined') return false;
 
   const measured: Rect[] = [];
   for (const id of STAGE_IDS) {
@@ -69,16 +81,13 @@ export function measureStages(): void {
     measured.push({ top: rect.top + window.scrollY, height: rect.height });
   }
 
-  // Fall back to an even split if the sections are not mounted yet.
   if (measured.length !== STAGE_COUNT) {
-    const doc = document.documentElement;
-    const total = Math.max(1, doc.scrollHeight);
-    const slice = total / STAGE_COUNT;
-    stageRects = STAGE_IDS.map((_, i) => ({ top: i * slice, height: slice }));
-    return;
+    stageRects = [];
+    return false;
   }
 
   stageRects = measured;
+  return true;
 }
 
 function notify() {
@@ -89,22 +98,33 @@ function notify() {
 export function updateFromScroll(scrollY: number): void {
   if (typeof window === 'undefined') return;
 
-  if (stageRects.length !== STAGE_COUNT) measureStages();
-
   const viewportHeight = window.innerHeight;
   const maxScroll = Math.max(1, document.documentElement.scrollHeight - viewportHeight);
   scrollState.progress = clamp(scrollY / maxScroll, 0, 1);
 
-  const centre = scrollY + viewportHeight / 2;
+  // Inner pages (a case file, the 404) have no stage sections. Keep the global
+  // progress honest, but do not invent stages that are not in the DOM.
+  if (stageRects.length !== STAGE_COUNT && !measureStages()) {
+    scrollState.stageT = 0;
+    if (scrollState.stage !== 0) {
+      scrollState.stage = 0;
+      notify();
+    }
+    return;
+  }
 
-  // Last section whose top edge is above the viewport centre.
+  // The reading line sits just below the fixed bar, so the active section
+  // changes when its top edge arrives there, not when its centre crosses the
+  // middle of the viewport.
+  const probe = scrollY + topOffset() + 8;
+
   let index = 0;
   for (let i = 0; i < stageRects.length; i++) {
-    if (centre >= stageRects[i].top) index = i;
+    if (probe >= stageRects[i].top) index = i;
   }
 
   const rect = stageRects[index];
-  const withinStage = rect ? clamp((centre - rect.top) / Math.max(1, rect.height), 0, 1) : 0;
+  const withinStage = rect ? clamp((probe - rect.top) / Math.max(1, rect.height), 0, 1) : 0;
 
   scrollState.stageT = withinStage;
 
@@ -136,7 +156,10 @@ export function getServerStageSnapshot(): number {
 export function scrollToStage(index: number): void {
   const clamped = clamp(index, 0, STAGE_COUNT - 1);
   const rect = stageRects[clamped];
-  const target = rect ? rect.top + rect.height / 2 - window.innerHeight / 2 : 0;
+  if (!rect) return;
+
+  const maxScroll = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
+  const target = clamp(rect.top - topOffset(), 0, maxScroll);
 
   if (lenisInstance) {
     lenisInstance.scrollTo(target, { duration: 1.1 });
@@ -148,4 +171,22 @@ export function scrollToStage(index: number): void {
 export function scrollToSectionId(id: string): void {
   const index = (STAGE_IDS as readonly string[]).indexOf(id);
   if (index >= 0) scrollToStage(index);
+}
+
+/* ---------- Overlay scroll lock ---------- */
+
+/**
+ * Used by the mobile menu. Lenis owns the scroll, so toggling `overflow: hidden`
+ * alone can be undone by the next wheel tick. Stop the instance as well; the
+ * class is the fallback for reduced motion and for direct visits before Lenis
+ * has mounted.
+ */
+export function lockScroll(): void {
+  lenisInstance?.stop();
+  document.documentElement.classList.add('tuiMenuOpen');
+}
+
+export function unlockScroll(): void {
+  lenisInstance?.start();
+  document.documentElement.classList.remove('tuiMenuOpen');
 }

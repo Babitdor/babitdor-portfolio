@@ -1,15 +1,18 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { usePathname } from 'next/navigation';
 import { STAGE_COMMANDS, STAGE_IDS, type StageId } from '@/lib/scroll';
 import { useStage } from '@/lib/useStage';
 
 /**
- * The bottom prompt bar: the current stage's command, a live scroll readout and
- * the stage counter. The prompt reads as a real shell would.
+ * The bottom prompt bar: the current command, a live scroll readout, and the
+ * stage counter. On a case file it shows the file being read instead of a
+ * section command, because that is the page the visitor is actually on.
  */
 export default function TuiPromptBar() {
   const stage = useStage();
+  const pathname = usePathname();
   const [scrollPercent, setScrollPercent] = useState(0);
 
   useEffect(() => {
@@ -32,27 +35,31 @@ export default function TuiPromptBar() {
     };
   }, []);
 
+  const onCase = pathname.startsWith('/work/');
+  const command = onCase
+    ? `cat ~/work/${pathname.split('/').pop()}`
+    : STAGE_COMMANDS[STAGE_IDS[stage] as StageId];
+  const context = onCase ? 'case file' : `stage ${stage + 1}/${STAGE_IDS.length}`;
+
   return (
-    <div className="tuiBar tuiBar--bottom">
+    <footer className="tuiBar tuiBar--bottom">
       <div className="tuiBar__inner">
-        <div className="tuiPrompt" aria-live="polite">
+        <div className="tuiPrompt">
           <span className="tuiPrompt__path">babit@portfolio</span>
           <span className="tuiPrompt__sep">:</span>
           <span className="tuiPrompt__dir">~</span>
           <span className="tuiPrompt__sigil">$</span>
-          <span className="tuiPrompt__cmd">{STAGE_COMMANDS[STAGE_IDS[stage] as StageId]}</span>
-          <span className="tuiCursor" />
+          <span className="tuiPrompt__cmd">{command}</span>
+          <span className="tuiCursor" aria-hidden="true" />
         </div>
 
         <div className="tuiPrompt__meta" aria-hidden="true">
-          <span>
-            stage <b>{stage + 1}</b>/{STAGE_IDS.length}
-          </span>
+          <span>{context}</span>
           <span>
             scroll <b>{scrollPercent}%</b>
           </span>
         </div>
       </div>
-    </div>
+    </footer>
   );
 }

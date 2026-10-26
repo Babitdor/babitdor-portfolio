@@ -39,7 +39,7 @@ export const experience = [
   },
   {
     role: 'Research affiliation',
-    org: 'Institute FAPS, FAU Erlangen–Nürnberg',
+    org: 'Institute FAPS, FAU Erlangen-Nürnberg',
     place: 'Erlangen, Germany',
     period: 'current',
     detail: 'Chair of Manufacturing Automation and Production Systems.',
@@ -49,14 +49,14 @@ export const experience = [
 export const education = [
   {
     degree: 'M.Sc. Artificial Intelligence',
-    school: 'Friedrich-Alexander-Universität Erlangen–Nürnberg',
-    period: '04/2024 – 09/2026',
+    school: 'Friedrich-Alexander-Universität Erlangen-Nürnberg',
+    period: '04/2024 to 09/2026',
     place: 'Germany',
   },
   {
     degree: 'B.Tech. Computer Science & Engineering',
     school: 'National Institute of Technology, Meghalaya',
-    period: '04/2018 – 04/2022',
+    period: '04/2018 to 04/2022',
     place: 'India',
   },
 ] as const;
@@ -141,9 +141,19 @@ export const stats = [
 
 /** Focus areas for the hero focus line. */
 export const focusAreas = [
-  'Agent harnesses',
-  'LangGraph',
-  'RAG',
-  'fine-tuning',
-  'Docker',
+  'agent harnesses',
+  'retrieval',
+  'validation',
+  'SysML v2',
+  'evals',
 ] as const;
+
+/**
+ * The one-sentence position the hero and the about section both depend on.
+ * Kept here so changing the framing is one edit, not a hunt through components.
+ */
+export const positioning = {
+  line: 'I build AI systems for the part after the demo.',
+  note: 'The interesting work is latency, retrieval, validation, and the harnesses that keep agents honest under load.',
+  availability: 'Open to research collaborations and hard agent problems.',
+} as const;

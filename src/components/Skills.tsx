@@ -2,17 +2,12 @@
 
 import { useMemo, useState } from 'react';
 import TuiPane from './TuiPane';
+import SectionHead from './SectionHead';
 import { publishedModels, skillGroups } from '@/content/profile';
 
 /**
- * Skills, as one compact block per category rather than one row per skill.
- *
- * The previous version was a 4-column table with a row per skill: 40 rows tall,
- * and every row repeated its own category and a constant "in use" status, so
- * most of the height carried no information. Grouping by category and rendering
- * each group's items as chips keeps the same content in roughly a third of the
- * space, and the filter buttons then select a whole group rather than filtering
- * rows out of a long list.
+ * Skills as one compact block per category rather than one row per skill.
+ * The filter selects a group, so the section stays short enough to scan.
  */
 export default function Skills() {
   const [filter, setFilter] = useState('ALL');
@@ -22,17 +17,20 @@ export default function Skills() {
     [],
   );
 
-  /**
-   * Annotated deliberately: `skillGroups` is `as const`, so without this the
-   * union of readonly tuples defeats `reduce`'s overload resolution.
-   */
   const visible: ReadonlyArray<{ category: string; items: readonly string[] }> =
-    filter === 'ALL' ? skillGroups : skillGroups.filter((g) => g.category === filter);
+    filter === 'ALL' ? skillGroups : skillGroups.filter((group) => group.category === filter);
   const total = visible.reduce((n, group) => n + group.items.length, 0);
 
   return (
-    <section id="skills" className="tuiSection">
+    <section id="skills" className="tuiSection" aria-labelledby="skills-title">
       <div className="tuiSection__inner tuiSection__inner--wide">
+        <SectionHead
+          index="03"
+          id="skills-title"
+          title="The stack, not the logo wall."
+          note="Grouped by the job it does. The filters are real, not a scrolling marquee."
+        />
+
         <TuiPane title="~/stack/" status={`${total} entries`} command="ls -la ~/stack/">
           <div className="tuiFilters" role="group" aria-label="Filter skills by category">
             {categories.map((category) => (
@@ -48,20 +46,13 @@ export default function Skills() {
             ))}
           </div>
 
-          {/* Empty state. Unreachable today, because `categories` is derived
-              from `skillGroups`, so every filter that can be selected matches at
-              least one group. It exists for the case this content is edited
-              later and the two stop agreeing: without it, that shows a titled
-              pane with nothing under it and reads as a rendering fault. */}
-          {total === 0 && (
-            <div className="tuiLine tuiFaint"># no entries in this category</div>
-          )}
+          {total === 0 && <div className="tuiLine tuiFaint"># no entries in this category</div>}
 
           <div className={`tuiSkills${filter === 'ALL' ? '' : ' is-single'}`}>
             {visible.map((group) => (
               <div className="tuiSkillGroup" key={group.category}>
                 <div className="tuiSkillGroup__head">
-                  <span className="tuiSkillGroup__name">{group.category}</span>
+                  <h3 className="tuiSkillGroup__name">{group.category}</h3>
                   <span className="tuiSkillGroup__count">{group.items.length}</span>
                 </div>
                 <div className="tuiSkillGroup__items">
@@ -75,21 +66,20 @@ export default function Skills() {
             ))}
           </div>
 
-          {/* The published models are the most concrete thing here: real weights,
-              real download counts, checkable on Ollama. */}
           <div className="tuiOutput">
             <span className="tuiLine tuiFaint">$ ollama list --mine</span>
-            <div className="tuiEdu">
+            <div className="tuiManifest">
               {publishedModels.map((model) => (
-                <div className="tuiEdu__row" key={model.name}>
-                  <div className="tuiEdu__degree">{model.name}</div>
-                  <div className="tuiEdu__meta">
-                    {model.pulls} pulls · {model.note} · published on{' '}
-                    <span className="tuiValue">Ollama &amp; Hugging Face</span>
-                  </div>
+                <div className="tuiManifest__row" key={model.name}>
+                  <span className="tuiManifest__name">{model.name}</span>
+                  <span className="tuiManifest__meta">{model.pulls} pulls</span>
+                  <span className="tuiManifest__meta">{model.note}</span>
                 </div>
               ))}
             </div>
+            <p className="tuiLine tuiFaint tuiSmall">
+              published on Ollama and Hugging Face · checkable at ollama.com/Babitdor
+            </p>
           </div>
         </TuiPane>
       </div>

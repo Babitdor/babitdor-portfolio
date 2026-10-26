@@ -2,6 +2,7 @@
 
 import { createContext, useContext, useEffect, type ReactNode } from 'react';
 import Lenis from 'lenis';
+import { usePathname } from 'next/navigation';
 import { measureStages, setLenis, updateFromScroll } from '@/lib/scroll';
 import { usePrefersReducedMotion } from '@/lib/useClient';
 
@@ -15,6 +16,7 @@ export function useSmoothScroll() {
 
 export function SmoothScrollProvider({ children }: { children: ReactNode }) {
   const reducedMotion = usePrefersReducedMotion();
+  const pathname = usePathname();
 
   useEffect(() => {
     let lenis: Lenis | null = null;
@@ -66,6 +68,17 @@ export function SmoothScrollProvider({ children }: { children: ReactNode }) {
       lenis?.destroy();
     };
   }, [reducedMotion]);
+
+  /*
+   * The provider lives in the root layout, so it survives route changes. A case
+   * file has no #home..#contact sections, and the home page does: remeasure on
+   * every navigation so the top bar and the prompt never point at stale
+   * geometry.
+   */
+  useEffect(() => {
+    measureStages();
+    updateFromScroll(window.scrollY);
+  }, [pathname]);
 
   return (
     <SmoothScrollContext.Provider value={{ reducedMotion }}>{children}</SmoothScrollContext.Provider>

@@ -1,86 +1,73 @@
-'use client';
-
-import { useState } from 'react';
 import Image from 'next/image';
 import TuiPane from './TuiPane';
+import SectionHead from './SectionHead';
 import { certifications, education, experience, stats } from '@/content/profile';
 
-const meter = (filled: number) => '█'.repeat(filled) + '░'.repeat(10 - filled);
-
 /**
- * About, with a photo portrait beside the prose.
+ * About, with the portrait beside the short version of the story.
  *
- * The portrait is a real photograph (`Me.jpg`, the subject's own picture),
- * downscaled and compressed to `public/portrait.jpg` for the web. It is a
- * meaningful image, not decoration, so it carries a real `alt` and is not
- * `aria-hidden`; the caption below it is the terminal-flavoured label.
- *
- * It is wrapped in `.tuiPortrait__frame`, which draws the terminal-style
- * border and hosts a shimmer skeleton (`.tuiPortrait__shimmer`) that shows
- * until the image fires `onLoad`. The skeleton occupies the image's box, so
- * the pane does not reflow when the photo arrives.
- *
- * Sizing: `width`/`height` are the asset's true pixel size, so the aspect ratio
- * is fixed and the image cannot shift layout. `.tuiAbout__portrait` sets the
- * displayed width, so no `sizes` attribute is needed.
+ * The photograph is the subject's own picture. It is a meaningful image, so it
+ * carries a real `alt`; the caption is the terminal-flavoured label. The asset
+ * has its true aspect ratio on the element, so the pane cannot reflow when the
+ * pixels arrive. There is no custom loader: a shimmer over a below-the-fold
+ * image is decoration, and the browser's own placeholder is honest.
  */
 export default function About() {
-  const [imgLoaded, setImgLoaded] = useState(false);
-
   return (
-    <section id="about" className="tuiSection">
+    <section id="about" className="tuiSection" aria-labelledby="about-title">
       <div className="tuiSection__inner">
-        <TuiPane title="~/about.md" status="read-only" command="cat about.md">
+        <SectionHead
+          index="02"
+          id="about-title"
+          title="The system around the model."
+          note="Fewer silent failures, shorter feedback loops, and systems a team can operate."
+        />
+
+        <TuiPane title="~/about.md" status="read only" command="cat about.md">
           <div className="tuiAbout">
             <figure className="tuiPortrait">
-              <div className="tuiPortrait__frame">
-                {!imgLoaded && <div className="tuiPortrait__shimmer" aria-hidden="true" />}
-                <Image
-                  className="tuiAbout__portrait"
-                  src="/portrait.jpg"
-                  alt="Portrait of Babitdor Kayang Khonglah"
-                  width={900}
-                  height={966}
-                  loading="lazy"
-                  decoding="async"
-                  onLoad={() => setImgLoaded(true)}
-                />
-              </div>
+              <Image
+                className="tuiAbout__portrait"
+                src="/portrait.jpg"
+                alt="Babitdor Kayang Khonglah at his desk"
+                width={900}
+                height={966}
+                sizes="(max-width: 860px) 82vw, 360px"
+                loading="lazy"
+                decoding="async"
+              />
               <figcaption className="tuiPortrait__cap">
                 <span className="tuiKey">$</span> whoami --portrait
               </figcaption>
             </figure>
 
             <div className="tuiAbout__prose">
-              <div className="tuiOutput" style={{ marginTop: 0, borderTop: 0, paddingTop: 0 }}>
-                <p className="tuiLine tuiMuted">
-                  I&apos;m an AI engineer working on{' '}
-                  <span className="tuiStrong">production agent systems</span>. By day I build AI
-                  agents at <span className="tuiStrong">Siemens Digital Industries Software</span>,
-                  where the interesting part is everything the demo never shows you: latency, token
-                  budgets, failing retries, and retrieval that quietly returns the wrong thing.
-                </p>
-                <p className="tuiLine tuiMuted">
-                  Alongside that I&apos;m finishing an{' '}
-                  <span className="tuiStrong">M.Sc. in Artificial Intelligence</span> at FAU
-                  Erlangen-Nürnberg, with a research affiliation at{' '}
-                  <span className="tuiStrong">Institute FAPS</span>. My focus is{' '}
-                  <span className="tuiStrong">Model-Based Systems Engineering</span> — using
-                  fine-tuned LLMs and multi-agent workflows to generate and validate SysML v2 models
-                  — plus the harnesses and tooling that make agents usable in practice.
-                </p>
-              </div>
+              <p className="tuiAbout__lead">
+                The demo is the easy part. My work sits between a research prototype and a
+                system a team can operate: retrieval that returns the right passage, agents
+                that fail visibly instead of quietly, and validation that is more than a
+                regex.
+              </p>
+              <p>
+                I am an AI engineer at <span className="tuiStrong">Siemens Digital Industries Software</span>{' '}
+                and an M.Sc. AI candidate at <span className="tuiStrong">FAU Erlangen-Nürnberg</span>.
+                My research affiliation at <span className="tuiStrong">Institute FAPS</span> applies
+                fine-tuned LLMs and multi-agent workflows to{' '}
+                <span className="tuiStrong">Model-Based Systems Engineering</span>.
+              </p>
+              <p>
+                Most of the job is not the model. It is the harness around it: tool
+                boundaries, retrieval, validation, observability, and the decisions that keep
+                an agent honest when the happy path stops working.
+              </p>
 
               <div className="tuiOutput">
                 <span className="tuiLine tuiFaint">$ stats --verbose</span>
                 <div className="tuiStats">
-                  {stats.map((stat, index) => (
+                  {stats.map((stat) => (
                     <div className="tuiStat" key={stat.label}>
                       <div className="tuiStat__num">{stat.value}</div>
                       <div className="tuiStat__label">{stat.label}</div>
-                      <div className="tuiMeter" aria-hidden="true">
-                        {meter(4 + index * 3)}
-                      </div>
                     </div>
                   ))}
                 </div>
@@ -88,39 +75,45 @@ export default function About() {
             </div>
           </div>
 
-          <div className="tuiOutput">
-            <span className="tuiLine tuiFaint">$ experience --list</span>
-            <div className="tuiEdu">
-              {experience.map((item) => (
-                <div className="tuiEdu__row" key={item.org}>
-                  <div className="tuiEdu__degree">
-                    {item.role} · {item.org}
+          <div className="tuiAbout__ledger">
+            <section className="tuiLedger" aria-labelledby="experience-title">
+              <h3 className="tuiLedger__title" id="experience-title">
+                <span className="tuiFaint">$</span> experience --list
+              </h3>
+              <div className="tuiEdu">
+                {experience.map((item) => (
+                  <div className="tuiEdu__row" key={item.org}>
+                    <div className="tuiEdu__degree">
+                      {item.role} · {item.org}
+                    </div>
+                    <div className="tuiEdu__meta">
+                      {item.detail} ({item.place}, {item.period})
+                    </div>
                   </div>
-                  <div className="tuiEdu__meta">
-                    {item.detail} ({item.place}, {item.period})
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
+                ))}
+              </div>
+            </section>
 
-          <div className="tuiOutput">
-            <span className="tuiLine tuiFaint">$ edu --list</span>
-            <div className="tuiEdu">
-              {education.map((item) => (
-                <div className="tuiEdu__row" key={item.degree}>
-                  <div className="tuiEdu__degree">{item.degree}</div>
-                  <div className="tuiEdu__meta">
-                    {item.school} · {item.period} · {item.place}
+            <section className="tuiLedger" aria-labelledby="education-title">
+              <h3 className="tuiLedger__title" id="education-title">
+                <span className="tuiFaint">$</span> edu --list
+              </h3>
+              <div className="tuiEdu">
+                {education.map((item) => (
+                  <div className="tuiEdu__row" key={item.degree}>
+                    <div className="tuiEdu__degree">{item.degree}</div>
+                    <div className="tuiEdu__meta">
+                      {item.school} · {item.period} · {item.place}
+                    </div>
                   </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            </section>
           </div>
 
           <div className="tuiOutput">
             <span className="tuiLine tuiFaint">$ certs --verify</span>
-            <div className="tuiEdu">
+            <div className="tuiEdu tuiEdu--two">
               {certifications.map((cert) => (
                 <div className="tuiEdu__row" key={cert.id}>
                   <div className="tuiEdu__degree">

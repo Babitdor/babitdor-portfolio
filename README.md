@@ -1,294 +1,123 @@
-# Portfolio Website
+# babit-os
 
-A modern, interactive portfolio website featuring a 3D bedroom scene, smooth animations, and dark/light theme support. Built with Next.js, React, Three.js, and Framer Motion.
+The portfolio of Babitdor Kayang Khonglah, an AI engineer at Siemens and an M.Sc. AI candidate at FAU Erlangen-Nurnberg.
 
-![Portfolio Website](https://img.shields.io/badge/Next.js-16.1.1-black?style=for-the-badge&logo=next.js)
-![React](https://img.shields.io/badge/React-19.2.3-blue?style=for-the-badge&logo=react)
-![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?style=for-the-badge&logo=typescript)
-![Three.js](https://img.shields.io/badge/Three.js-0.182.0-white?style=for-the-badge&logo=three.js)
+It is built as a production console rather than a conventional portfolio: a boot log, a live status bar, an ASCII torus, and eight long-form case files.
 
-## ✨ Features
+## What is here
 
-- **Interactive 3D Scene** - Beautiful 3D bedroom model with smooth animations and user interaction
-- **Dark/Light Theme** - Seamless theme switching with localStorage persistence
-- **Smooth Animations** - Framer Motion powered animations throughout the site
-- **Responsive Design** - Fully responsive layout that works on all devices
-- **Modern UI** - Clean, minimalist design with gradient accents
-- **Fast Performance** - Optimized for speed with Next.js App Router
-- **TypeScript** - Fully typed for better developer experience
+- A terminal shell with section navigation, a command palette (`Ctrl/Cmd + K` or `:`), and a keyboard focus path through every control.
+- Eight case studies at `/work/[slug]`, each with the problem, approach, result, execution trace, and verified facts.
+- A hand-written ASCII torus in the hero. It rotates, drags with inertia, and reveals a pointer spotlight in the system accent. It becomes a still frame and stops accepting drags under reduced motion.
+- A dark "night console" theme and a light "daylight terminal" theme. The choice persists in `localStorage`, applies before first paint, and switches with a circular View Transition. Browsers without that API get a short crossfade fallback.
+- A boot sequence that plays once per tab on the home page and is skipped on case files, repeat visits, and reduced-motion visits.
+- Per-page metadata, canonical URLs, Open Graph and Twitter cards, a generated 1200x630 image, JSON-LD, `robots.txt`, and a sitemap.
+- A custom 404, a skip link, visible focus states, 24px minimum targets, and a reduced-motion path that keeps all content visible.
 
-## 🚀 Tech Stack
+## Stack
 
-### Core Framework
-- **Next.js 16.1.1** - React framework with App Router
-- **React 19.2.3** - UI library
-- **TypeScript 5** - Type-safe JavaScript
+- Next.js 16.1 App Router
+- React 19
+- TypeScript 5
+- Lenis for smooth scrolling
+- Font Awesome for interface icons
+- Hand-written character-cell renderers for every ASCII effect. No 3D library and no animation library.
 
-### 3D Graphics
-- **Three.js 0.182.0** - 3D graphics library
-- **@react-three/fiber 9.5.0** - React renderer for Three.js
-- **@react-three/drei 10.7.7** - Three.js helpers and abstractions
-
-### UI & Animation
-- **Framer Motion 12.23.26** - Animation library
-- **FontAwesome 7.1.0** - Icon library
-
-### Development Tools
-- **ESLint 9** - Code linting
-- **PostCSS** - CSS processing
-
-## 📸 Preview
-
-The portfolio includes:
-- **Hero Section** - Eye-catching introduction with 3D model
-- **About Section** - Personal information and education
-- **Skills Section** - Technical skills showcase
-- **Projects Section** - Project portfolio with descriptions
-- **Contact Section** - Contact information and links
-
-## 🛠️ Installation
-
-### Prerequisites
-
-- Node.js 20 or higher
-- npm, yarn, pnpm, or bun
-
-### Clone the Repository
-
-```bash
-git clone <your-repo-url>
-cd portfolio
-```
-
-### Install Dependencies
+## Run it
 
 ```bash
 npm install
-# or
-yarn install
-# or
-pnpm install
-```
-
-## 🏃 Development
-
-### Start Development Server
-
-```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) in your browser to see the result.
-
-### Build for Production
+Open the URL printed by Next.js. For a production check:
 
 ```bash
 npm run build
-# or
-yarn build
-# or
-pnpm build
+npm start
 ```
 
-### Start Production Server
+### Site URL
+
+Set `NEXT_PUBLIC_SITE_URL` in the deployment environment:
 
 ```bash
-npm start
-# or
-yarn start
-# or
-pnpm start
+NEXT_PUBLIC_SITE_URL=https://your-domain.example
 ```
 
-### Lint Code
+The fallback in `src/lib/site.ts` is `https://babitdor.dev`. It keeps local builds valid, but it is not a claim that this domain is live.
+
+## Content
+
+Personal facts live in `src/content/` and nowhere else:
+
+- `profile.ts`: identity, positioning, experience, education, certifications, skills, stats.
+- `projects.ts`: the eight case files, their verified links, tags, traces, and metrics.
+
+Every claim in those files was checked against a primary source. Add nothing that has not been verified. Case-study pages are generated from `projects.ts`; adding a project there also adds its static route, metadata, sitemap entry, and next-case link.
+
+Older notes such as `Information.md`, `Projects.md`, and `Last_Project.md` are inputs, not sources of truth. `src/content/` wins.
+
+## Structure
+
+```text
+src/
+  app/
+    layout.tsx              root metadata, theme guard, shell, skip link
+    page.tsx                home: Hero, About, Skills, Projects, Contact
+    globals.css             design tokens for both themes, layout, motion
+    not-found.tsx           custom case-file 404
+    robots.ts               robots.txt
+    sitemap.ts              sitemap.xml
+    work/[slug]/page.tsx    case file route, metadata, JSON-LD
+  components/
+    AsciiBackdrop.tsx       ambient character field
+    AsciiBanner.tsx         boot name banner
+    AsciiDonut.tsx          hero torus, drag, pointer spotlight
+    BootSequence.tsx        once-per-tab boot log
+    CommandPalette.tsx      Ctrl/Cmd+K command list
+    Contact.tsx             contact channels and copy actions
+    CopyToast.tsx           clipboard confirmation
+    Hero.tsx                hero pane and torus figure
+    Projects.tsx            case-file index
+    SectionHead.tsx         section statements
+    Skills.tsx              filterable skill table
+    ThemeToggle.tsx         dark/light switch
+    TuiFrame.tsx            scanlines, vignette, edge brackets
+    TuiPane.tsx             window chrome
+    TuiPromptBar.tsx        bottom prompt and scroll readout
+    TuiStatusBar.tsx        top path, tabs, theme switch, mobile menu
+  content/                  all personal facts
+  lib/
+    ascii.ts                character ramps
+    banner.ts               5x7 font and scramble reveal
+    donut.ts                z-buffered ASCII torus
+    field.ts                ambient field renderer
+    scroll.ts               section state and scroll helpers
+    site.ts                 canonical URL and shared metadata copy
+    theme.ts                theme persistence, View Transition, fallback
+    useAsciiLoop.ts         shared rAF loop for every ASCII effect
+```
+
+## Theme system
+
+Dark is the default identity. The inline guard in `src/app/layout.tsx` reads `tui-theme` before the first paint and applies a saved light choice to `<html data-theme="light">`.
+
+`src/lib/theme.ts` owns the rest:
+
+- writes the choice to `localStorage`
+- updates `color-scheme` and the `theme-color` meta tag
+- starts a View Transition from the switch button, with a radius computed to the furthest viewport corner
+- falls back to a brief opaque veil when the browser has no View Transition support
+- skips the animation under `prefers-reduced-motion`
+
+The light palette is not an inversion. It is a warm paper surface with a darker printed green and softer shadows. Tokens live at the top of `globals.css`.
+
+## Checks
 
 ```bash
 npm run lint
-# or
-yarn lint
-# or
-pnpm lint
-```
-
-## 📁 Project Structure
-
-```
-portfolio/
-├── public/                    # Static assets
-│   ├── room/                 # 3D model files
-│   │   └── bedroom.glb       # Main 3D bedroom scene
-│   └── *.svg                 # SVG icons
-├── src/
-│   ├── app/                  # Next.js App Router
-│   │   ├── layout.tsx        # Root layout
-│   │   ├── page.tsx          # Home page
-│   │   ├── globals.css       # Global styles
-│   │   └── favicon.ico       # Site favicon
-│   └── components/           # React components
-│       ├── ThemeProvider.tsx # Theme context
-│       ├── Navbar.tsx        # Navigation
-│       ├── Footer.tsx        # Footer
-│       ├── Hero.tsx          # Hero section
-│       ├── About.tsx         # About section
-│       ├── Skills.tsx        # Skills display
-│       ├── Projects.tsx      # Projects showcase
-│       ├── Contact.tsx       # Contact section
-│       ├── Model3D.tsx       # 3D model viewer
-│       └── Animations.tsx    # Animation variants
-├── .gitignore               # Git ignore rules
-├── package.json             # Dependencies
-├── tsconfig.json            # TypeScript config
-├── next.config.ts           # Next.js config
-├── eslint.config.mjs        # ESLint config
-└── README.md                # This file
-```
-
-## 🎨 Customization
-
-### Personal Information
-
-Update your personal details in the following components:
-
-- **Hero Section** (`src/components/Hero.tsx`) - Name, title, social links
-- **About Section** (`src/components/About.tsx`) - Bio, education
-- **Skills Section** (`src/components/Skills.tsx`) - Technical skills
-- **Projects Section** (`src/components/Projects.tsx`) - Project details
-- **Contact Section** (`src/components/Contact.tsx`) - Contact information
-
-### Theme Colors
-
-Modify theme colors in `src/app/globals.css`:
-
-```css
-:root {
-  /* Light Theme */
-  --bg-primary: #fafafa;
-  --text-primary: #1d1d1f;
-  --accent: #0066cc;
-  /* ... more variables */
-}
-
-[data-theme="dark"] {
-  /* Dark Theme */
-  --bg-primary: #000000;
-  --text-primary: #f5f5f7;
-  --accent: #2997ff;
-  /* ... more variables */
-}
-```
-
-### 3D Model
-
-Replace the 3D model by:
-1. Place your GLB/GLTF file in `public/room/`
-2. Update the path in `src/components/Model3D.tsx`:
-   ```tsx
-   const { scene } = useGLTF("/room/your-model.glb");
-   ```
-3. Adjust scale and position as needed
-
-### Animations
-
-Modify animations in `src/components/Animations.tsx` or individual components. Framer Motion variants control:
-- Stagger timing
-- Animation duration
-- Easing functions
-- Spring physics
-
-## 🌐 Deployment
-
-### Vercel (Recommended)
-
-1. Push your code to GitHub
-2. Import project in [Vercel](https://vercel.com/new)
-3. Vercel will automatically detect Next.js and configure settings
-4. Click **Deploy**
-
-### Other Platforms
-
-```bash
-# Build the project
 npm run build
-
-# The output will be in the .next/ directory
-# Deploy the .next/ directory and public/ folder to your hosting provider
 ```
 
-### Environment Variables
-
-No environment variables are required for this project.
-
-## 📝 Scripts
-
-| Command | Description |
-|---------|-------------|
-| `npm run dev` | Start development server |
-| `npm run build` | Build for production |
-| `npm start` | Start production server |
-| `npm run lint` | Run ESLint |
-
-## 🎯 Key Features Explained
-
-### 3D Model Integration
-
-The 3D bedroom scene is rendered using:
-- **@react-three/fiber** - React renderer for Three.js
-- **@react-three/drei** - Helpers for OrbitControls, Environment, Float
-- **GLB Format** - Optimized 3D model format
-- **Suspense** - Async loading with fallback
-
-### Theme System
-
-- **CSS Variables** - Easy theme customization
-- **localStorage** - Persists user preference
-- **System Preference** - Respects OS theme on first visit
-- **Smooth Transitions** - Animated theme switching
-
-### Performance Optimizations
-
-- **Next.js App Router** - Server components by default
-- **Code Splitting** - Automatic route-based splitting
-- **Image Optimization** - Next.js Image component
-- **Font Optimization** - Automatic font loading
-- **Tree Shaking** - Removes unused code
-
-## 🤝 Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-## 📄 License
-
-This project is open source and available under the [MIT License](LICENSE).
-
-## 👤 Author
-
-**Babitdor Kayang Khonglah**
-
-- 📧 Email: babitdorbryan14@gmail.com
-- 📍 Location: Erlangen, Germany
-- 💼 LinkedIn: [linkedin.com/in/babitdor-kayang-khonglah](https://www.linkedin.com/in/babitdor-kayang-khonglah-aa1b68207/)
-- 💻 GitHub: [github.com/Babitdor](https://github.com/Babitdor)
-
-## 🙏 Acknowledgments
-
-- [Next.js](https://nextjs.org/) - The React framework
-- [Three.js](https://threejs.org/) - 3D graphics library
-- [Framer Motion](https://www.framer.com/motion/) - Animation library
-- [FontAwesome](https://fontawesome.com/) - Icon library
-- [Vercel](https://vercel.com/) - Hosting platform
-
-## 📚 Resources
-
-- [Next.js Documentation](https://nextjs.org/docs)
-- [React Documentation](https://react.dev)
-- [Three.js Documentation](https://threejs.org/docs)
-- [Framer Motion Documentation](https://www.framer.com/motion/)
-- [TypeScript Documentation](https://www.typescriptlang.org/docs)
-
----
-
-Made with ❤️ using Next.js, React, and Three.js
+The build runs TypeScript. The production QA pass covers desktop, throttled mobile, reduced motion, keyboard focus, hover targets, axe-core, overflow, LCP, CLS, and console errors on the home page, a case file, and the 404.

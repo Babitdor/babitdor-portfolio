@@ -1,7 +1,16 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { STAGE_IDS, STAGE_LABELS, scrollToSectionId, scrollToStage, type StageId } from '@/lib/scroll';
+import {
+  STAGE_IDS,
+  STAGE_LABELS,
+  lockScroll,
+  scrollToSectionId,
+  scrollToStage,
+  unlockScroll,
+  type StageId,
+} from '@/lib/scroll';
+import { toggleTheme } from '@/lib/theme';
 
 type Entry = {
   id: string;
@@ -29,6 +38,8 @@ export default function CommandPalette() {
   const [query, setQuery] = useState('');
   const [cursor, setCursor] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
+  const windowRef = useRef<HTMLDivElement>(null);
+  const restoreRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
@@ -57,8 +68,18 @@ export default function CommandPalette() {
   }, [open]);
 
   useEffect(() => {
-    if (open) inputRef.current?.focus();
+    if (open) {
+      restoreRef.current = document.activeElement as HTMLElement | null;
+      lockScroll();
+      inputRef.current?.focus();
+    } else {
+      restoreRef.current?.focus();
+      restoreRef.current = null;
+      unlockScroll();
+    }
   }, [open]);
+
+  useEffect(() => () => unlockScroll(), []);
 
   const entries: Entry[] = [
     ...STAGE_IDS.map((id, index) => ({
@@ -73,6 +94,12 @@ export default function CommandPalette() {
       hint: item.hint,
       run: () => window.open(item.href, '_blank', 'noopener,noreferrer'),
     })),
+    {
+      id: 'theme',
+      label: 'toggle theme',
+      hint: 'dark / light',
+      run: () => toggleTheme(),
+    },
     {
       id: 'top',
       label: 'goto top',
@@ -94,21 +121,43 @@ export default function CommandPalette() {
     setOpen(false);
   };
 
+  const trapTab = (event: React.KeyboardEvent) => {
+    if (event.key !== 'Tab') return;
+    const nodes = Array.from(
+      windowRef.current?.querySelectorAll<HTMLElement>('input, button, a[href]') ?? [],
+    ).filter((node) => !node.hasAttribute('disabled'));
+    if (nodes.length === 0) return;
+    const first = nodes[0];
+    const last = nodes[nodes.length - 1];
+
+    if (event.shiftKey && document.activeElement === first) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault();
+      first.focus();
+    }
+  };
+
   return (
-    <div className="tuiPalette" role="dialog" aria-label="Command palette" aria-modal="true">
-      <div
-        className="tuiPalette__scrim"
-        onClick={() => setOpen(false)}
-        aria-hidden="true"
-      />
-      <div className="tuiWindow tuiPalette__window">
+    <div
+      className="tuiPalette"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="palette-title"
+      onKeyDown={trapTab}
+    >
+      <div className="tuiPalette__scrim" onClick={() => setOpen(false)} aria-hidden="true" />
+      <div className="tuiWindow tuiPalette__window" ref={windowRef}>
         <div className="tuiWindow__bar">
           <span className="tuiWindow__dots" aria-hidden="true">
             <i />
             <i />
             <i />
           </span>
-          <span className="tuiWindow__title">command palette</span>
+          <span className="tuiWindow__title" id="palette-title">
+            command palette
+          </span>
           <span className="tuiWindow__status">esc</span>
         </div>
 
@@ -136,6 +185,8 @@ export default function CommandPalette() {
             }}
             placeholder="type a command"
             aria-label="Command"
+            autoComplete="off"
+            spellCheck={false}
           />
         </div>
 

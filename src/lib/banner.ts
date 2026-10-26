@@ -93,7 +93,7 @@ export type RevealOptions = {
  *
  *  Title case, matching the name as it is written everywhere else on the site. */
 export const BANNER_TEXT = 'Babitdor';
-export const BANNER_REVEAL: RevealOptions = { colDelay: 0.055, rowDelay: 0.045, band: 0.28 };
+export const BANNER_REVEAL: RevealOptions = { colDelay: 0.016, rowDelay: 0.02, band: 0.18 };
 
 /**
  * One frame of the reveal. Returns the same row count as `buildBanner`.
